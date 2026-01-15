@@ -37,7 +37,7 @@ namespace Engine::System
 	struct MoveComponent
 	{
 		//	“ü—Í‚Å‚ÌˆÚ“®—Ê
-		Math::Vector3 InputVec;
+		Math::Vector3 TargetDir;
 
 		//	ƒtƒ‰ƒOˆê——
 		MoveFlags Flags = MoveFlags::Default;

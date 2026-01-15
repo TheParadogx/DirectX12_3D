@@ -16,12 +16,12 @@ void Engine::System::InputRequestSystem::PreUpdate(entt::registry& Reg, double D
 			//	移動
 			if (vel.SqrLength() > 0)
 			{
-				req.Flags |= ActionInputFlags::RunRequested;
+				req.Flags |= eActionInputFlags::RunRequested;
 			}
 			//	してないからビットを降ろす
 			else
 			{
-				req.Flags &= ~ActionInputFlags::RunRequested;
+				req.Flags &= ~eActionInputFlags::RunRequested;
 			}
 			//	ダッシュ
 

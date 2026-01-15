@@ -15,7 +15,7 @@
 #include"Application/Components/Socket/SocketComponent.hpp"
 #include"Application/Components/HpRender/HpRenderComponent.hpp"
 #include"Application/Components/Status/StatusComponent.hpp"
-
+#include"Application/Components/Player/PlayerState/PlayerStateComponent.hpp"
 
 #include"Application/Components/Player/Input/InputRequestComponent.hpp"
 
@@ -51,8 +51,6 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 
 	auto& rigidbody = registry.emplace<Rigidbody3D>(player);
 	rigidbody.Flags |= RigidbodyFlags::UseCameraBasis;
-	auto& move = registry.emplace<System::MoveComponent>(player);
-	move.MoveSpeed = 20.0f;
 	auto& camera = registry.emplace<System::CameraControlComponent>(player);
 	camera.TargetEntity = player;
 	camera.offset = { 0,8,0 };
@@ -68,6 +66,11 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	hpBar.SetPosition({100,10});
 
 	registry.emplace<System::InputRequestComponent>(player);
+	registry.emplace<System::PlayerStateComponent>(player);
+	auto& move = registry.emplace<System::MoveComponent>(player);
+	move.MoveSpeed = 20.0f;
+
+
 	return player;
 }
 

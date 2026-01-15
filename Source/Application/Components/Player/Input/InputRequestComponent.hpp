@@ -5,7 +5,7 @@
 
 namespace Engine::System
 {
-	enum class ActionInputFlags :uint32_t
+	enum class eActionInputFlags :uint32_t
 	{
 		None = 0,
 
@@ -14,7 +14,7 @@ namespace Engine::System
 		DashRequested = 1 << 1,		//	ダッシュ
 		AttackRequested = 1 << 2,	//	攻撃
 	};
-	DEFINE_ENUM_BITWISE_OPERATORS(ActionInputFlags);
+	DEFINE_ENUM_BITWISE_OPERATORS(eActionInputFlags);
 
 	struct InputRequestComponent
 	{
@@ -22,6 +22,6 @@ namespace Engine::System
 		Math::Vector3 InputVec;
 
 		//	判定用フラグ
-		ActionInputFlags Flags = ActionInputFlags::None;
+		eActionInputFlags Flags = eActionInputFlags::None;
 	};
 }

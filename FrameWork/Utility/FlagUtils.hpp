@@ -95,3 +95,7 @@ inline Type& operator^= (Type& a, Type b) { \
 inline bool operator!(Type a) { \
     return static_cast<std::underlying_type_t<Type>>(a) == 0; \
 }
+template<typename T>
+inline bool HasFlag(T alpha, T beta) {
+    return static_cast<std::underlying_type_t<T>>(alpha & beta) != 0;
+}

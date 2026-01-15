@@ -5,6 +5,11 @@ namespace Engine::System
 {
 	class PlayerStateSystem : public ISystem
 	{
+		/// <summary>
+		/// 走り状態に移行できるかどうかの判定フラグ
+		/// </summary>
+		/// <returns></returns>
+		bool CheckRunRequest();
 	public:
 		/// <summary>
 		/// 前回情報の保持

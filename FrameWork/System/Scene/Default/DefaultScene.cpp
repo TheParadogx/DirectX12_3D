@@ -27,6 +27,7 @@
 #include"Application/Components/Socket/SocketComponentSystem.hpp"
 #include"Application/Components/HpRender/HpRenderSystem.hpp"
 #include"Application/Components/Player/Input/InputRequestSystem.hpp"
+#include"Application/Components/Player/PlayerState/PlayerStateSystem.hpp"
 
 #include"Graphics/Texture/Manager/TextureManager.hpp"
 #include"Graphics/UI/UISprite.hpp"
@@ -58,6 +59,8 @@ bool Engine::System::DefaultScene::Initialize()
     System::SystemManager::GetInstance()->AddSystem<System::SocketComponentSystem>();
     System::SystemManager::GetInstance()->AddSystem<System::HpRenderSystem>();
     System::SystemManager::GetInstance()->AddSystem<System::InputRequestSystem>();
+    System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
+    System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
 
     //  フィールド
     System::ObjectsFactory::CreateField();
