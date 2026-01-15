@@ -5,3 +5,5 @@
 /.vs
 /DirectX12 Engine/x64/Debug
 /x64/Debug
+/DirectX12 Engine/x64/Release
+/x64/Release
