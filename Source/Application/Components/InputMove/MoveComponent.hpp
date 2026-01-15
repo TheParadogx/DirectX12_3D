@@ -39,9 +39,6 @@ namespace Engine::System
 		//	入力での移動量
 		Math::Vector3 TargetDir;
 
-		//	フラグ一覧
-		MoveFlags Flags = MoveFlags::Default;
-
 		//	移動速度
 		float MoveSpeed = 5.0f;
 		//	ダッシュ時の加速倍率
