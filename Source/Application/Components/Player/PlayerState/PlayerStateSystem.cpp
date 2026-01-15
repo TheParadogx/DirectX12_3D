@@ -4,6 +4,7 @@
 #include"Application/Components/Player/Input/InputRequestComponent.hpp"
 #include"Application/Components/Player/PlayerState/PlayerStateComponent.hpp"
 #include"System/Conponent/Fbx/FbxMeshConponent.hpp"
+#include"Application/Components/InputMove/MoveComponent.hpp"
 
 bool Engine::System::PlayerStateSystem::CheckRunRequest()
 {
@@ -23,10 +24,10 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 	//	—Dæ“x‡‚É•À‚×‚Ä‚¨‚«‚Ü‚·B
 	//	Œã‚©‚çÀ‘•‘‚â‚µ‚Ü‚·
 
-	auto view = Reg.view<PlayerStateComponent, InputRequestComponent,FbxComponent>(entt::exclude<DeadTag>);
+	auto view = Reg.view<PlayerStateComponent, InputRequestComponent,FbxComponent, MoveComponent>(entt::exclude<DeadTag>);
 	bool ret = false;
 
-	view.each([&](auto entity, PlayerStateComponent& state, InputRequestComponent& req, FbxComponent&fbx)
+	view.each([&](auto entity, PlayerStateComponent& state, InputRequestComponent& req, FbxComponent&fbx, MoveComponent& move)
 		{
 			//	UŒ‚
 
@@ -41,6 +42,9 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					//	‚±‚±‚ÉØ‚è‘Ö‚¦‚É1‰ñ‚¾‚¯’Ê‚µ‚½‚¢ˆ—‚È‚Ç‚ğ“ü‚ê‚Ä‚à‚¢‚¢
 					fbx.CurrAnimation = "Run";
 				}
+				//	ˆÚ“®—Ê‚Ì‘ã“ü
+				move.TargetDir = req.InputVec;
+
 				return;
 			}
 
@@ -52,7 +56,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 			{
 				state.State = ePlayerState::Idle;
 				fbx.CurrAnimation = "Idle";
-
+				move.TargetDir = Math::Vector3::Zero;
 			}
 
 

@@ -60,6 +60,7 @@ bool Engine::System::DefaultScene::Initialize()
     System::SystemManager::GetInstance()->AddSystem<System::HpRenderSystem>();
     System::SystemManager::GetInstance()->AddSystem<System::InputRequestSystem>();
     System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
+    System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
 
     //  フィールド
     System::ObjectsFactory::CreateField();
