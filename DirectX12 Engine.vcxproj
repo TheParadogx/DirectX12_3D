@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.props" Condition="Exists('packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.props')" />
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>17.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{21a90f08-366b-4a01-bc10-2e26e4a6f3de}</ProjectGuid>
+    <RootNamespace>DirectX12Engine</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>Source;External\pch;FrameWork;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc.dll.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)mimalloc*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>Source;External\pch;FrameWork;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>$(CoreLibraryDependencies);%(AdditionalDependencies);mimalloc.dll.lib</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)mimalloc*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>Source;External\pch;FrameWork;External;External\Plugin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Debug\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)mimalloc*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <AdditionalIncludeDirectories>Source;External\pch;FrameWork;External;External\Plugin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Release\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>xcopy /Y /D "$(ProjectDir)mimalloc*.dll" "$(OutDir)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Application\Components\Player\Input\InputRequestSystem.hpp" />
+    <ClInclude Include="External\Plugin\ImGui\ImGuizmo.h" />
+    <ClInclude Include="FrameWork\System\Conponent\Collider\System\ColliderSystem.hpp" />
+    <ClInclude Include="FrameWork\Graphics\FbxMesh\Resource\Manager\FbxResourceManager.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Collider\ColliderComponent.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Rigidbody\System\RigidbodySystem.hpp" />
+    <ClInclude Include="FrameWork\System\Scene\Default\DefaultScene.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Fbx\System\FbxRenderSystem.h" />
+    <ClInclude Include="FrameWork\System\Conponent\Fbx\FbxMeshConponent.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Rigidbody\RigidbodyComponent.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Transform\TransformConponent.hpp" />
+    <ClInclude Include="FrameWork\System\Entity\Manager\EntityManager.hpp" />
+    <ClInclude Include="FrameWork\System\Entity\System\Base\ISystem.hpp" />
+    <ClInclude Include="FrameWork\System\Entity\Traits\EnTTTraits.hpp" />
+    <ClInclude Include="FrameWork\System\EventBus\Manager\EventManager.hpp" />
+    <ClInclude Include="FrameWork\System\EventBus\Connection\EventConnection.hpp" />
+    <ClInclude Include="FrameWork\System\Collider\AABB\AABBCollider.hpp" />
+    <ClInclude Include="FrameWork\Graphics\FbxMesh\Resource\FbxResource.hpp" />
+    <ClInclude Include="FrameWork\Graphics\FbxMesh\Pipeline\FbxPipeline.hpp" />
+    <ClInclude Include="FrameWork\Graphics\FbxMesh\FbxMesh.hpp" />
+    <ClInclude Include="FrameWork\Audio\Device\AudioDevice.hpp" />
+    <ClInclude Include="FrameWork\Audio\Manager\AudioManager.hpp" />
+    <ClInclude Include="External\Plugin\miniaudio\miniaudio.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="FrameWork\Audio\Resource\AudioHeader.hpp" />
+    <ClInclude Include="FrameWork\Audio\Resource\AudioResource.hpp" />
+    <ClInclude Include="FrameWork\Audio\Resource\Manager\AudioResourceManager.hpp" />
+    <ClInclude Include="FrameWork\Audio\Sound\Sound.hpp" />
+    <ClInclude Include="FrameWork\Graphics\ConstantBuffer\ConstantBuffer.hpp" />
+    <ClInclude Include="FrameWork\Graphics\Graphics.hpp" />
+    <ClInclude Include="FrameWork\Graphics\GraphicsDescriptorHeap\GraphicsDescriptorHeapInfo.hpp" />
+    <ClInclude Include="FrameWork\Graphics\Sprite\Pipeline\SpritePipeline.hpp" />
+    <ClInclude Include="FrameWork\Math\Math.h" />
+    <ClInclude Include="FrameWork\System\Camera\Camera.hpp" />
+    <ClInclude Include="External\pch\pch.h" />
+    <ClInclude Include="External\Plugin\ImGui\imconfig.h" />
+    <ClInclude Include="External\Plugin\ImGui\imgui.h" />
+    <ClInclude Include="External\Plugin\ImGui\imgui_impl_dx12.h" />
+    <ClInclude Include="External\Plugin\ImGui\imgui_impl_win32.h" />
+    <ClInclude Include="External\Plugin\ImGui\imgui_internal.h" />
+    <ClInclude Include="External\Plugin\ImGui\imgui_win32_forward.h" />
+    <ClInclude Include="External\Plugin\ImGui\imstb_rectpack.h" />
+    <ClInclude Include="External\Plugin\ImGui\imstb_textedit.h" />
+    <ClInclude Include="External\Plugin\ImGui\imstb_truetype.h" />
+    <ClInclude Include="FrameWork\Math\Matrix3x3\Matrix3x3.h" />
+    <ClInclude Include="FrameWork\Math\Matrix\Matrix.h" />
+    <ClInclude Include="FrameWork\Math\Quaternion\Quaternion.h" />
+    <ClInclude Include="FrameWork\Math\Vector2\Vector2.h" />
+    <ClInclude Include="FrameWork\Math\Vector3\Vector3.h" />
+    <ClInclude Include="FrameWork\System\Clock\Clock.hpp" />
+    <ClInclude Include="FrameWork\System\Collider\Collision\Collision.hpp" />
+    <ClInclude Include="FrameWork\System\Input\Keyboard\KeyCode.hpp" />
+    <ClInclude Include="FrameWork\System\Input\Manager\EnumInputDevice.hpp" />
+    <ClInclude Include="FrameWork\System\Input\Mouse\MouseButton.hpp" />
+    <ClInclude Include="FrameWork\System\Input\Pad\PadButton.hpp" />
+    <ClInclude Include="FrameWork\System\Memory\Memory.hpp" />
+    <ClInclude Include="FrameWork\System\Scene\IScene.hpp" />
+    <ClInclude Include="FrameWork\System\Time\Time.hpp" />
+    <ClInclude Include="FrameWork\System\Input\Keyboard\Keyboard.hpp" />
+    <ClInclude Include="FrameWork\System\Input\Mouse\Mouse.hpp" />
+    <ClInclude Include="FrameWork\System\Input\Pad\Pad.hpp" />
+    <ClInclude Include="FrameWork\System\Input\Pad\PadManager.hpp" />
+    <ClInclude Include="FrameWork\System\Input\Manager\InputManager.hpp" />
+    <ClInclude Include="FrameWork\Utility\FlagUtils.hpp" />
+    <ClInclude Include="FrameWork\Utility\MacroHelpers.hpp" />
+    <ClInclude Include="FrameWork\Utility\PtrUtils.hpp" />
+    <ClInclude Include="FrameWork\Graphics\IndexBuffer\IndexBuffer.hpp" />
+    <ClInclude Include="FrameWork\Graphics\Renderer\Renderer.hpp" />
+    <ClInclude Include="FrameWork\System\Collider\OBB\OBBCollider.hpp" />
+    <ClInclude Include="FrameWork\Graphics\Line\Pipeline\LinePipeline.hpp" />
+    <ClInclude Include="FrameWork\System\Scene\Manager\SceneManager.hpp" />
+    <ClInclude Include="Source\Application\Components\HpRender\HpRenderSystem.hpp" />
+    <ClInclude Include="Source\Application\Components\HpRender\HpRenderComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Player\Input\InputRequestComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Player\PlayerState\PlayerStateComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Player\PlayerState\PlayerStateSystem.hpp" />
+    <ClInclude Include="Source\Application\Components\Socket\SocketComponentSystem.hpp" />
+    <ClInclude Include="Source\Application\Components\CameraWork\CameraControl.hpp" />
+    <ClInclude Include="Source\Application\Components\CameraWork\System\CameraControlSystem.hpp" />
+    <ClInclude Include="Source\Application\Components\InputMove\MoveComponentSystem.hpp" />
+    <ClInclude Include="Source\Application\Application.hpp" />
+    <ClInclude Include="FrameWork\Engine\Engine.hpp" />
+    <ClInclude Include="FrameWork\Graphics\Color\Color.hpp" />
+    <ClInclude Include="FrameWork\Graphics\DirectX\DirectX12.hpp" />
+    <ClInclude Include="FrameWork\Graphics\DirectX\TypeAlias\DirectX12TypeAlias.hpp" />
+    <ClInclude Include="FrameWork\Graphics\GraphicsDescriptorHeap\GraphicsDescriptorHeap.hpp" />
+    <ClInclude Include="FrameWork\Debug\ImGui\ImGuiManager.hpp" />
+    <ClInclude Include="FrameWork\Debug\spdlog\Logger.hpp" />
+    <ClInclude Include="FrameWork\Math\Random\Random.hpp" />
+    <ClInclude Include="FrameWork\System\Singleton\Singleton.hpp" />
+    <ClInclude Include="FrameWork\System\Window\Setting\WindowSettings.hpp" />
+    <ClInclude Include="FrameWork\System\Window\Window.hpp" />
+    <ClInclude Include="FrameWork\Graphics\GraphicsDescriptorHeap\GraphicsDescriptorHeapManager.hpp" />
+    <ClInclude Include="FrameWork\Graphics\VertexBuffer\VertexBuffer.hpp" />
+    <ClInclude Include="FrameWork\Graphics\Texture\Texture.hpp" />
+    <ClInclude Include="FrameWork\Graphics\Sprite\Sprite.hpp" />
+    <ClInclude Include="FrameWork\System\Collider\Sphere\SphereCollider.hpp" />
+    <ClInclude Include="FrameWork\System\StepTimer\StepTimer.hpp" />
+    <ClInclude Include="FrameWork\System\Entity\System\Manager\SystemManager.hpp" />
+    <ClInclude Include="Source\Application\Components\InputMove\MoveComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Socket\SocketComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Status\StatusComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Tag\TagComponent.hpp" />
+    <ClInclude Include="Source\Application\EventComponent\EventComponents.hpp" />
+    <ClInclude Include="Source\Application\Objects\CreateObjects.hpp" />
+    <ClInclude Include="FrameWork\Graphics\UI\UISprite.hpp" />
+    <ClInclude Include="FrameWork\Graphics\UI\Pipeline\UISpritePipeline.hpp" />
+    <ClInclude Include="FrameWork\Graphics\Texture\Manager\TextureManager.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Application\Components\Player\Input\InputRequestSystem.cpp" />
+    <ClCompile Include="External\Plugin\ImGui\ImGuizmo.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FrameWork\System\Conponent\Collider\System\ColliderSystem.cpp" />
+    <ClCompile Include="FrameWork\Graphics\FbxMesh\Resource\Manager\FbxResourceManager.cpp" />
+    <ClCompile Include="FrameWork\System\Conponent\Rigidbody\System\RigidbodySystem.cpp" />
+    <ClCompile Include="FrameWork\System\Scene\Default\DefaultScene.cpp" />
+    <ClCompile Include="FrameWork\System\Conponent\Fbx\System\FbxRenderSystem.cpp" />
+    <ClCompile Include="FrameWork\System\Entity\Manager\EntityManager.cpp" />
+    <ClCompile Include="FrameWork\System\EventBus\Manager\EventManager.cpp" />
+    <ClCompile Include="FrameWork\System\Collider\AABB\AABBCollider.cpp" />
+    <ClCompile Include="FrameWork\Graphics\FbxMesh\Resource\FbxResource.cpp" />
+    <ClCompile Include="FrameWork\Graphics\FbxMesh\Pipeline\FbxPipeline.cpp" />
+    <ClCompile Include="FrameWork\Graphics\FbxMesh\FbxMesh.cpp" />
+    <ClCompile Include="FrameWork\Audio\Device\AudioDevice.cpp" />
+    <ClCompile Include="FrameWork\Audio\Manager\AudioManager.cpp" />
+    <ClCompile Include="FrameWork\Audio\Resource\AudioResource.cpp" />
+    <ClCompile Include="FrameWork\Audio\Resource\Manager\AudioResourceManager.cpp" />
+    <ClCompile Include="FrameWork\Audio\Sound\Sound.cpp" />
+    <ClCompile Include="FrameWork\Graphics\ConstantBuffer\ConstantBuffer.cpp" />
+    <ClCompile Include="FrameWork\Graphics\Sprite\Pipeline\SpritePipeline.cpp" />
+    <ClCompile Include="FrameWork\Math\Math.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FrameWork\System\Camera\Camera.cpp" />
+    <ClCompile Include="External\pch\CppWithPCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="External\Plugin\ImGui\imgui.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="External\Plugin\ImGui\imgui_draw.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="External\Plugin\ImGui\imgui_impl_dx12.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="External\Plugin\ImGui\imgui_impl_win32.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="External\Plugin\ImGui\imgui_tables.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="External\Plugin\ImGui\imgui_widgets.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FrameWork\Debug\ImGui\ImGuiManager.cpp" />
+    <ClCompile Include="FrameWork\Engine\Engine.cpp" />
+    <ClCompile Include="FrameWork\Graphics\Color\Color.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FrameWork\Graphics\DirectX\DirectX12.cpp" />
+    <ClCompile Include="FrameWork\Graphics\GraphicsDescriptorHeap\GraphicsDescriptorHeap.cpp" />
+    <ClCompile Include="FrameWork\Debug\spdlog\Logger.cpp" />
+    <ClCompile Include="FrameWork\Math\Matrix3x3\Matrix3x3.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FrameWork\Math\Matrix\Matrix.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FrameWork\Math\Quaternion\Quaternion.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FrameWork\Math\Vector2\Vector2.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FrameWork\Math\Vector3\Vector3.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="FrameWork\System\Clock\Clock.cpp" />
+    <ClCompile Include="FrameWork\System\Collider\Collision\Collision.cpp" />
+    <ClCompile Include="FrameWork\System\Time\Time.cpp" />
+    <ClCompile Include="FrameWork\System\Window\Window.cpp" />
+    <ClCompile Include="FrameWork\Graphics\GraphicsDescriptorHeap\GraphicsDescriptorHeapManager.cpp" />
+    <ClCompile Include="FrameWork\System\Input\Keyboard\Keyboard.cpp" />
+    <ClCompile Include="FrameWork\System\Input\Mouse\Mouse.cpp" />
+    <ClCompile Include="FrameWork\System\Input\Pad\Pad.cpp" />
+    <ClCompile Include="FrameWork\System\Input\Pad\PadManager.cpp" />
+    <ClCompile Include="FrameWork\System\Input\Manager\InputManager.cpp" />
+    <ClCompile Include="FrameWork\Graphics\IndexBuffer\IndexBuffer.cpp" />
+    <ClCompile Include="FrameWork\Graphics\Renderer\Renderer.cpp" />
+    <ClCompile Include="FrameWork\System\Collider\OBB\OBBCollider.cpp" />
+    <ClCompile Include="FrameWork\Graphics\Line\Pipeline\LinePipeline.cpp" />
+    <ClCompile Include="FrameWork\System\Scene\Manager\SceneManager.cpp" />
+    <ClCompile Include="Source\Application\Components\HpRender\HpRenderSystem.cpp" />
+    <ClCompile Include="Source\Application\Components\Player\PlayerState\PlayerStateSystem.cpp" />
+    <ClCompile Include="Source\Application\Components\Socket\SocketComponentSystem.cpp" />
+    <ClCompile Include="Source\Application\Components\CameraWork\System\CameraControlSystem.cpp" />
+    <ClCompile Include="Source\Application\Components\InputMove\MoveComponentSystem.cpp" />
+    <ClCompile Include="Source\Application\Application.cpp" />
+    <ClCompile Include="Source\Application\Objects\CreateObjects.cpp" />
+    <ClCompile Include="Source\main.cpp">
+      <SubType>
+      </SubType>
+    </ClCompile>
+    <ClCompile Include="External\pch\pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="FrameWork\Graphics\VertexBuffer\VertexBuffer.cpp" />
+    <ClCompile Include="FrameWork\Graphics\Texture\Texture.cpp" />
+    <ClCompile Include="FrameWork\Graphics\Sprite\Sprite.cpp" />
+    <ClCompile Include="FrameWork\System\Collider\Sphere\SphereCollider.cpp" />
+    <ClCompile Include="FrameWork\System\StepTimer\StepTimer.cpp" />
+    <ClCompile Include="FrameWork\System\Entity\System\Manager\SystemManager.cpp" />
+    <ClCompile Include="FrameWork\Graphics\UI\UISprite.cpp" />
+    <ClCompile Include="FrameWork\Graphics\UI\Pipeline\UISpritePipeline.cpp" />
+    <ClCompile Include="FrameWork\Graphics\Texture\Manager\TextureManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Document\CodingConventions\CodingConventions.md">
+      <SubType>
+      </SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Assets\Shader\PS_UITexture.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.targets" Condition="Exists('packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>このプロジェクトは、このコンピューター上にない NuGet パッケージを参照しています。それらのパッケージをダウンロードするには、[NuGet パッケージの復元] を使用します。詳細については、http://go.microsoft.com/fwlink/?LinkID=322105 を参照してください。見つからないファイルは {0} です。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.props'))" />
+    <Error Condition="!Exists('packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.Windows.CppWinRT.2.0.250303.1\build\native\Microsoft.Windows.CppWinRT.targets'))" />
+  </Target>
+</Project>

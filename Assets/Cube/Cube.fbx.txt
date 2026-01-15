@@ -1,0 +1,5 @@
+VertexCount:24
+PolygonCount:12
+MeshCount:1
+MaterialCount:1
+Material[lambert1]:Blank.dds
