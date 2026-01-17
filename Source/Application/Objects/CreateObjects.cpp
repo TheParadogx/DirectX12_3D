@@ -15,9 +15,12 @@
 #include"Application/Components/Socket/SocketComponent.hpp"
 #include"Application/Components/HpRender/HpRenderComponent.hpp"
 #include"Application/Components/Status/StatusComponent.hpp"
-#include"Application/Components/Player/PlayerState/PlayerStateComponent.hpp"
 
+#include"Application/Components/Player/PlayerState/PlayerStateComponent.hpp"
 #include"Application/Components/Player/Input/InputRequestComponent.hpp"
+
+#include"Application/Components/Tag/TagComponent.hpp"
+
 
 entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 {
@@ -46,9 +49,16 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	fbx.CurrAnimation = "Idle";
 
 	//	当たり判定
-	auto& collider = registry.emplace<AABBColliderComponent>(player);
-	collider.Collider.SetVolume({ 2.0f,8.0f,2.0f });
-	collider.Offset = { 0.0f, collider.Collider.GetVolume().y * 0.5f, 0.0f };
+	//auto& collider = registry.emplace<AABBColliderComponent>(player);
+	//collider.Collider.SetVolume({ 2.0f,8.0f,2.0f });
+	//collider.Offset = { 0.0f, collider.Collider.GetVolume().y * 0.5f, 0.0f };
+
+	//	当たり判定
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
+	collider->SetVolume({ 2.0f,8.0f,2.0f });
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	registry.emplace<ColliderComponent>(player, std::move(col));
 
 	//	移動量（物理）
 	auto& rigidbody = registry.emplace<Rigidbody3D>(player);
@@ -84,6 +94,9 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	auto sword = CreateSword(player);
 	state.Weapon = sword;
 
+	//	タグ
+	registry.emplace<PlayerTag>(player);
+
 	return player;
 }
 
@@ -113,9 +126,18 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	//	当たり判定
-	auto& collider = registry.emplace<AABBColliderComponent>(enemy);
-	collider.Collider.SetVolume({ 2.0f,8.0f,2.0f });
-	collider.Offset = { 0.0f, collider.Collider.GetVolume().y * 0.5f, 0.0f };
+	//auto& collider = registry.emplace<AABBColliderComponent>(enemy);
+	//collider.Collider.SetVolume({ 2.0f,8.0f,2.0f });
+	//collider.Offset = { 0.0f, collider.Collider.GetVolume().y * 0.5f, 0.0f };
+
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
+	collider->SetVolume({ 2.0f,8.0f,2.0f });
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	registry.emplace<ColliderComponent>(enemy, std::move(col));
+
+	//	タグ
+	registry.emplace<EnemyTag>(enemy);
 
 }
 

@@ -8,6 +8,7 @@
 #include<utility>
 #include<type_traits>
 #include<typeindex>
+#include<typeinfo>
 
 // STL
 #include<vector>

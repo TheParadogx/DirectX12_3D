@@ -19,6 +19,7 @@ namespace Engine::System
 	{
 		GENERATE_SINGLETON_BODY(SystemManager);
 	public:
+
 		/// <summary>
 		/// ‰Â•ÏXV
 		/// </summary>
