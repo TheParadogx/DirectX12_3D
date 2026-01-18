@@ -30,7 +30,8 @@ bool Engine::System::PlayerStateSystem::CheckAttackRequest(PlayerStateComponent&
 	return
 		curr == ePlayerState::Idle ||
 		curr == ePlayerState::Run ||
-		curr == ePlayerState::Dash;
+		curr == ePlayerState::Dash ||
+		curr == ePlayerState::Attack;
 }
 
 /// <summary>
@@ -46,10 +47,10 @@ bool Engine::System::PlayerStateSystem::IsFinishAttack(PlayerStateComponent& Sta
 	}
 
 	//	リクエストが次も攻撃かどうか
-	if (HasFlag(Req.Flags, eActionInputFlags::AttackRequested) == true)
-	{
-		return false;
-	}
+	//if (HasFlag(Req.Flags, eActionInputFlags::AttackRequested) == true)
+	//{
+	//	return false;
+	//}
 
 	//	スタミナを追加したらここでスタミナの残量判定をする
 
@@ -75,8 +76,23 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 				{
 					state.State = ePlayerState::Idle;
 					fbx.CurrAnimation = "Idle";
+					fbx.IsLoop = true;
+					fbx.AnimationScale = 1.0f;
+					//req.Flags &= ~eActionInputFlags::AttackRequested;
 				}
 			}
+
+			//	ダッシュ
+			if (state.State == ePlayerState::Run)
+			{
+				if (req.InputVec.SqrLength() <= 0)
+				{
+					state.State = ePlayerState::Idle;
+					fbx.CurrAnimation = "Idle";
+					fbx.IsLoop = true;
+				}
+			}
+
 	});
 }
 
@@ -101,7 +117,9 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				{
 					//	状態変更
 					state.State = ePlayerState::Attack;
-					//fbx.CurrAnimation = "Attack";
+					fbx.CurrAnimation = "Attack";
+					fbx.IsLoop = false;
+					fbx.AnimationScale = 2.5f;
 
 					//	武器に必要なものをアタッチ
 					Reg.emplace_or_replace<WeaponAttackComponent>(state.Weapon);
@@ -130,12 +148,15 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 			//	ダッシュ
 
 			//	待機
-			//	この地点で何も通いないなら
-			if (state.State != ePlayerState::Idle)
+			if (HasNoFlag(req.Flags) && state.State == ePlayerState::Idle)
 			{
-				state.State = ePlayerState::Idle;
-				fbx.CurrAnimation = "Idle";
-				move.TargetDir = Math::Vector3::Zero;
+				//	この地点で何も通いないなら
+				if (state.State != ePlayerState::Idle)
+				{
+					state.State = ePlayerState::Idle;
+					fbx.CurrAnimation = "Idle";
+					move.TargetDir = Math::Vector3::Zero;
+				}
 			}
 
 

@@ -157,7 +157,7 @@ Engine::Input::eKeyCode Engine::Input::Keyboard::ToKeyCode(WPARAM VKCode)
 /// <returns>true:”ÍˆÍ“à</returns>
 bool Engine::Input::Keyboard::IsValid(eKeyCode keyCode) const
 {
-	return keyCode < eKeyCode::Count || keyCode > eKeyCode::Unknown;
+	return keyCode < eKeyCode::Count && keyCode > eKeyCode::Unknown;
 }
 
 /// <summary>

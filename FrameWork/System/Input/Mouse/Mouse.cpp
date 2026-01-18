@@ -63,7 +63,7 @@ void Engine::Input::Mouse::UpdatePosition(LPARAM LParam)
 /// <returns>true:有効</returns>
 bool Engine::Input::Mouse::IsValid(eMouseButton Button)const
 {
-	return Button > eMouseButton::Unknown || Button < eMouseButton::Count;
+	return Button > eMouseButton::Unknown && Button < eMouseButton::Count;
 }
 
 Engine::Input::Mouse::Mouse()
