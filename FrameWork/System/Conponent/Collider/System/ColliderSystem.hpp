@@ -107,7 +107,7 @@ namespace Engine::System
 		{
 			sCheckCollision[{typeid(C2), typeid(C1)}] = [](const void* raw1, const void* raw2, Math::Vector3& outVec)->bool
 				{
-					return Collision::ComputeCollision(static_cast<const C2*>(raw2), static_cast<const C1*>(raw1), outVec);
+					return Collision::ComputeCollision(static_cast<const C1*>(raw2),static_cast<const C2*>(raw1), outVec);
 				};
 		}
 	}

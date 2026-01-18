@@ -5,7 +5,7 @@ namespace Engine::System
 {
 	class SphereCollider;
 	class AABBCollider;
-
+	class OBBCollider;
 
 	class Collision
 	{
@@ -61,7 +61,17 @@ namespace Engine::System
 
 		//	OBB‚ÆOBB‚Ì“–‚½‚è”»’è
 
-		//	AABB‚ÆOBB‚Ì“–‚½‚è”»’è
+		/// <summary>
+		/// AABB‚ÆOBB‚Ì“–‚½‚è”»’è
+		/// </summary>
+		/// <param name="aabb"></param>
+		/// <param name="obb"></param>
+		/// <param name="OutVector">‰Ÿ‚µ–ß‚µ‚ÌƒxƒNƒgƒ‹</param>
+		/// <returns>ture:ÚG</returns>
+		static bool ComputeCollision(
+			const AABBCollider* aabb,
+			const OBBCollider* obb,
+			Math::Vector3& OutVector);
 
 		//	AABB‚Æ‰~‚Ì“–‚½‚è”»’è
 

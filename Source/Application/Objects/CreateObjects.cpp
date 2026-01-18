@@ -55,8 +55,8 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	//collider.Offset = { 0.0f, collider.Collider.GetVolume().y * 0.5f, 0.0f };
 
 	//	“–‚½‚è”»’è
-	auto col = ColliderComponent::Create<AABBCollider>();
-	auto collider = col.GetPtr<AABBCollider>();
+	auto col = ColliderComponent::Create<OBBCollider>();
+	auto collider = col.GetPtr<OBBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
 	registry.emplace<ColliderComponent>(player, std::move(col));
@@ -164,9 +164,9 @@ void Engine::System::ObjectsFactory::CreateField()
 	fbx.Mesh->SetColor(Graphics::Color::Cyan());
 
 	//	collider
-	auto& collider = registry.emplace<AABBColliderComponent>(field);
-	collider.Collider.SetVolume(volume);
-	collider.Offset = { 0.0f, 5.0f, 0.0f };
+	//auto& collider = registry.emplace<AABBColliderComponent>(field);
+	//collider.Collider.SetVolume(volume);
+	//collider.Offset = { 0.0f, 5.0f, 0.0f };
 }
 
 entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent)

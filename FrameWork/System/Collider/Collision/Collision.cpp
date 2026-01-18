@@ -1,8 +1,10 @@
 #include "pch.h"
 #include "Collision.hpp"
+#include"Math/Matrix/Matrix.h"
 
 #include"System/Collider/AABB/AABBCollider.hpp"
 #include"System/Collider/Sphere/SphereCollider.hpp"
+#include"System/Collider/OBB/OBBCollider.hpp"
 
 /// <summary>
 /// AABBど氏の当たり判定
@@ -227,4 +229,128 @@ bool Engine::System::Collision::ComputeCollision(const SphereCollider* Collider1
 
     return false;
 
+}
+
+/// <summary>
+/// AABBとOBBの当たり判定
+/// AABBを回転してないOBBとして考える
+/// </summary>
+/// <param name="aabb"></param>
+/// <param name="obb"></param>
+/// <param name="OutVector">押し戻しのベクトル</param>
+/// <returns>ture:接触</returns>
+bool Engine::System::Collision::ComputeCollision(const AABBCollider* aabb, const OBBCollider* obb, Math::Vector3& OutVector)
+{
+    if (aabb == nullptr || obb == nullptr) return false;
+
+    OutVector = Math::Vector3::Zero;
+
+    //   AABBの情報
+    const Math::Vector3 aabbCenter = aabb->GetCenter();
+    const Math::Vector3 aabbHalf = aabb->GetVolume() * 0.5f;
+    const Math::Vector3 aabbAxis[3] = {
+        {1.0f,0.0f,0.0f},
+        {0.0f,1.0f,0.0f},
+        {0.0f,0.0f,1.0f}
+    };
+
+    // OBBの情報
+    const Math::Vector3 obbCenter = obb->GetCenter();
+    const Math::Vector3 obbHalf = obb->GetVolume() * 0.5f;
+    const Math::Matrix rot = obb->GetRotation().ToMatrix();
+    const Math::Vector3 obbAxis[3] = {
+        Math::Vector3::Normalize(rot.GetRightVector()),
+        Math::Vector3::Normalize(rot.GetUpVector()),
+        Math::Vector3::Normalize(rot.GetForwardVector())
+    };
+
+    //  中心差分
+    const Math::Vector3 diff = obbCenter - aabbCenter;
+    float minPenetration = FLT_MAX;
+    Math::Vector3 bestAxis;
+
+    //  射影半径計算ラムダ
+    auto ProjectAABB = [&](const Math::Vector3& axis)
+        {
+            return
+                aabbHalf.x * fabsf(axis.x) +
+                aabbHalf.y * fabsf(axis.y) +
+                aabbHalf.z * fabsf(axis.z);
+        };
+    auto ProjectOBB = [&](const Math::Vector3& axis)
+        {
+            return
+                obbHalf.x * fabsf(Math::Vector3::Dot(axis, obbAxis[0])) +
+                obbHalf.y * fabsf(Math::Vector3::Dot(axis, obbAxis[1])) +
+                obbHalf.z * fabsf(Math::Vector3::Dot(axis, obbAxis[2]));
+        };
+
+    // SAT1軸判定
+    auto TestAxis = [&](const Math::Vector3& axis)
+        {
+            const float lenSq = axis.SqrLength();
+            if (lenSq < 1e-6f) return true;
+
+            // 1. ここで確実に正規化する
+            const Math::Vector3 n = axis / sqrtf(lenSq);
+
+            // 2. Project関数を使わず、その場で計算して「n」を直接使う
+            const float ra = aabbHalf.x * fabsf(n.x) +
+                aabbHalf.y * fabsf(n.y) +
+                aabbHalf.z * fabsf(n.z);
+
+            const float rb = obbHalf.x * fabsf(Math::Vector3::Dot(n, obbAxis[0])) +
+                obbHalf.y * fabsf(Math::Vector3::Dot(n, obbAxis[1])) +
+                obbHalf.z * fabsf(Math::Vector3::Dot(n, obbAxis[2]));
+
+            const float dist = fabsf(Math::Vector3::Dot(diff, n));
+
+            const float penetration = ra + rb - dist;
+
+            // 3. 判定 (浮動小数点誤差を考慮して 0 ではなく小さなマイナスと比較)
+            if (penetration <= 0.0001f) // 離れている軸が見つかった！
+                return false;
+
+            if (penetration < minPenetration)
+            {
+                minPenetration = penetration;
+                bestAxis = n;
+            }
+            return true;
+        };
+
+    // AABBの3軸
+    for (int i = 0; i < 3; ++i)
+    {
+        if (!TestAxis(aabbAxis[i]))
+            return false;
+    }
+
+    // OBBの3軸
+    for (int i = 0; i < 3; ++i)
+    {
+        if (!TestAxis(obbAxis[i]))
+            return false;
+    }
+
+    //   外積9軸
+    for (int i = 0; i < 3; ++i)
+    {
+        for (int j = 0; j < 3; ++j)
+        {
+            Math::Vector3 cross =
+                Math::Vector3::Cross(aabbAxis[i], obbAxis[j]);
+
+            if (!TestAxis(cross))
+                return false;
+        }
+    }
+
+    //  押し戻し方向調整
+    if (Math::Vector3::Dot(diff, bestAxis) < 0.0f)
+        bestAxis = -bestAxis;
+
+    OutVector = bestAxis * minPenetration;
+
+    return true;
 }

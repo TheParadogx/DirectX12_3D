@@ -13,6 +13,7 @@
 void Engine::System::ColliderSystem::Initialize()
 {
 	RegisterRule<AABBCollider, AABBCollider>();
+	RegisterRule<AABBCollider, OBBCollider>();
 }
 
 /// <summary>
@@ -45,6 +46,10 @@ void Engine::System::ColliderSystem::Update(entt::registry& Registry)
 			if (auto* pAABB = col.GetPtr<AABBCollider>())
 			{
 				pAABB->SetCenter(trans.Position + col.Offset);
+			}
+			else if (auto* pOBB = col.GetPtr<OBBCollider>())
+			{
+				pOBB->SetCenter(trans.Position + col.Offset);
 			}
 
 			/* ¡Œã Sphere “™‚ª‘‚¦‚½ê‡‚à“¯—l‚É’Ç‰Á
@@ -268,12 +273,10 @@ void Engine::System::ColliderSystem::Debug(entt::registry& Registry)
 			{
 				pAABB->DebugRender();
 			}
-
-			/* ¡Œã Sphere “™‚ª‘‚¦‚½ê‡‚à“¯—l‚É’Ç‰Á‚Å‚«‚Ü‚·
-			else if (auto* pSphere = col.GetPtr<SphereColliderComponent>())
+			else if (auto* pOBB = col.GetPtr<OBBCollider>())
 			{
+				pOBB->DebugRender();
 			}
-			*/
 		});
 
 }
