@@ -56,6 +56,16 @@ void Engine::Input::Mouse::UpdatePosition(LPARAM LParam)
 	mPosition.y = static_cast<float>(HIWORD(LParam));
 }
 
+/// <summary>
+/// ボタンの入力が有効かどうかの判定
+/// </summary>
+/// <param name="Button"></param>
+/// <returns>true:有効</returns>
+bool Engine::Input::Mouse::IsValid(eMouseButton Button)const
+{
+	return Button > eMouseButton::Unknown || Button < eMouseButton::Count;
+}
+
 Engine::Input::Mouse::Mouse()
 {
 	mCurrButtons.fill(false);
@@ -112,10 +122,7 @@ void Engine::Input::Mouse::Update()
 
 bool Engine::Input::Mouse::IsButtonPressed(eMouseButton Button)
 {
-	if (Button == eMouseButton::Unknown)
-	{
-		return false;
-	}
+	if (IsValid(Button) == false) return false;
 
 	return mCurrButtons[static_cast<int>(Button)] == true
 		&& mPrevButtons[static_cast<int>(Button)] == false;
@@ -123,20 +130,14 @@ bool Engine::Input::Mouse::IsButtonPressed(eMouseButton Button)
 
 bool Engine::Input::Mouse::IsButtonHeld(eMouseButton Button)
 {
-	if (Button == eMouseButton::Unknown)
-	{
-		return false;
-	}
+	if (IsValid(Button) == false) return false;
 
 	return mCurrButtons[static_cast<int>(Button)] == true;
 }
 
 bool Engine::Input::Mouse::IsButtonReleased(eMouseButton Button)
 {
-	if (Button == eMouseButton::Unknown)
-	{
-		return false;
-	}
+	if (IsValid(Button) == false) return false;
 
 	return mCurrButtons[static_cast<int>(Button)] == false
 		&& mPrevButtons[static_cast<int>(Button)] == true;

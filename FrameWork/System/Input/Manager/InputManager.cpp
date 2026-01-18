@@ -11,6 +11,13 @@ bool Engine::Input::InputManager::Initialize()
 	mMouse = std::make_unique<Mouse>();
 	mKeyboard = std::make_unique<Keyboard>();
 
+	/*
+	* デフォルトのキーコンフィグでのアクションマップの作成
+	* 余裕ができたらファイルから前回の設定を引き継げるようにします
+	*/
+
+
+
 	return true;
 }
 
@@ -141,4 +148,73 @@ Math::Vector2 Engine::Input::InputManager::GetLookAxis()
 	}
 
 	return vec; 
+}
+
+/// <summary>
+/// アクション名の要録
+/// </summary>
+/// <param name="ActionName">アクション名</param>
+/// <param name="Bind">対応したキーコード群</param>
+void Engine::Input::InputManager::AddAction(const std::string& ActionName, const ActionBinding& Bind)
+{
+	if (ActionName.empty()) return;
+	mActionMaps[ActionName] = Bind;
+}
+
+/// <summary>
+/// 押した瞬間
+/// </summary>
+/// <param name="ActionName">アクション名</param>
+/// <returns>true:押した瞬間</returns>
+bool Engine::Input::InputManager::IsActionPressed(const std::string& ActionName)
+{
+	auto it = mActionMaps.find(ActionName);
+	if (it == mActionMaps.end()) return false;
+
+	const auto& bind = it->second;
+
+	//	どちらかが入力されていたらtrue
+	const bool KeyIn = mKeyboard->IsKeyPressed(bind.key);
+	const bool PadIn = mPadManager->IsPressed(bind.pad);
+
+	return KeyIn || PadIn;
+}
+
+/// <summary>
+/// 押されている
+/// </summary>
+/// <param name="ActionName">アクション名</param>
+/// <returns>true:押されている</returns>
+bool Engine::Input::InputManager::IsActionHeld(const std::string& ActionName)
+{
+	auto it = mActionMaps.find(ActionName);
+	if (it == mActionMaps.end()) return false;
+
+	const auto& bind = it->second;
+
+	//	どちらかが入力されていたらtrue
+	const bool KeyIn = mKeyboard->IsKeyHeld(bind.key);
+	const bool PadIn = mPadManager->IsHeld(bind.pad);
+
+
+	return KeyIn || PadIn;
+}
+
+/// <summary>
+/// 離した瞬間
+/// </summary>
+/// <param name="ActionName">アクション名</param>
+/// <returns>true:離した瞬間</returns>
+bool Engine::Input::InputManager::IsActionReleased(const std::string& ActionName)
+{
+	auto it = mActionMaps.find(ActionName);
+	if (it == mActionMaps.end()) return false;
+
+	const auto& bind = it->second;
+
+	//	どちらかが入力されていたらtrue
+	const bool KeyIn = mKeyboard->IsKeyReleased(bind.key);
+	const bool PadIn = mPadManager->IsReleased(bind.pad);
+
+	return KeyIn || PadIn;
 }

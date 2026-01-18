@@ -43,6 +43,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
 	res->LoadAnimation("Run", "Assets/Mannequin/Animation/MM_Run_Fwd.FBX.anm");
 	res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
+	res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(player, res);
@@ -116,16 +117,14 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	transform.Rotation = Math::Quaternion::Identity;
 
 	//	fbxのリソース
-	bool b = false;
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
-	b = res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
-	b = res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
-	b = res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
-
+	res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
+	res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
+	res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
 	
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
-	fbx.CurrAnimation = "Attack";
+	fbx.CurrAnimation = "Idle";
 	fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	//	当たり判定

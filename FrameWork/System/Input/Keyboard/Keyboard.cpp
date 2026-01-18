@@ -151,6 +151,16 @@ Engine::Input::eKeyCode Engine::Input::Keyboard::ToKeyCode(WPARAM VKCode)
 }
 
 /// <summary>
+/// キーコードが範囲内か判定する
+/// </summary>
+/// <param name="keyCode"></param>
+/// <returns>true:範囲内</returns>
+bool Engine::Input::Keyboard::IsValid(eKeyCode keyCode) const
+{
+	return keyCode < eKeyCode::Count || keyCode > eKeyCode::Unknown;
+}
+
+/// <summary>
 /// 初期化
 /// </summary>
 Engine::Input::Keyboard::Keyboard()
@@ -189,6 +199,7 @@ bool Engine::Input::Keyboard::ProcessEvent(UINT Message, WPARAM VKCode)
 /// <returns></returns>
 bool Engine::Input::Keyboard::IsKeyPressed(eKeyCode keyCode) const
 {
+	if (IsValid(keyCode) == false) return false;
 	return (mCurrKeys[static_cast<uint32_t>(keyCode)] == true
 		&& mPrevKeys[static_cast<uint32_t>(keyCode)] == false);
 }
@@ -200,6 +211,7 @@ bool Engine::Input::Keyboard::IsKeyPressed(eKeyCode keyCode) const
 /// <returns></returns>
 bool Engine::Input::Keyboard::IsKeyHeld(eKeyCode keyCode) const
 {
+	if (IsValid(keyCode) == false) return false;
 	return mCurrKeys[static_cast<uint32_t>(keyCode)] == true;
 }
 
@@ -210,6 +222,7 @@ bool Engine::Input::Keyboard::IsKeyHeld(eKeyCode keyCode) const
 /// <returns></returns>
 bool Engine::Input::Keyboard::IsKeyReleased(eKeyCode keyCode) const
 {
+	if (IsValid(keyCode) == false) return false;
 	return mCurrKeys[static_cast<uint32_t>(keyCode)] == false
 		&& mPrevKeys[static_cast<uint32_t>(keyCode)] == true;
 }

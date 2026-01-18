@@ -47,7 +47,7 @@ void Engine::System::ColliderSystem::Update(entt::registry& Registry)
 				pAABB->SetCenter(trans.Position + col.Offset);
 			}
 
-			/* ¡Œã Sphere “™‚ª‘‚¦‚½ê‡‚à“¯—l‚É’Ç‰Á‚Å‚«‚Ü‚·
+			/* ¡Œã Sphere “™‚ª‘‚¦‚½ê‡‚à“¯—l‚É’Ç‰Á
 			else if (auto* pSphere = col.GetPtr<SphereColliderComponent>())
 			{
 				pSphere->SetCenter(trans.Position + col.Offset);

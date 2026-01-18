@@ -19,6 +19,12 @@ namespace Engine::Input
 		/// <returns></returns>
 		eKeyCode ToKeyCode(WPARAM VKCode);
 
+		/// <summary>
+		/// キーコードが範囲内か判定する
+		/// </summary>
+		/// <param name="keyCode"></param>
+		/// <returns>true:範囲内</returns>
+		bool IsValid(eKeyCode keyCode)const;
 	public:
 		/// <summary>
 		/// 初期化

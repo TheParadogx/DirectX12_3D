@@ -30,6 +30,13 @@ namespace Engine::Input
 		/// <param name="LParam"></param>
 		void UpdatePosition(LPARAM LParam);
 
+		/// <summary>
+		/// ボタンの入力が有効かどうかの判定
+		/// </summary>
+		/// <param name="Button"></param>
+		/// <returns>true:有効</returns>
+		bool IsValid(eMouseButton Button)const;
+
 	public:
 		/// <summary>
 		/// 初期化
