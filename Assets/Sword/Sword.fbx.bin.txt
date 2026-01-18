@@ -1,8 +1,6 @@
-VertexCount:15412
-PolygonCount:26068
-MeshCount:3
+VertexCount:15499
+PolygonCount:26065
+MeshCount:1
 MaterialCount:1
-Material[Sword_Base_Color]:Sword_Base_Color.png
-Mesh[Sword_Base_Color]:Sword_Base_Color.png
-Mesh[Sword_Base_Color]:Sword_Base_Color.png
-Mesh[Sword_Base_Color]:Sword_Base_Color.png
+Material[Sword_Base_Color.001]:Sword_Base_Color.png
+Mesh[Sword_Base_Color.001]:Sword_Base_Color.png

@@ -37,7 +37,7 @@ namespace Engine::System
 	struct MoveComponent
 	{
 		//	“ü—Í‚Å‚ÌˆÚ“®—Ê
-		Math::Vector3 TargetDir;
+		Math::Vector3 TargetDir;                                                                               
 
 		//	ˆÚ“®‘¬“x
 		float MoveSpeed = 5.0f;

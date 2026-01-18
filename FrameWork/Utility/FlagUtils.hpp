@@ -99,3 +99,9 @@ template<typename T>
 inline bool HasFlag(T alpha, T beta) {
     return static_cast<std::underlying_type_t<T>>(alpha & beta) != 0;
 }
+//  ‚Ç‚Ìƒtƒ‰ƒO‚à—§‚Á‚Ä‚¢‚È‚¢
+template<typename T>
+inline bool HasNoFlag(T value)
+{
+    return static_cast<std::underlying_type_t<T>>(value) == 0;
+}

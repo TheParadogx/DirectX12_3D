@@ -8,23 +8,57 @@
 #include"System/Conponent/Rigidbody/RigidbodyComponent.hpp"
 
 /// <summary>
+/// 初期化
+/// </summary>
+void Engine::System::ColliderSystem::Initialize()
+{
+	RegisterRule<AABBCollider, AABBCollider>();
+	RegisterRule<AABBCollider, OBBCollider>();
+}
+
+/// <summary>
 /// 中心座標の更新
 /// </summary>
 /// <param name="Registry"></param>
 void Engine::System::ColliderSystem::Update(entt::registry& Registry)
 {
-	//	四角形の中心座標
-	auto view = Registry.view<Transform3D, AABBColliderComponent>();
-	view.each([](auto& trans, auto& col)
-	{
-		if (col.IsCollision == false)
-		{
-			return;
-		}
+	////	四角形の中心座標
+	//auto view = Registry.view<Transform3D, AABBColliderComponent>();
+	//view.each([](auto& trans, auto& col)
+	//{
+	//	if (col.IsCollision == false)
+	//	{
+	//		return;
+	//	}
 
-		//	足元＋浮かせたい分
-		col.Collider.SetCenter(trans.Position + col.Offset);
-	});
+	//	//	足元＋浮かせたい分
+	//	col.Collider.SetCenter(trans.Position + col.Offset);
+	//});
+
+	// ColliderComponent を持つものをすべて取得
+	auto view = Registry.view<Transform3D, ColliderComponent>();
+
+	view.each([](Transform3D& trans, ColliderComponent& col)
+		{
+			if (!col.IsCollisiton) return;
+
+			// 型が AABB の場合のみ取得して更新
+			if (auto* pAABB = col.GetPtr<AABBCollider>())
+			{
+				pAABB->SetCenter(trans.Position + col.Offset);
+			}
+			else if (auto* pOBB = col.GetPtr<OBBCollider>())
+			{
+				pOBB->SetCenter(trans.Position + col.Offset);
+			}
+
+			/* 今後 Sphere 等が増えた場合も同様に追加
+			else if (auto* pSphere = col.GetPtr<SphereColliderComponent>())
+			{
+				pSphere->SetCenter(trans.Position + col.Offset);
+			}
+			*/
+		});
 }
 
 void Engine::System::ColliderSystem::CheckAABBCollition(entt::registry& Registry)
@@ -115,22 +149,106 @@ void Engine::System::ColliderSystem::CheckAABBCollition(entt::registry& Registry
 				//	衝突通知
 
 			}
-
 		}
 	}
 
 }
 
+////	AABBの当たり判定
+//CheckAABBCollition(Registry);
 
 /// <summary>
 /// 当たり判定
 /// </summary>
 void Engine::System::ColliderSystem::CheckCollition(entt::registry& Registry)
 {
-	//	AABBの当たり判定
-	CheckAABBCollition(Registry);
+	//	当たり判定をするタグのコレクションでループ
+	for (auto& [tags,Resolution]: sCollisionResolutions)
+	{
+		//	タグの取得
+		entt::id_type tag1 = tags.first;
+		entt::id_type tag2 = tags.second;
 
+		//	Runtime View 1の作成
+		entt::runtime_view view1 = {};
+		view1.iterate(Registry.storage<ColliderComponent>());
+		view1.iterate(Registry.storage<Transform3D>());
 
+		if (auto* s1 = Registry.storage(tag1))
+		{
+			view1.iterate(*s1);
+		}
+
+		//	Runtime View 1の作成
+		entt::runtime_view view2 = {};
+		view2.iterate(Registry.storage<ColliderComponent>());
+		view2.iterate(Registry.storage<Transform3D>());
+
+		if (auto* s2 = Registry.storage(tag2))
+		{
+			view2.iterate(*s2);
+		}
+
+		//	タグ１
+		for (auto entityA : view1)
+		{
+			//	タグ２
+			for (auto entityB : view2)
+			{
+				//	同一オブジェクトかどうかの判定
+				if (entityA == entityB)
+				{
+					return;
+				}
+
+				//	コンポーネントの取得
+				auto& colA = Registry.get<ColliderComponent>(entityA);
+				auto& colB = Registry.get<ColliderComponent>(entityB);
+
+				//	衝突フラグ判定
+				if (colA.IsCollisiton == false || colB.IsCollisiton == false)
+				{
+					continue;
+				}
+
+				//	衝突判定をする型のテーブル
+				auto it = sCheckCollision.find({ colA.Type,colB.Type });
+				if (it != sCheckCollision.end())
+				{
+					Math::Vector3 OutVec = {};
+					if (it->second(colA.GetRaw(), colB.GetRaw(), OutVec))
+					{
+						//	座標系のコンポーネントの取得
+						auto& transA = Registry.get<Transform3D>(entityA);
+						auto& transB = Registry.get<Transform3D>(entityB);
+
+						//	両方押し戻し
+						if (Resolution.PushFirst == true && Resolution.PushSecond)
+						{
+							transA.Position += OutVec * 0.5f;
+							transB.Position -= OutVec * 0.5f;
+						}
+						//	Aだけ
+						else if (Resolution.PushFirst == true)
+						{
+							transA.Position += OutVec;
+						}
+						//	Bだけ
+						else if (Resolution.PushSecond == true)
+						{
+							transB.Position -= OutVec;
+						}
+
+						//	衝突通知
+
+					}
+
+				}
+
+			}
+		}
+	}
+	//	当たっていたら押し戻しをCollisionResolutionの情報から見て押し戻し処理をする
 	
 }
 
@@ -139,9 +257,26 @@ void Engine::System::ColliderSystem::CheckCollition(entt::registry& Registry)
 /// </summary>
 void Engine::System::ColliderSystem::Debug(entt::registry& Registry)
 {
-	auto view = Registry.view<AABBColliderComponent>();
-	view.each([](auto& col)
-	{
-		col.Collider.DebugRender();
-	});
+	//auto view = Registry.view<AABBColliderComponent>();
+	//view.each([](auto& col)
+	//{
+	//	col.Collider.DebugRender();
+	//});
+
+	auto view = Registry.view<Transform3D, ColliderComponent>();
+	view.each([](Transform3D& trans, ColliderComponent& col)
+		{
+			if (!col.IsCollisiton) return;
+
+			// 型が AABB の場合のみ取得して更新
+			if (auto* pAABB = col.GetPtr<AABBCollider>())
+			{
+				pAABB->DebugRender();
+			}
+			else if (auto* pOBB = col.GetPtr<OBBCollider>())
+			{
+				pOBB->DebugRender();
+			}
+		});
+
 }

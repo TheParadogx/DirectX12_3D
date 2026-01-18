@@ -336,6 +336,9 @@
     <ClInclude Include="Source\Application\Components\Player\Input\InputRequestSystem.hpp">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Application\Components\WeaponAttack\WeaponAttackComponent.hpp">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="External\pch\pch.cpp">

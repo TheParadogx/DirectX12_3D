@@ -76,6 +76,9 @@ void Engine::System::MoveComponentSystem::MainUpdate(entt::registry& Reg, double
 				);
 			}
 
+			//	“ü—Í‚©‚ç‚ÌˆÚ“®—Ê‚ÌƒŠƒZƒbƒg
+			move.TargetDir = Math::Vector3::Zero;
+
 		});
 
 

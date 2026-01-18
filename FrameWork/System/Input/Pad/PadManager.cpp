@@ -26,6 +26,17 @@ bool Engine::Input::PadManager::IsValidIndex(const uint8_t index) const
 }
 
 /// <summary>
+/// “n‚³‚ê‚½ƒ{ƒ^ƒ“‚ª—LŒø‚©‚Ç‚¤‚©‚Ì”»’è
+/// </summary>
+/// <param name="Button"></param>
+/// <returns></returns>
+bool Engine::Input::PadManager::IsValidButtonCode(ePadButton Button)const
+{
+	if (Button == ePadButton::Count) return false;
+	return true;
+}
+
+/// <summary>
 /// ‰Šú‰»
 /// </summary>
 Engine::Input::PadManager::PadManager()
@@ -74,6 +85,8 @@ void Engine::Input::PadManager::Update()
 /// <returns>true:‰Ÿ‚µ‚½uŠÔ</returns>
 bool Engine::Input::PadManager::IsPressed(const ePadButton Button, const ePadIndex Index) const
 {
+	if (this->IsValidButtonCode(Button) == false) return false;
+
 	const auto index = static_cast<uint8_t>(Index);
 	if (this->IsValidIndex(index) == false)
 	{
@@ -89,6 +102,8 @@ bool Engine::Input::PadManager::IsPressed(const ePadButton Button, const ePadInd
 /// <returns>true:‰Ÿ‚³‚ê‚Ä‚¢‚é</returns>
 bool Engine::Input::PadManager::IsHeld(const ePadButton Button, const ePadIndex Index) const
 {
+	if (this->IsValidButtonCode(Button) == false) return false;
+
 	const auto index = static_cast<uint8_t>(Index);
 	if (this->IsValidIndex(index) == false)
 	{
@@ -104,6 +119,8 @@ bool Engine::Input::PadManager::IsHeld(const ePadButton Button, const ePadIndex 
 /// <returns>true:—£‚µ‚½uŠÔ</returns>
 bool Engine::Input::PadManager::IsReleased(const ePadButton Button, const ePadIndex Index) const
 {
+	if (this->IsValidButtonCode(Button) == false) return false;
+
 	const auto index = static_cast<uint8_t>(Index);
 	if (this->IsValidIndex(index) == false)
 	{

@@ -14,6 +14,13 @@ namespace Engine::Input
 		/// <param name="index"></param>
 		/// <returns>true:”ÍˆÍ“à</returns>
 		bool IsValidIndex(const uint8_t Index) const;
+
+		/// <summary>
+		/// “n‚³‚ê‚½ƒ{ƒ^ƒ“‚ª—LŒø‚©‚Ç‚¤‚©‚Ì”»’è
+		/// </summary>
+		/// <param name="Button"></param>
+		/// <returns></returns>
+		bool IsValidButtonCode(ePadButton Button)const;
 	public:
 		/// <summary>
 		/// ‰Šú‰»

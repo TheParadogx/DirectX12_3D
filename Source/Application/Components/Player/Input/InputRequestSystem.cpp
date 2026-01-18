@@ -26,6 +26,14 @@ void Engine::System::InputRequestSystem::PreUpdate(entt::registry& Reg, double D
 			//	ダッシュ
 
 			//	攻撃
+			if (Input::InputManager::GetInstance()->IsActionHeld("Attack"))
+			{
+				req.Flags |= eActionInputFlags::AttackRequested;
+			}
+			else
+			{
+				req.Flags &= ~eActionInputFlags::AttackRequested;
+			}
 
 			//	ジャンプ
 

@@ -7,6 +7,8 @@
 #include "System/Input/Pad/PadManager.hpp"
 
 #include<memory>
+#include<unordered_map>
+#include<string>
 
 #ifdef GET_INPUT_MANAGER
 #undef GET_INPUT_MANAGER 
@@ -16,16 +18,22 @@
 
 namespace Engine::Input
 {
-
-	enum class Axis
-	{
-		Horizontal,
-		Vertical,
-	};
-
+	/// <summary>
+	/// 各入力の管理
+	/// </summary>
 	class InputManager : public Singleton<InputManager>
 	{
 		GENERATE_SINGLETON_BODY(InputManager);
+
+		/// <summary>
+		/// アクション名に紐づける各デバイスのコード
+		/// </summary>
+		struct ActionBinding
+		{
+			eKeyCode key = eKeyCode::Count;
+			ePadButton pad = ePadButton::Count;
+			eMouseButton mouse = eMouseButton::Count;
+		};
 
 	public:
 
@@ -77,7 +85,41 @@ namespace Engine::Input
 		/// <returns></returns>
 		Math::Vector2 GetLookAxis();
 
+		/// <summary>
+		/// アクション名の要録
+		/// </summary>
+		/// <param name="ActionName">アクション名</param>
+		/// <param name="Bind">対応したキーコード群</param>
+		void AddAction(const std::string& ActionName, const ActionBinding& Bind);
+
+		/// <summary>
+		/// 押した瞬間
+		/// </summary>
+		/// <param name="ActionName">アクション名</param>
+		/// <returns>true:押した瞬間</returns>
+		bool IsActionPressed(const std::string& ActionName);
+
+		/// <summary>
+		/// 押されている
+		/// </summary>
+		/// <param name="ActionName">アクション名</param>
+		/// <returns>true:押されている</returns>
+		bool IsActionHeld(const std::string& ActionName);
+
+		/// <summary>
+		/// 離した瞬間
+		/// </summary>
+		/// <param name="ActionName">アクション名</param>
+		/// <returns>true:離した瞬間</returns>
+		bool IsActionReleased(const std::string& ActionName);
+
+
 	private:
+		/// <summary>
+		/// アクション毎の入力
+		/// </summary>
+		std::unordered_map<std::string, ActionBinding> mActionMaps;
+
 		/// <summary>
 		/// Pad管理のインスタンス
 		/// </summary>

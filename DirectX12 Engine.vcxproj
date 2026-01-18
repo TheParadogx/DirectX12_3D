@@ -267,6 +267,7 @@
     <ClInclude Include="Source\Application\Components\Socket\SocketComponent.hpp" />
     <ClInclude Include="Source\Application\Components\Status\StatusComponent.hpp" />
     <ClInclude Include="Source\Application\Components\Tag\TagComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\WeaponAttack\WeaponAttackComponent.hpp" />
     <ClInclude Include="Source\Application\EventComponent\EventComponents.hpp" />
     <ClInclude Include="Source\Application\Objects\CreateObjects.hpp" />
     <ClInclude Include="FrameWork\Graphics\UI\UISprite.hpp" />

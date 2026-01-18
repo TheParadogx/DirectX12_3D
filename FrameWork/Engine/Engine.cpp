@@ -118,6 +118,8 @@ bool Engine::Core::Engine::Initialize()
 	Input::InputManager::Create();
 	Input::InputManager::GetInstance()->Initialize();
 
+
+
 	//	ƒCƒxƒ“ƒgŠÇ—‚Ìì¬
 	System::EventManager::Create();
 

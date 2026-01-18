@@ -30,6 +30,13 @@ namespace Engine::Input
 		/// <param name="LParam"></param>
 		void UpdatePosition(LPARAM LParam);
 
+		/// <summary>
+		/// ボタンの入力が有効かどうかの判定
+		/// </summary>
+		/// <param name="Button"></param>
+		/// <returns>true:有効</returns>
+		bool IsValid(eMouseButton Button)const;
+
 	public:
 		/// <summary>
 		/// 初期化
@@ -40,9 +47,9 @@ namespace Engine::Input
 		bool ProcessEvent(UINT Message, WPARAM WParam, LPARAM LParam);
 		void Update();
 
-		bool IsButtonPressed(eMouseButton Button);
-		bool IsButtonHeld(eMouseButton Button);
-		bool IsButtonReleased(eMouseButton Button);
+		bool IsPressed(eMouseButton Button);
+		bool IsHeld(eMouseButton Button);
+		bool IsReleased(eMouseButton Button);
 
 		Math::Vector2 GetPosition()const;
 		Math::Vector2 GetDeltaPosition() const;
