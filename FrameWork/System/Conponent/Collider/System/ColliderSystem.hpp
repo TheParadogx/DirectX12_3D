@@ -63,9 +63,10 @@ namespace Engine::System
 		template<typename C1, typename C2>
 		static void RegisterRule();
 
-	private:
-		//	 AABB
-		static void CheckAABBCollition(entt::registry& Registry);
+		/// <summary>
+		/// Guiで全オブジェクト操作
+		/// </summary>
+		static void OnGui(entt::registry& Registry);
 
 	private:
 		/// <summary>

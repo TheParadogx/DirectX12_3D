@@ -4,6 +4,8 @@
 #include"Application/Components/InputMove/MoveComponent.hpp"
 #include"Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
 
+#include"System/Conponent/Collider/ColliderComponent.hpp"
+
 /// <summary>
 /// 走り状態に移行できるかどうかの判定フラグ
 /// </summary>
@@ -78,7 +80,8 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 					fbx.CurrAnimation = "Idle";
 					fbx.IsLoop = true;
 					fbx.AnimationScale = 1.0f;
-					//req.Flags &= ~eActionInputFlags::AttackRequested;
+					//	当たり判定の削除
+					Reg.remove<ColliderComponent>(state.Weapon);
 				}
 			}
 
@@ -119,11 +122,18 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					state.State = ePlayerState::Attack;
 					fbx.CurrAnimation = "Attack";
 					fbx.IsLoop = false;
-					fbx.AnimationScale = 2.5f;
+					//fbx.AnimationScale = 2.5f;
+					fbx.AnimationScale = 0.2f;
 
 					//	武器に必要なものをアタッチ
 					Reg.emplace_or_replace<WeaponAttackComponent>(state.Weapon);
-					//	ここで当たり判定をつける
+					//	ここで当たり判定をアタッチする。
+					auto col = ColliderComponent::Create<OBBCollider>();
+					auto collider = col.GetPtr<OBBCollider>();
+					collider->SetVolume({ 1.0f,4.0f,1.0f });
+					col.Offset = { 0.0f, -4.0f, 0.0f };
+					Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
+
 				}
 				return;
 			}

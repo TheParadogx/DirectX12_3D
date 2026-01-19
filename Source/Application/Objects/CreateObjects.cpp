@@ -55,8 +55,8 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	//collider.Offset = { 0.0f, collider.Collider.GetVolume().y * 0.5f, 0.0f };
 
 	//	当たり判定
-	auto col = ColliderComponent::Create<OBBCollider>();
-	auto collider = col.GetPtr<OBBCollider>();
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
 	registry.emplace<ColliderComponent>(player, std::move(col));
@@ -127,6 +127,19 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	fbx.CurrAnimation = "Idle";
 	fbx.Mesh->SetColor(Graphics::Color::Red());
 
+	//	ステータス
+	auto& status = registry.emplace<System::StatusComponet>(enemy);
+	status.MaxHp.Base = 1000;
+	status.Hp = 1000;
+
+	//	画像
+	auto baseRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/BarBase.png");
+	auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
+
+	//	体力バー
+	auto& hpBar = registry.emplace<System::HpRenderComponent>(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0));
+	hpBar.SetPosition({ 100,100 });
+
 	//	当たり判定
 	//auto& collider = registry.emplace<AABBColliderComponent>(enemy);
 	//collider.Collider.SetVolume({ 2.0f,8.0f,2.0f });
@@ -193,6 +206,8 @@ entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent)
 	//fbx.Mesh->SetColor(Graphics::Color::Green);
 
 	//	当たり判定
+	//	いったん正常に動作するかどうか
+
 
 	//	アタッチ
 	auto& socket = registry.emplace<SocketComponent>(sword);
