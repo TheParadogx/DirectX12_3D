@@ -135,7 +135,14 @@ void Engine::System::ColliderSystem::CheckCollition(entt::registry& Registry)
 						}
 
 						//	�Փ˒ʒm
+						if (Resolution.DamageAtoB == true)
+						{
 
+						}
+						if (Resolution.DamageBtoA == true)
+						{
+
+						}
 					}
 
 				}
