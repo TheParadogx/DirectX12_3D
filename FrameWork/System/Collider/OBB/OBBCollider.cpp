@@ -13,7 +13,7 @@ namespace Engine::System
 	void OBBCollider::DebugRender()
 	{
 		Graphics::LineVertex vertices[8];
-		for (auto& v : vertices) { v.color = Graphics::Color::Cyan(); }
+		for (auto& v : vertices) { v.color = Graphics::Color::Magenta(); }
 
 		// 1. 行列から回転軸（向き）を取得して、サイズを掛ける
 		const Math::Matrix rot = GetRotation().ToMatrix();
