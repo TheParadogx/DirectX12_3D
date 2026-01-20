@@ -15,8 +15,8 @@ namespace Engine::System
 	{
 		bool PushFirst = true;
 		bool PushSecond = true;
-		bool HitEventFirst = false;
-		bool HitEventSecond = false;
+		bool HitEventFirst = true;
+		bool HitEventSecond = true;
 	};
 
 	//	当たり判定用の関数のポインタの型情報

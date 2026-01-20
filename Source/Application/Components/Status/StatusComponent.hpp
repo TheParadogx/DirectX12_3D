@@ -33,7 +33,26 @@ namespace Engine::System
 			}
 
 			return Hp / MaxHp.GetCurrent();
-
 		}
+
+		//	‘Ì—Í‚ðŒ¸‚ç‚·
+		void ApplyDamage(float Damage)
+		{
+			Hp -= Damage;
+			if (Hp < 0)
+			{
+				Hp = 0;
+			}
+		}
+
+		/// <summary>
+		/// Ž€–S”»’è
+		/// </summary>
+		/// <returns>true:Ž€‚ñ‚Å‚¢‚é</returns>
+		bool IsDead()
+		{
+			return Hp <= 0;
+		}
+
 	};
 }

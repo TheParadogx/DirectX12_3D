@@ -1,13 +1,14 @@
 #pragma once
 #include<vector>
 #include<Plugin/entt/entt.hpp>
+#include<set>
 
 namespace Engine::System
 {
-	//	武器にアタッチする攻撃用コンポーネント
-	struct WeaponAttackComponent
+	//	多段防止用のコンポーネント
+	struct HitHistoryComponent
 	{
-		std::vector<entt::entity> HitList;	//  衝突した敵にリスト（多段しないように）
-		float HitStopMS = 0.1f;	//	ヒットストップで止める時間
+		std::set<entt::entity>HitList;	//  衝突した敵にリスト（多段しないように）
+		float HitStopMS = 0.0f;	//	ヒットストップで止める時間
 	};
 }

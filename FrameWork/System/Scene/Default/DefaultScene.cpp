@@ -32,6 +32,7 @@
 #include"Application/Components/HpRender/HpRenderSystem.hpp"
 #include"Application/Components/Player/Input/InputRequestSystem.hpp"
 #include"Application/Components/Player/PlayerState/PlayerStateSystem.hpp"
+#include"Application/Components/Damage/DamageSystem.hpp"
 
 #include"Graphics/Texture/Manager/TextureManager.hpp"
 #include"Graphics/UI/UISprite.hpp"
@@ -59,6 +60,7 @@ bool Engine::System::DefaultScene::Initialize()
     System::SystemManager::GetInstance()->AddSystem<System::InputRequestSystem>();
     System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
     System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
+    System::SystemManager::GetInstance()->AddSystem<System::DamageSystem>();
 
     //  “–‚½‚è”»’è‚ÌƒVƒXƒeƒ€
     System::ColliderSystem::Initialize();
