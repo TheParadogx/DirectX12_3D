@@ -55,7 +55,7 @@ namespace Engine::Graphics
 		//	同一アニメーションデータの存在判定
 		if (mAnimations.count(AnimationName) > 0)
 		{
-			return false;
+			return true;
 		}
 
 		//	ファイルを開く

@@ -1,5 +1,6 @@
 #pragma once
 #include<cstdint>
+#include<Plugin/entt/entt.hpp>
 
 namespace Engine::System
 {
@@ -23,5 +24,6 @@ namespace Engine::System
 	{
 		//	¡‚Ìó‘Ô
 		ePlayerState State = ePlayerState::Idle;
+		entt::entity Weapon = entt::null;
 	};
 }

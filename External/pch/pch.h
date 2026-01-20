@@ -8,6 +8,7 @@
 #include<utility>
 #include<type_traits>
 #include<typeindex>
+#include<typeinfo>
 
 // STL
 #include<vector>
@@ -35,6 +36,7 @@
 #include<tuple>
 #include<span>
 #include<ranges>
+#include<initializer_list>
 
 //	Thread
 #include<thread>

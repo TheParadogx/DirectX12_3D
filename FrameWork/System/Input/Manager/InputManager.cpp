@@ -11,6 +11,16 @@ bool Engine::Input::InputManager::Initialize()
 	mMouse = std::make_unique<Mouse>();
 	mKeyboard = std::make_unique<Keyboard>();
 
+	/*
+	* デフォルトのキーコンフィグでのアクションマップの作成
+	* 余裕ができたらファイルから前回の設定を引き継げるようにします
+	*/
+
+	AddAction("Select", { eKeyCode::Enter,ePadButton::A });
+	AddAction("Cancel", { eKeyCode::Escape,ePadButton::B });
+	AddAction("Attack", { eKeyCode::Count,ePadButton::R2,eMouseButton::Left });
+	AddAction("Jump", { eKeyCode::Space,ePadButton::A });
+
 	return true;
 }
 
@@ -86,20 +96,20 @@ Math::Vector2 Engine::Input::InputManager::GetAxis()
 	Math::Vector2 pad = {};
 
 	//	キーボード
-	if (mKeyboard->IsKeyHeld(Input::eKeyCode::D))
+	if (mKeyboard->IsHeld(Input::eKeyCode::D))
 	{
 		key.x += 1.0f;
 	}
-	if (mKeyboard->IsKeyHeld(Input::eKeyCode::A))
+	if (mKeyboard->IsHeld(Input::eKeyCode::A))
 	{
 		key.x -= 1.0f;
 	}
 	//	キーボード
-	if (mKeyboard->IsKeyHeld(Input::eKeyCode::W))
+	if (mKeyboard->IsHeld(Input::eKeyCode::W))
 	{
 		key.y += 1.0f;
 	}
-	if (mKeyboard->IsKeyHeld(Input::eKeyCode::S))
+	if (mKeyboard->IsHeld(Input::eKeyCode::S))
 	{
 		key.y -= 1.0f;
 	}
@@ -141,4 +151,75 @@ Math::Vector2 Engine::Input::InputManager::GetLookAxis()
 	}
 
 	return vec; 
+}
+
+/// <summary>
+/// アクション名の要録
+/// </summary>
+/// <param name="ActionName">アクション名</param>
+/// <param name="Bind">対応したキーコード群</param>
+void Engine::Input::InputManager::AddAction(const std::string& ActionName, const ActionBinding& Bind)
+{
+	if (ActionName.empty()) return;
+	mActionMaps[ActionName] = Bind;
+}
+
+/// <summary>
+/// 押した瞬間
+/// </summary>
+/// <param name="ActionName">アクション名</param>
+/// <returns>true:押した瞬間</returns>
+bool Engine::Input::InputManager::IsActionPressed(const std::string& ActionName)
+{
+	auto it = mActionMaps.find(ActionName);
+	if (it == mActionMaps.end()) return false;
+
+	const auto& bind = it->second;
+
+	//	どれかが入力されていたらtrue
+	const bool KeyIn = mKeyboard->IsPressed(bind.key);
+	const bool PadIn = mPadManager->IsPressed(bind.pad);
+	const bool MouseIn = mMouse->IsPressed(bind.mouse);
+
+	return KeyIn || PadIn || MouseIn;
+}
+
+/// <summary>
+/// 押されている
+/// </summary>
+/// <param name="ActionName">アクション名</param>
+/// <returns>true:押されている</returns>
+bool Engine::Input::InputManager::IsActionHeld(const std::string& ActionName)
+{
+	auto it = mActionMaps.find(ActionName);
+	if (it == mActionMaps.end()) return false;
+
+	const auto& bind = it->second;
+
+	//	どれかが入力されていたらtrue
+	const bool KeyIn = mKeyboard->IsHeld(bind.key);
+	const bool PadIn = mPadManager->IsHeld(bind.pad);
+	const bool MouseIn = mMouse->IsHeld(bind.mouse);
+
+	return KeyIn || PadIn || MouseIn;
+}
+
+/// <summary>
+/// 離した瞬間
+/// </summary>
+/// <param name="ActionName">アクション名</param>
+/// <returns>true:離した瞬間</returns>
+bool Engine::Input::InputManager::IsActionReleased(const std::string& ActionName)
+{
+	auto it = mActionMaps.find(ActionName);
+	if (it == mActionMaps.end()) return false;
+
+	const auto& bind = it->second;
+
+	//	どれかが入力されていたらtrue
+	const bool KeyIn = mKeyboard->IsReleased(bind.key);
+	const bool PadIn = mPadManager->IsReleased(bind.pad);
+	const bool MouseIn = mMouse->IsReleased(bind.mouse);
+
+	return KeyIn || PadIn || MouseIn;
 }

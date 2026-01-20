@@ -19,6 +19,12 @@ namespace Engine::Input
 		/// <returns></returns>
 		eKeyCode ToKeyCode(WPARAM VKCode);
 
+		/// <summary>
+		/// キーコードが範囲内か判定する
+		/// </summary>
+		/// <param name="keyCode"></param>
+		/// <returns>true:範囲内</returns>
+		bool IsValid(eKeyCode keyCode)const;
 	public:
 		/// <summary>
 		/// 初期化
@@ -37,21 +43,21 @@ namespace Engine::Input
 		/// </summary>
 		/// <param name="keyCode">キーコード</param>
 		/// <returns></returns>
-		bool IsKeyPressed(eKeyCode keyCode)const;
+		bool IsPressed(eKeyCode keyCode)const;
 
 		/// <summary>
 		/// 押している間
 		/// </summary>
 		/// <param name="keyCode">キーコード</param>
 		/// <returns></returns>
-		bool IsKeyHeld(eKeyCode keyCode)const;
+		bool IsHeld(eKeyCode keyCode)const;
 
 		/// <summary>
 		/// 離した瞬間
 		/// </summary>
 		/// <param name="keyCode">キーコード</param>
 		/// <returns></returns>
-		bool IsKeyReleased(eKeyCode keyCode)const;
+		bool IsReleased(eKeyCode keyCode)const;
 
 		/// <summary>
 		/// 状態の更新

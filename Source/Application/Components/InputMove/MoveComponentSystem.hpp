@@ -9,10 +9,10 @@ namespace Engine::System
 	{
 	public:
 		MoveComponentSystem() = default;
-		//	移動量のセット
-		virtual void PreUpdate(entt::registry& Reg, double DeltaTime)override;
 
-		//	入力取得
+		/// <summary>
+		/// 移動量の計算処理をしてRigidの移動量に加算する
+		/// </summary>
 		virtual void MainUpdate(entt::registry& Reg, double DeltaTime) override;
 
 	private:

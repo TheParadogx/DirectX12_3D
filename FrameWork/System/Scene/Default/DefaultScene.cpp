@@ -7,6 +7,10 @@
 
 #include"Application/Components/InputMove/MoveComponentSystem.hpp"
 #include"Application/Components/CameraWork/System/CameraControlSystem.hpp"
+
+#include"Application/Components/Tag/TagComponent.hpp"
+#include"System/Conponent/Collider/System/ColliderSystem.hpp"
+
 /*
 * テスト
 */
@@ -28,15 +32,12 @@
 #include"Application/Components/HpRender/HpRenderSystem.hpp"
 #include"Application/Components/Player/Input/InputRequestSystem.hpp"
 #include"Application/Components/Player/PlayerState/PlayerStateSystem.hpp"
+#include"Application/Components/Damage/DamageSystem.hpp"
 
 #include"Graphics/Texture/Manager/TextureManager.hpp"
 #include"Graphics/UI/UISprite.hpp"
 
 static Engine::System::Camera sCamera;
-static entt::entity player;
-
-static Engine::Graphics::Texture sTexture;
-static Engine::Graphics::UISprite sUI;
 
 bool Engine::System::DefaultScene::Initialize()
 {
@@ -50,8 +51,6 @@ bool Engine::System::DefaultScene::Initialize()
     auto baseRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/test.png");
     auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
     auto luffy = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/luffy.dds");
-    ret = sTexture.Create("Assets/Texture/luffy.dds");
-
 
     //  システムの追加
     //System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
@@ -61,21 +60,23 @@ bool Engine::System::DefaultScene::Initialize()
     System::SystemManager::GetInstance()->AddSystem<System::InputRequestSystem>();
     System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
     System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
+    System::SystemManager::GetInstance()->AddSystem<System::DamageSystem>();
+
+    //  当たり判定のシステム
+    System::ColliderSystem::Initialize();
+    //System::ColliderSystem::AddCollisionPair<PlayerTag, EnemyTag>({ true,false });
+    System::ColliderSystem::AddCollisionPair<WeaponTag, EnemyTag>({ false,false });
 
     //  フィールド
     System::ObjectsFactory::CreateField();
 
     //  プレイヤーの作成
-    player = System::ObjectsFactory::CreatePlayer();
+    System::ObjectsFactory::CreatePlayer();
 
     //  敵の作成
     System::ObjectsFactory::CreateEnemy();
-    System::ObjectsFactory::CreateSword(player);
+    //System::ObjectsFactory::CreateSword(player);
 
-    ret = sUI.Create(luffy);
-    sUI.SetPosition({ 100,100 });
-    sUI.SetScale({ 0.2,0.2 });
-    sUI.SetFillRatio(1.0f);
 	return true;
 }
 
@@ -94,7 +95,6 @@ void Engine::System::DefaultScene::ImGuiUpdate()
 
 void Engine::System::DefaultScene::Render()
 {
-    sUI.Render();
 }
 
 void Engine::System::DefaultScene::Release()
