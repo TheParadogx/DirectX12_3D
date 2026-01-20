@@ -160,6 +160,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\System\Collider\CollisionEvents\CollisionEvent.hpp" />
+    <ClInclude Include="Source\Application\Components\Damage\AttackPowerComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Damage\DamageSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Player\Input\InputRequestSystem.hpp" />
     <ClInclude Include="External\Plugin\ImGui\ImGuizmo.h" />
     <ClInclude Include="FrameWork\System\Conponent\Collider\System\ColliderSystem.hpp" />
@@ -275,6 +278,7 @@
     <ClInclude Include="FrameWork\Graphics\Texture\Manager\TextureManager.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Application\Components\Damage\DamageSystem.cpp" />
     <ClCompile Include="Source\Application\Components\Player\Input\InputRequestSystem.cpp" />
     <ClCompile Include="External\Plugin\ImGui\ImGuizmo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>

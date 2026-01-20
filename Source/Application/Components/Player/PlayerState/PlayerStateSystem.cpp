@@ -82,6 +82,7 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 					fbx.AnimationScale = 1.0f;
 					//	当たり判定の削除
 					Reg.remove<ColliderComponent>(state.Weapon);
+					Reg.remove<HitHistoryComponent>(state.Weapon);
 				}
 			}
 
@@ -122,11 +123,11 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					state.State = ePlayerState::Attack;
 					fbx.CurrAnimation = "Attack";
 					fbx.IsLoop = false;
-					//fbx.AnimationScale = 2.5f;
-					fbx.AnimationScale = 0.2f;
+					fbx.AnimationScale = 2.5f;
+					//fbx.AnimationScale = 0.2f;
 
 					//	武器に必要なものをアタッチ
-					Reg.emplace_or_replace<WeaponAttackComponent>(state.Weapon);
+					Reg.emplace_or_replace<HitHistoryComponent>(state.Weapon);
 					//	ここで当たり判定をアタッチする。
 					auto col = ColliderComponent::Create<OBBCollider>();
 					auto collider = col.GetPtr<OBBCollider>();

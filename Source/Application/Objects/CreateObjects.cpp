@@ -15,6 +15,7 @@
 #include"Application/Components/Socket/SocketComponent.hpp"
 #include"Application/Components/HpRender/HpRenderComponent.hpp"
 #include"Application/Components/Status/StatusComponent.hpp"
+#include"Application/Components/Damage/AttackPowerComponent.hpp"
 
 #include"Application/Components/Player/PlayerState/PlayerStateComponent.hpp"
 #include"Application/Components/Player/Input/InputRequestComponent.hpp"
@@ -216,6 +217,9 @@ entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent)
 	socket.OffsetPos = { 0.46,-0.33,0.11 };
 	socket.OffsetRot = { -0.8,0.176,0.32,0.46 };
 	//socket.PivotOffset = { -0.39,2.27,-0.22 };
+
+	auto& damage = registry.emplace<AttackPowerComponent>(sword);
+	damage.DamageValue = 250.0f;
 
 	registry.emplace<WeaponTag>(sword);
 
