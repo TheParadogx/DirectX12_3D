@@ -62,6 +62,8 @@ namespace Engine::System
 
 		//	–ŒãXV
 		System::ColliderSystem::OnGui(Reg);
+
+		System::ColliderSystem::PostUpdate(Reg);
 	}
 
 

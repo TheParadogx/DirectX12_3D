@@ -15,8 +15,8 @@ namespace Engine::System
 	{
 		bool PushFirst = true;
 		bool PushSecond = true;
-		bool DamageAtoB = false;
-		bool DamageBtoA = false;
+		bool HitEventFirst = false;
+		bool HitEventSecond = false;
 	};
 
 	//	当たり判定用の関数のポインタの型情報
@@ -27,6 +27,10 @@ namespace Engine::System
 	/// </summary>
 	class ColliderSystem
 	{
+		/// <summary>
+		/// 衝突コンポーネントのアタッチ
+		/// </summary>
+		static void NotifyCollision(entt::registry& Reg, entt::entity EntityA, entt::entity EntityB);
 	public:
 		/// <summary>
 		/// 初期化
@@ -43,6 +47,12 @@ namespace Engine::System
 		/// 当たり判定
 		/// </summary>
 		static void CheckCollition(entt::registry& Registry);
+
+		/// <summary>
+		/// 更新の最後に衝突イベントを全て削除する
+		/// </summary>
+		/// <param name="Registry"></param>
+		static void PostUpdate(entt::registry& Registry);
 
 		/// <summary>
 		/// デバック用の当たり判定の表示

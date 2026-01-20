@@ -160,6 +160,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\System\Collider\CollisionEvents\CollisionEvent.hpp" />
     <ClInclude Include="Source\Application\Components\Player\Input\InputRequestSystem.hpp" />
     <ClInclude Include="External\Plugin\ImGui\ImGuizmo.h" />
     <ClInclude Include="FrameWork\System\Conponent\Collider\System\ColliderSystem.hpp" />

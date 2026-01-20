@@ -6,6 +6,24 @@
 #include"System/Conponent/Transform/TransformConponent.hpp"
 #include"System/Conponent/Collider/ColliderComponent.hpp"
 #include"System/Conponent/Rigidbody/RigidbodyComponent.hpp"
+#include"System/Collider/CollisionEvents/CollisionEvent.hpp"
+
+/// <summary>
+/// 衝突コンポーネントのアタッチ
+/// </summary>
+void Engine::System::ColliderSystem::NotifyCollision(entt::registry& Reg, entt::entity EntityA, entt::entity EntityB)
+{
+	//	既にあるから追加するだけ
+	if (auto* ev = Reg.try_get<CollisionEvent>(EntityA))
+	{
+		ev->HitEntitys.push_back(EntityB);
+	}
+	//	まだないから作成して追加する
+	else
+	{
+		Reg.emplace<CollisionEvent>(EntityA, std::vector{ EntityB });
+	}
+}
 
 /// <summary>
 /// 初期化
@@ -134,14 +152,16 @@ void Engine::System::ColliderSystem::CheckCollition(entt::registry& Registry)
 							transB.Position -= OutVec;
 						}
 
-						//	衝突通知
-						if (Resolution.DamageAtoB == true)
+						//	Firstの当たり判定イベント
+						if (Resolution.HitEventFirst == true)
 						{
-
+							NotifyCollision(Registry, entityA, entityB);
 						}
-						if (Resolution.DamageBtoA == true)
-						{
 
+						// Secondの当たり判定イベント
+						if (Resolution.HitEventSecond == true)
+						{
+							NotifyCollision(Registry, entityB, entityA);
 						}
 					}
 
@@ -150,8 +170,16 @@ void Engine::System::ColliderSystem::CheckCollition(entt::registry& Registry)
 			}
 		}
 	}
-	//	当たっていたら押し戻しをCollisionResolutionの情報から見て押し戻し処理をする
 	
+}
+
+/// <summary>
+/// 更新の最後に衝突イベントを全て削除する
+/// </summary>
+/// <param name="Registry"></param>
+void Engine::System::ColliderSystem::PostUpdate(entt::registry& Registry)
+{
+	Registry.clear<CollisionEvent>();
 }
 
 /// <summary>
@@ -202,7 +230,7 @@ void Engine::System::ColliderSystem::OnGui(entt::registry& Registry)
 
 			if (ImGui::TreeNode(label.c_str()))
 			{
-				// 1. 当たり判定の有効/無効
+				// 当たり判定の有効/無効
 				ImGui::Checkbox("Is Collision", &col.IsCollisiton);
 
 				// Offset の操作 (今回のメイン)
