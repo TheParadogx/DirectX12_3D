@@ -126,7 +126,6 @@ void Engine::App::Application::PreUpdate(double dt)
 {
     GET_INPUT_MANAGER->Update();
     mSystems->PreUpdate(mEntitys->GetRegistry(), dt);
-    mScene->Update(dt);
 
 }
 
@@ -136,7 +135,7 @@ void Engine::App::Application::PreUpdate(double dt)
 void Engine::App::Application::MainUpdate(double dt)
 {
     mSystems->MainUpdate(mEntitys->GetRegistry(), dt);
-    mScene->FixedUpdate(dt);
+    mScene->Update(dt);
 }
 
 /// <summary>
@@ -145,6 +144,7 @@ void Engine::App::Application::MainUpdate(double dt)
 void Engine::App::Application::PostUpdate(double dt)
 {
     mSystems->PostUpdate(mEntitys->GetRegistry(), dt);
+    mScene->PostUpdate(dt);
 }
 
 /// <summary>

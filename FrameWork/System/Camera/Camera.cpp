@@ -23,8 +23,23 @@ bool Engine::System::Camera::Create()
 	SetFieldOfView(90.0f);
 	SetAspect(16.0f, 9.0f);
 	SetZ(0.1f, 1000.0f);
+	//	自分以外の前のカメラが残っている時
+	if (Main != nullptr && Main != this)
+	{
+		delete Main;
+		Main = nullptr;
+	}
 	Main = this;
 	return true;
+}
+
+void Engine::System::Camera::Release()
+{
+	if (Main != nullptr)
+	{
+		delete Main;
+		Main = nullptr;
+	}
 }
 
 void Engine::System::Camera::Update(

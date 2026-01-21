@@ -37,7 +37,7 @@ namespace Engine::System
 		/// <summary>
 		/// 固定更新
 		/// </summary>
-		void FixedUpdate(double FixedDeltaTime);
+		void PostUpdate(double FixedDeltaTime);
 
 		/// <summary>
 		/// ImGuiの更新表示

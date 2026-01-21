@@ -16,14 +16,14 @@ namespace Engine::System
 		virtual bool Initialize() { return true; };
 
 		/// <summary>
-		/// 可変更新
+		/// メイン更新
 		/// </summary>
 		virtual void Update(double DeltaTime) {};
 
 		/// <summary>
-		/// 固定更新
+		/// 事後更新
 		/// </summary>
-		virtual void FixedUpdate(double FixedDeltaTime) {};
+		virtual void PostUpdate(double FixedDeltaTime) {};
 
 		/// <summary>
 		/// ImGuiの更新表示

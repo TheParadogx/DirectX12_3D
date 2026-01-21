@@ -161,6 +161,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="FrameWork\System\Collider\CollisionEvents\CollisionEvent.hpp" />
+    <ClInclude Include="Source\Application\Scene\InGame\InGameScene.hpp" />
     <ClInclude Include="Source\Application\Components\Damage\AttackPowerComponent.hpp" />
     <ClInclude Include="Source\Application\Components\Damage\DamageSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Player\Input\InputRequestSystem.hpp" />
@@ -276,9 +277,10 @@
     <ClInclude Include="FrameWork\Graphics\UI\UISprite.hpp" />
     <ClInclude Include="FrameWork\Graphics\UI\Pipeline\UISpritePipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\Texture\Manager\TextureManager.hpp" />
-    <ClInclude Include="Source\Application\Scene\TitleScene.hpp" />
+    <ClInclude Include="Source\Application\Scene\Title\TitleScene.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Application\Scene\InGame\InGameScene.cpp" />
     <ClCompile Include="Source\Application\Components\Damage\DamageSystem.cpp" />
     <ClCompile Include="Source\Application\Components\Player\Input\InputRequestSystem.cpp" />
     <ClCompile Include="External\Plugin\ImGui\ImGuizmo.cpp">
@@ -407,6 +409,7 @@
     <ClCompile Include="Source\Application\Components\InputMove\MoveComponentSystem.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\Objects\CreateObjects.cpp" />
+    <ClCompile Include="Source\Application\Scene\Title\TitleScene.cpp" />
     <ClCompile Include="Source\main.cpp">
       <SubType>
       </SubType>

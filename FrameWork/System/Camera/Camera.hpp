@@ -14,6 +14,7 @@ namespace Engine::System
 		static Camera* Main;
 
 		bool Create();
+		static void Release();
 
 		void Update(
 			const Math::Vector3& Position,

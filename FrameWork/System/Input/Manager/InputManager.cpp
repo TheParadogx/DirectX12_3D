@@ -16,7 +16,7 @@ bool Engine::Input::InputManager::Initialize()
 	* 余裕ができたらファイルから前回の設定を引き継げるようにします
 	*/
 
-	AddAction("Select", { eKeyCode::Enter,ePadButton::A });
+	AddAction("Select", { eKeyCode::Space,ePadButton::A,eMouseButton::Left });
 	AddAction("Cancel", { eKeyCode::Escape,ePadButton::B });
 	AddAction("Attack", { eKeyCode::Count,ePadButton::R2,eMouseButton::Left });
 	AddAction("Jump", { eKeyCode::Space,ePadButton::A });

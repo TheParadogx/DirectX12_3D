@@ -30,11 +30,11 @@ void Engine::System::SceneManager::Update(double DeltaTime)
 /// <summary>
 /// ŒÅ’èXV
 /// </summary>
-void Engine::System::SceneManager::FixedUpdate(double  FixedDeltaTime)
+void Engine::System::SceneManager::PostUpdate(double  FixedDeltaTime)
 {
 	if (mScene != nullptr)
 	{
-		mScene->FixedUpdate(FixedDeltaTime);
+		mScene->PostUpdate(FixedDeltaTime);
 	}
 }
 
