@@ -1,6 +1,8 @@
 #pragma once
 #include"System/Time/Time.hpp"
 
+#include<string>
+
 namespace Engine::System
 {
 	class IScene
@@ -16,14 +18,14 @@ namespace Engine::System
 		virtual bool Initialize() { return true; };
 
 		/// <summary>
-		/// 可変更新
+		/// メイン更新
 		/// </summary>
-		virtual void Update(double DeltaTime) = 0;
+		virtual void Update(double DeltaTime) {};
 
 		/// <summary>
-		/// 固定更新
+		/// 事後更新
 		/// </summary>
-		virtual void FixedUpdate(double FixedDeltaTime) = 0;
+		virtual void PostUpdate(double FixedDeltaTime) {};
 
 		/// <summary>
 		/// ImGuiの更新表示
@@ -33,13 +35,18 @@ namespace Engine::System
 		/// <summary>
 		/// 描画
 		/// </summary>
-		virtual void Render() = 0;
+		virtual void Render() {};
 
 		/// <summary>
 		/// 終了処理
 		/// </summary>
 		virtual void Release() {};
 
+		/// <summary>
+		/// Sceneの名前を返す
+		/// </summary>
+		/// <returns></returns>
+		virtual std::string GetSceneName() = 0;
 	};
 
 }

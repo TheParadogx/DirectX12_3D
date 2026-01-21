@@ -37,12 +37,12 @@
 #include"Graphics/Texture/Manager/TextureManager.hpp"
 #include"Graphics/UI/UISprite.hpp"
 
-static Engine::System::Camera sCamera;
 
 bool Engine::System::DefaultScene::Initialize()
 {
     bool ret = false;
-    ret = sCamera.Create();
+    Camera* camera = new Camera();
+    ret = camera->Create();
     if (ret == false)
     {
         return false;
@@ -80,22 +80,11 @@ bool Engine::System::DefaultScene::Initialize()
 	return true;
 }
 
-void Engine::System::DefaultScene::Update(double DeltaTime)
-{
-}
-
-void Engine::System::DefaultScene::FixedUpdate(double FixedDeltaTime)
-{
-
-}
 
 void Engine::System::DefaultScene::ImGuiUpdate()
 {
 }
 
-void Engine::System::DefaultScene::Render()
-{
-}
 
 void Engine::System::DefaultScene::Release()
 {

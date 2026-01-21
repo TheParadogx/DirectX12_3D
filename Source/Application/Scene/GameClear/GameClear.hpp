@@ -1,9 +1,9 @@
 #pragma once
 #include"System/Scene/IScene.hpp"
 
-namespace Engine::System
+namespace Engine::Scene
 {
-	class DefaultScene : public IScene
+	class GameClear : public System::IScene
 	{
 	public:
 
@@ -11,23 +11,24 @@ namespace Engine::System
 		/// 初期化
 		/// </summary>
 		/// <returns>true:成功</returns>
-		virtual bool Initialize()override;
+		bool Initialize()override;
 
 		/// <summary>
-		/// ImGuiの更新表示
+		/// 事後更新
 		/// </summary>
-		virtual void ImGuiUpdate()override;
+		void PostUpdate(double FixedDeltaTime)override;
 
 		/// <summary>
 		/// 終了処理
 		/// </summary>
-		virtual void Release()override;
-
+		void Release()override;
 
 		std::string GetSceneName()override
 		{
-			return "Default";
+			return "GameClear";
 		}
+	private:
+
 	};
 }
 

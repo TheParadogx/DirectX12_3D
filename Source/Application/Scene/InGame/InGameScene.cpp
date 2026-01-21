@@ -1,0 +1,71 @@
+#include "pch.h"
+#include "InGameScene.hpp"
+
+#include "System/Entity/System/Manager/SystemManager.hpp"
+#include"System/Entity/Manager/EntityManager.hpp"
+#include"Graphics/FbxMesh/Resource/Manager/FbxResourceManager.hpp"
+
+#include"System/Camera/Camera.hpp"
+#include"System/Conponent/Collider/System/ColliderSystem.hpp"
+
+#include"Application/Components/CameraWork/System/CameraControlSystem.hpp"
+#include"Application/Components/Socket/SocketComponentSystem.hpp"
+#include"Application/Components/HpRender/HpRenderSystem.hpp"
+#include"Application/Components/Player/Input/InputRequestSystem.hpp"
+#include"Application/Components/Player/PlayerState/PlayerStateSystem.hpp"
+#include"Application/Components/Damage/DamageSystem.hpp"
+#include"Application/Components/InputMove/MoveComponentSystem.hpp"
+#include"Application/Components/GameRule/GameRuleSystem.hpp"
+
+#include"Application/Components/Tag/TagComponent.hpp"
+#include"Application/Objects/CreateObjects.hpp"
+
+namespace Engine::Scene
+{
+	/// <summary>
+	///	初期化
+	/// </summary>
+	/// <returns></returns>
+	bool InGame::Initialize()
+	{
+		//	カメラ
+		Engine::System::Camera* camera = new Engine::System::Camera();
+		camera->Create();
+
+		//	システム追加
+		System::SystemManager::GetInstance()->AddSystem<System::CameraControlSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::SocketComponentSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::HpRenderSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::InputRequestSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::DamageSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::GameRuleSystem>();
+
+		System::ColliderSystem::Initialize();
+		System::ColliderSystem::AddCollisionPair<System::WeaponTag, System::EnemyTag>({ false,false });
+
+		System::ObjectsFactory::CreateField();
+		System::ObjectsFactory::CreatePlayer();
+		System::ObjectsFactory::CreateEnemy();
+
+		return true;
+	}
+
+	/// <summary>
+	/// 画面の切り替え判定
+	/// </summary>
+	/// <param name="FixedDeltaTime"></param>
+	void InGame::PostUpdate(double FixedDeltaTime)
+	{
+
+	}
+
+	/// <summary>
+	/// 終了処理
+	/// </summary>
+	void InGame::Release()
+	{
+		System::EntityManager::GetInstance()->ClearLocalEntities();
+	}
+}
