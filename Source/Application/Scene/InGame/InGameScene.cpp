@@ -15,6 +15,7 @@
 #include"Application/Components/Player/PlayerState/PlayerStateSystem.hpp"
 #include"Application/Components/Damage/DamageSystem.hpp"
 #include"Application/Components/InputMove/MoveComponentSystem.hpp"
+#include"Application/Components/GameRule/GameRuleSystem.hpp"
 
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Objects/CreateObjects.hpp"
@@ -39,6 +40,7 @@ namespace Engine::Scene
 		System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::DamageSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::GameRuleSystem>();
 
 		System::ColliderSystem::Initialize();
 		System::ColliderSystem::AddCollisionPair<System::WeaponTag, System::EnemyTag>({ false,false });

@@ -173,7 +173,6 @@ void Engine::App::Application::Render()
     mSystems->Render(mEntitys->GetRegistry());
     mScene->Render();
     GET_INPUT_MANAGER->Update();
-
 }
 
 /// <summary>

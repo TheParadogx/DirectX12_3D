@@ -2,8 +2,11 @@
 #include "AppDebug.hpp"
 
 #include"System/Scene/Manager/SceneManager.hpp"
+
 #include"Application/Scene/Title/TitleScene.hpp"
 #include"Application/Scene/InGame/InGameScene.hpp"
+#include"Application/Scene/GameOver/GameOverScene.hpp"
+#include"Application/Scene/GameClear/GameClear.hpp"
 
 /// <summary>
 /// Scene関係のデバック
@@ -19,19 +22,31 @@ void Engine::Debug::AppDebugUI::SceneDebug()
 
 	//	今
 	ImGui::Text(scene->CurrentSceneName().c_str());
-	ImGui::Separator();
 
+	ImGui::Separator();
 	if (ImGui::Button("Title"))
 	{
 		scene->ChangeScene<Scene::Title>();
 	}
 
 	ImGui::SameLine();
-
 	if (ImGui::Button("InGame"))
 	{
 		scene->ChangeScene<Scene::InGame>();
 	}
+
+	ImGui::SameLine();
+	if (ImGui::Button("GameOver"))
+	{
+		scene->ChangeScene<Scene::GameOver>();
+	}
+
+	ImGui::SameLine();
+	if (ImGui::Button("GameClear"))
+	{
+		scene->ChangeScene<Scene::GameClear>();
+	}
+
 
 	ImGui::Separator();
 
