@@ -80,22 +80,11 @@ bool Engine::System::DefaultScene::Initialize()
 	return true;
 }
 
-void Engine::System::DefaultScene::Update(double DeltaTime)
-{
-}
-
-void Engine::System::DefaultScene::FixedUpdate(double FixedDeltaTime)
-{
-
-}
 
 void Engine::System::DefaultScene::ImGuiUpdate()
 {
 }
 
-void Engine::System::DefaultScene::Render()
-{
-}
 
 void Engine::System::DefaultScene::Release()
 {

@@ -276,6 +276,7 @@
     <ClInclude Include="FrameWork\Graphics\UI\UISprite.hpp" />
     <ClInclude Include="FrameWork\Graphics\UI\Pipeline\UISpritePipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\Texture\Manager\TextureManager.hpp" />
+    <ClInclude Include="Source\Application\Scene\TitleScene.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application\Components\Damage\DamageSystem.cpp" />

@@ -18,12 +18,12 @@ namespace Engine::System
 		/// <summary>
 		/// 可変更新
 		/// </summary>
-		virtual void Update(double DeltaTime) = 0;
+		virtual void Update(double DeltaTime) {};
 
 		/// <summary>
 		/// 固定更新
 		/// </summary>
-		virtual void FixedUpdate(double FixedDeltaTime) = 0;
+		virtual void FixedUpdate(double FixedDeltaTime) {};
 
 		/// <summary>
 		/// ImGuiの更新表示
@@ -33,7 +33,7 @@ namespace Engine::System
 		/// <summary>
 		/// 描画
 		/// </summary>
-		virtual void Render() = 0;
+		virtual void Render() {};
 
 		/// <summary>
 		/// 終了処理
