@@ -78,6 +78,11 @@ namespace Engine::System
 				});
 		}
 
+		/// <summary>
+		/// システムの全削除
+		/// </summary>
+		void AllClearSystem();
+
 	private:
 		/// <summary>
 		/// ユーザー定義のシステム

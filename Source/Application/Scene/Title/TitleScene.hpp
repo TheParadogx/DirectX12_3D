@@ -23,7 +23,10 @@ namespace Engine::Scene
 		/// </summary>
 		void Release()override;
 
-
+		std::string GetSceneName()override
+		{
+			return "Title";
+		}
 	private:
 
 	};

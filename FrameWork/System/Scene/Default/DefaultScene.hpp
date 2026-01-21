@@ -22,6 +22,12 @@ namespace Engine::System
 		/// I—¹ˆ—
 		/// </summary>
 		virtual void Release()override;
+
+
+		std::string GetSceneName()override
+		{
+			return "Default";
+		}
 	};
 }
 

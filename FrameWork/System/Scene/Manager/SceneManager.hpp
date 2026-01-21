@@ -5,7 +5,8 @@
 
 #include<memory>
 #include<concepts>
-
+#include<string>
+#include<functional>
 
 namespace Engine::System
 {
@@ -59,19 +60,37 @@ namespace Engine::System
 		/// </summary>
 		/// <typeparam name="...Args">引数</typeparam>
 		/// <typeparam name="T">ISceneを継承いる型</typeparam>
-		template<IsScene T,typename... Args>
-		void ChangeScene(Args&&... args)
+		template<IsScene T>
+		void ChangeScene()
 		{
+			mReloader = []() { return std::make_unique<T>(); };
+
 			if (mScene == nullptr)
 			{
-				mScene = std::make_unique<T>(std::forward<Args>(args)...);
+				mScene = mReloader();
 				return;
 			}
-			mNextScene = std::make_unique<T>(std::forward<Args>(args)...);
+			mNextScene = mReloader();
 		}
 
+		/// <summary>
+		/// 今のSceneを読み込み直す
+		/// </summary>
+		void ReloadCurrentScene();
+
+		/// <summary>
+		/// 今のSceneの名前の取得
+		/// </summary>
+		/// <returns></returns>
+		std::string CurrentSceneName();
 
 	private:
+
+		/// <summary>
+		/// 今のSceneを再度読み込む
+		/// </summary>
+		std::function<std::unique_ptr<IScene>()> mReloader;
+
 		/// <summary>
 		///	今のSceneのポインタ
 		/// </summary>
@@ -81,6 +100,11 @@ namespace Engine::System
 		/// 次のSceneのポインタ
 		/// </summary>
 		std::unique_ptr<IScene> mNextScene = nullptr;
+
+		/// <summary>
+		/// 今のSceneの名前
+		/// </summary>
+		std::string mCurrentSceneName;
 	};
 }
 

@@ -20,6 +20,11 @@ namespace Engine::App
 	class Application : public Singleton<Application>
 	{
 		GENERATE_SINGLETON_BODY(Application);
+
+		/// <summary>
+		/// Å‰‚Ì‰æ–Ê‚Ìì¬
+		/// </summary>
+		void CreateStartScene();
 	public:
 		/// <summary>
 		/// ƒƒCƒ“ƒ‹[ƒv

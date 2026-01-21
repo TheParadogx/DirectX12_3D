@@ -22,6 +22,11 @@ namespace Engine::Scene
 		/// I—¹ˆ—
 		/// </summary>
 		void Release()override;
+
+		std::string GetSceneName()override
+		{
+			return "InGame";
+		}
 	private:
 
 	};

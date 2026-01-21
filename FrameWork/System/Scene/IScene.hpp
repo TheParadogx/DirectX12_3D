@@ -1,6 +1,8 @@
 #pragma once
 #include"System/Time/Time.hpp"
 
+#include<string>
+
 namespace Engine::System
 {
 	class IScene
@@ -40,6 +42,11 @@ namespace Engine::System
 		/// </summary>
 		virtual void Release() {};
 
+		/// <summary>
+		/// Scene‚Ì–¼‘O‚ð•Ô‚·
+		/// </summary>
+		/// <returns></returns>
+		virtual std::string GetSceneName() = 0;
 	};
 
 }

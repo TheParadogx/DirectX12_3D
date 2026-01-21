@@ -84,4 +84,9 @@ namespace Engine::System
 			System->Render(Reg);
 		}
 	}
+
+	void SystemManager::AllClearSystem()
+	{
+		mSystems.clear();
+	}
 }
