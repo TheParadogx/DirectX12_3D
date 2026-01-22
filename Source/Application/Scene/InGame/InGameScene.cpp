@@ -43,6 +43,7 @@ namespace Engine::Scene
 		System::SystemManager::GetInstance()->AddSystem<System::GameRuleSystem>();
 
 		System::ColliderSystem::Initialize();
+		System::ColliderSystem::AddCollisionPair<System::PlayerTag, System::EnemyTag>({true,false,false,false});
 		System::ColliderSystem::AddCollisionPair<System::WeaponTag, System::EnemyTag>({ false,false });
 
 		System::ObjectsFactory::CreateField();

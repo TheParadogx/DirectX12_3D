@@ -23,6 +23,7 @@
 
 void Engine::App::Application::CreateStartScene()
 {
+
 #if START_SCENE == 0
     mScene->ChangeScene<Scene::Title>();
 

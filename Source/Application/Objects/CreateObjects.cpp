@@ -118,15 +118,18 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	transform.Rotation = Math::Quaternion::Identity;
 
 	//	fbxのリソース
+	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/MachanicGirl/Girl.fbx.bin");
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
 	res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
 	res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
 	res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
-	
+	res->LoadAnimation("Roll", "Assets/Mannequin/Animation/Roll.fbx.anm");
+
+
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
-	fbx.CurrAnimation = "Idle";
-	fbx.Mesh->SetColor(Graphics::Color::Red());
+	fbx.CurrAnimation = "Roll";
+	//fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);
