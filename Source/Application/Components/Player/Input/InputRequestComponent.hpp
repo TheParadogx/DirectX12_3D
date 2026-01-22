@@ -11,7 +11,7 @@ namespace Engine::System
 
 		//	判定フラグ
 		RunRequested = 1 << 0,		//	走り
-		DashRequested = 1 << 1,		//	ダッシュ
+		SprintRequested = 1 << 1,	//	ダッシュ
 		AttackRequested = 1 << 2,	//	攻撃
 	};
 	DEFINE_ENUM_BITWISE_OPERATORS(eActionInputFlags);

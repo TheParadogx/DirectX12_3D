@@ -45,6 +45,8 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	res->LoadAnimation("Run", "Assets/Mannequin/Animation/MM_Run_Fwd.FBX.anm");
 	res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
 	res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
+	res->LoadAnimation("Sprint", "Assets/Mannequin/Animation/Sprint.fbx.anm");
+
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(player, res);
@@ -124,11 +126,12 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
 	res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
 	res->LoadAnimation("Roll", "Assets/Mannequin/Animation/Roll.fbx.anm");
+	res->LoadAnimation("Sprint", "Assets/Mannequin/Animation/Sprint.fbx.anm");
 
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
-	fbx.CurrAnimation = "Roll";
+	fbx.CurrAnimation = "Sprint";
 	//fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	//	ステータス

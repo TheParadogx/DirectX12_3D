@@ -12,7 +12,7 @@ namespace Engine::System
 	{
 		Idle,		//	待機
 		Run,		//	走り
-		Dash,		//	ダッシュ（ダッシュキー長押し）
+		Sprint,		//	ダッシュ（ダッシュキー長押し）
 		Attack,		//	攻撃
 		Dead,		//	死亡
 	};

@@ -7,7 +7,7 @@
 #include"System/Conponent/Collider/ColliderComponent.hpp"
 
 /// <summary>
-/// 走り状態に移行できるかどうかの判定フラグ
+/// 走り状態に移行できるかどうかの判定
 /// </summary>
 /// <returns></returns>
 bool Engine::System::PlayerStateSystem::CheckRunRequest(PlayerStateComponent& state)
@@ -18,12 +18,12 @@ bool Engine::System::PlayerStateSystem::CheckRunRequest(PlayerStateComponent& st
 	return  
 		curr == ePlayerState::Idle	||
 		curr == ePlayerState::Run	||
-		curr == ePlayerState::Dash;
+		curr == ePlayerState::Sprint;
 
 }
 
 /// <summary>
-/// 攻撃状態に移行できるかどうかの判定フラグ
+/// 攻撃状態に移行できるかどうかの判定
 /// </summary>
 /// <returns></returns>
 bool Engine::System::PlayerStateSystem::CheckAttackRequest(PlayerStateComponent& state)
@@ -32,9 +32,71 @@ bool Engine::System::PlayerStateSystem::CheckAttackRequest(PlayerStateComponent&
 	return
 		curr == ePlayerState::Idle ||
 		curr == ePlayerState::Run ||
-		curr == ePlayerState::Dash ||
+		curr == ePlayerState::Sprint ||
 		curr == ePlayerState::Attack;
 }
+
+/// <summary>
+/// スプリント状態に移行できるかどうかの判定
+/// </summary>
+/// <param name="state"></param>
+/// <returns></returns>
+bool Engine::System::PlayerStateSystem::CheckSprintRequest(PlayerStateComponent& state, const Math::Vector3& InputVec)
+{
+	const auto& curr = state.State;
+
+	const bool HasInputVec = InputVec.SqrLength() > 0;
+	const bool CanPrevState = 
+		curr == ePlayerState::Idle ||
+		curr == ePlayerState::Run ||
+		curr == ePlayerState::Sprint ||
+		curr == ePlayerState::Attack;
+
+	return HasInputVec == true && CanPrevState == true;
+}
+
+/// <summary>
+/// 状態の終了
+/// </summary>
+/// <param name="Reg"></param>
+void Engine::System::PlayerStateSystem::ExitState(entt::registry& Reg)
+{
+	auto view = Reg.view<PlayerStateComponent, InputRequestComponent, FbxComponent>();
+	view.each([&](auto entity, PlayerStateComponent& state, InputRequestComponent& req, FbxComponent& fbx)
+		{
+			//	攻撃
+			switch (state.State)
+			{
+			case ePlayerState::Attack:
+				OnAttackFinished(Reg, entity, state, req, fbx);
+				break;
+			case ePlayerState::Run:
+				state.State = ePlayerState::Idle;
+				fbx.CurrAnimation = "Idle";
+				fbx.IsLoop = true;
+				break;
+			case ePlayerState::Sprint:
+				state.State = ePlayerState::Idle;
+				fbx.CurrAnimation = "Idle";
+				break;
+			default:
+				break;
+			}
+
+
+		});
+
+}
+
+/// <summary>
+/// 状態の切り替え
+/// </summary>
+void Engine::System::PlayerStateSystem::ChangeState(entt::registry& Reg, PlayerStateComponent& state, ePlayerState NextState)
+{
+	ExitState(Reg);
+	state.State = NextState;
+}
+
 
 /// <summary>
 /// 攻撃の終了条件の判定
@@ -62,42 +124,66 @@ bool Engine::System::PlayerStateSystem::IsFinishAttack(PlayerStateComponent& Sta
 }
 
 /// <summary>
+/// 攻撃の終了
+/// </summary>
+void Engine::System::PlayerStateSystem::OnAttackFinished(entt::registry& Reg,entt::entity entity, PlayerStateComponent& state, InputRequestComponent& req, FbxComponent& fbx)
+{
+	state.State = ePlayerState::Idle;
+	fbx.CurrAnimation = "Idle";
+	fbx.IsLoop = true;
+	fbx.AnimationScale = 1.0f;
+
+	//	当たり判定の削除
+	if (Reg.all_of<ColliderComponent>(state.Weapon))
+	{
+		Reg.remove<ColliderComponent>(state.Weapon);
+	}
+	if (Reg.all_of<HitHistoryComponent>(state.Weapon))
+	{
+		Reg.remove<HitHistoryComponent>(state.Weapon);
+	}
+}
+
+/// <summary>
 /// 終了条件を判断するして前状態を終了する
 /// </summary>
 void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double DeltaTime)
 {
 	//	攻撃の終了などを判断する
-	auto view = Reg.view<PlayerStateComponent, InputRequestComponent,FbxComponent>();
+	auto view = Reg.view<PlayerStateComponent, InputRequestComponent, FbxComponent>();
 	view.each([&](auto entity, PlayerStateComponent& state, InputRequestComponent& req, FbxComponent& fbx)
-	{
+		{
 			//	攻撃
 			if (state.State == ePlayerState::Attack)
 			{
 				//	攻撃の終了判定
 				if (IsFinishAttack(state, req, fbx))
 				{
-					state.State = ePlayerState::Idle;
-					fbx.CurrAnimation = "Idle";
-					fbx.IsLoop = true;
-					fbx.AnimationScale = 1.0f;
-					//	当たり判定の削除
-					Reg.remove<ColliderComponent>(state.Weapon);
-					Reg.remove<HitHistoryComponent>(state.Weapon);
+					ExitState(Reg);
 				}
 			}
-
 			//	ダッシュ
-			if (state.State == ePlayerState::Run)
+			else if (state.State == ePlayerState::Run)
 			{
 				if (req.InputVec.SqrLength() <= 0)
 				{
-					state.State = ePlayerState::Idle;
-					fbx.CurrAnimation = "Idle";
-					fbx.IsLoop = true;
+					ExitState(Reg);
 				}
 			}
+			else if (state.State == ePlayerState::Sprint)
+			{
+				//	無敵コンポーネントがない状態かつ
 
-	});
+
+				//	スプリントのリクエストがない
+				if (HasFlag(req.Flags, eActionInputFlags::SprintRequested) == false)
+				{
+					return false;
+				}
+				ExitState(Reg);
+			}
+		});
+
 }
 
 /// <summary>
@@ -113,6 +199,22 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 
 	view.each([&](auto entity, PlayerStateComponent& state, InputRequestComponent& req, FbxComponent&fbx, MoveComponent& move)
 		{
+
+			//	スプリント
+			ret = (HasFlag(req.Flags, eActionInputFlags::SprintRequested) == true)
+				&& (this->CheckSprintRequest(state, req.InputVec) == true);
+			if (ret == true)
+			{
+				if (state.State != ePlayerState::Sprint)
+				{
+					ChangeState(Reg, state, ePlayerState::Sprint);
+					fbx.CurrAnimation = "Sprint";
+				}
+				//	移動量の代入
+				move.TargetDir = req.InputVec;
+				return;
+			}
+
 			//	攻撃
 			ret = (HasFlag(req.Flags, eActionInputFlags::AttackRequested) == true) && (this->CheckAttackRequest(state) == true);
 			if (ret == true)
@@ -120,7 +222,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				if (state.State != ePlayerState::Attack)
 				{
 					//	状態変更
-					state.State = ePlayerState::Attack;
+					ChangeState(Reg, state, ePlayerState::Attack);
 					fbx.CurrAnimation = "Attack";
 					fbx.IsLoop = false;
 					fbx.AnimationScale = 2.5f;
@@ -134,7 +236,6 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					collider->SetVolume({ 1.0f,4.0f,1.0f });
 					col.Offset = { 0.0f, -4.0f, 0.0f };
 					Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
-
 				}
 				return;
 			}
@@ -155,8 +256,6 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 
 				return;
 			}
-
-			//	ダッシュ
 
 			//	待機
 			if (HasNoFlag(req.Flags) && state.State == ePlayerState::Idle)
