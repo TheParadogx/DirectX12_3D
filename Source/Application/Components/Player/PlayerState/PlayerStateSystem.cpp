@@ -46,15 +46,22 @@ bool Engine::System::PlayerStateSystem::CheckSprintRequest(PlayerStateComponent&
 {
 	const auto& curr = state.State;
 
+	//	入力量がないとだめ
 	if (InputVec.SqrLength() <= 0)
 	{
 		return false;
 	}
 
+	//	クールダウン中はだめ
+	if (state.Sprint.IsCoolDown == true)
+	{
+		return false;
+	}
+
+	//	後は条件次第
 	return 
 		curr == ePlayerState::Idle ||
 		curr == ePlayerState::Run ||
-		curr == ePlayerState::Sprint ||
 		curr == ePlayerState::Attack;
 }
 
@@ -175,9 +182,6 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 			}
 			else if (state.State == ePlayerState::Sprint)
 			{
-				//	無敵コンポーネントがない状態かつ
-
-
 				//	スプリントのリクエストがない
 				if (HasFlag(req.Flags, eActionInputFlags::SprintRequested) == false)
 				{
@@ -185,6 +189,27 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 				}
 				ExitState(Reg);
 			}
+
+			//	タイマーのカウントダウン
+			if (state.Sprint.RecoveryTimer > 0.0f)
+			{
+				state.Sprint.RecoveryTimer -= DeltaTime;
+			}
+			//	クールタイム終了判定
+			if (state.Sprint.IsCoolDown && state.Sprint.RecoveryTimer <= 0.0f)
+			{
+				state.Sprint.IsCoolDown = false;
+				state.Sprint.DodgeCount = 0;
+				//state.Sprint.RecoveryTimer = 0;
+			}
+			//	1回以上で最大数以下の状態で連続判定の時間を過ぎたらカウントをリセットする
+			else if (!state.Sprint.IsCoolDown && state.Sprint.RecoveryTimer <= 0.0f)
+			{
+				state.Sprint.DodgeCount = 0;
+				//state.Sprint.RecoveryTimer = 0;
+			}
+
+
 		});
 
 }
@@ -213,9 +238,23 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					ChangeState(Reg, state, ePlayerState::Sprint);
 					fbx.CurrAnimation = "Sprint";
 					Reg.emplace_or_replace<InvincibleComponet>(entity);
+
+					//	カウント加算
+					state.Sprint.DodgeCount++;
+					//	カウントが上限を超えていたら
+					if (state.Sprint.DodgeCount >= state.Sprint.DodgeCountMax)
+					{
+						//	連続使用のペナルティ
+						state.Sprint.IsCoolDown = true;
+						state.Sprint.RecoveryTimer = state.Sprint.CoolDowmMax;
+					}
+					else
+					{
+						state.Sprint.RecoveryTimer = state.Sprint.DodgeInputWindow;
+					}
 				}
 				//	移動量の代入
-				move.TargetDir = req.InputVec * 30;
+				move.TargetDir = req.InputVec * 10;
 				return;
 			}
 

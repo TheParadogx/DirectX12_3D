@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "InvincibleSystem.hpp"
 #include"InvincibleTag.hpp"
-
+#include"Application/Components/Player/Input/InputRequestComponent.hpp"
 
 void Engine::System::InvincibleSystem::MainUpdate(entt::registry& Reg, double DeltaTime)
 {
@@ -13,7 +13,7 @@ void Engine::System::InvincibleSystem::MainUpdate(entt::registry& Reg, double De
 			{
 				//	ñ≥ìGÇÃçÌèú
 				Reg.remove<InvincibleComponet>(entity);
-			}
 
+			}
 		});
 }

@@ -34,13 +34,13 @@ namespace Engine::Scene
 		camera->Create();
 
 		//	ƒVƒXƒeƒ€’Ç‰Á
-		System::SystemManager::GetInstance()->AddSystem<System::CameraControlSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::SocketComponentSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::HpRenderSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::InputRequestSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::DamageSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::CameraControlSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::GameRuleSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::InvincibleSystem>();
 

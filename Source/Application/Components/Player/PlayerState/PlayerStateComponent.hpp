@@ -25,5 +25,16 @@ namespace Engine::System
 		//	ç°ÇÃèÛë‘
 		ePlayerState State = ePlayerState::Idle;
 		entt::entity Weapon = entt::null;
+
+		struct SprintData
+		{
+			int DodgeCount = 0;
+			int DodgeCountMax = 2;
+			float RecoveryTimer = 0.0f;
+			float CoolDowmMax = 5.0f;
+			float DodgeInputWindow = 0.8f;
+			bool IsCoolDown = false;
+		} Sprint;
+
 	};
 }
