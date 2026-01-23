@@ -23,7 +23,16 @@ void Engine::System::InputRequestSystem::PreUpdate(entt::registry& Reg, double D
 			{
 				req.Flags &= ~eActionInputFlags::RunRequested;
 			}
+
 			//	ƒ_ƒbƒVƒ…
+			if (Input::InputManager::GetInstance()->IsActionPressed("Sprint"))
+			{
+				req.Flags |= eActionInputFlags::SprintRequested;
+			}
+			else
+			{
+				req.Flags &= ~eActionInputFlags::SprintRequested;
+			}
 
 			//	UŒ‚
 			if (Input::InputManager::GetInstance()->IsActionHeld("Attack"))

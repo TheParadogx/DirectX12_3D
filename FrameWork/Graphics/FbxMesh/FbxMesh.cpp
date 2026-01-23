@@ -243,6 +243,19 @@ void Engine::Graphics::FbxMesh::Animate(const std::string& AnimationName, const 
 		// GPU送信用
 		mSkinningMatrices[i] = Math::Matrix::Transpose(bones[i].BindMatrix * mCurrentGlobalMatrices[i]);
 	}
+
+
+	////	同期
+	//int rootIdx = 0;
+	//Math::Matrix rootMatrix = mCurrentGlobalMatrices[rootIdx];
+
+	//// 1. 行列から移動量を抽出して mPosition に反映
+	//mPosition.x = rootMatrix._41;
+	//mPosition.y = rootMatrix._42;
+	//mPosition.z = rootMatrix._43;
+
+	//// 2. 行列から回転を抽出して mRotation に反映
+	//mRotation = Math::Quaternion::FromMatrix(rootMatrix);
 }
 
 /// <summary>

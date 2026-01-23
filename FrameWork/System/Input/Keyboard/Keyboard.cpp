@@ -69,7 +69,7 @@ Engine::Input::eKeyCode Engine::Input::Keyboard::ToKeyCode(WPARAM VKCode)
 		//	特殊キー
 	case VK_ESCAPE:   return eKeyCode::Escape;
 	case VK_LCONTROL: return eKeyCode::LControl;
-	case VK_LSHIFT:   return eKeyCode::LShift;
+	case VK_SHIFT:   return eKeyCode::LShift;
 	case VK_LMENU:    return eKeyCode::LAlt;     // VK_MENU は Alt キー
 	case VK_LWIN:     return eKeyCode::LSystem;  // 左 Windows キー
 	case VK_RCONTROL: return eKeyCode::RControl;
@@ -200,8 +200,8 @@ bool Engine::Input::Keyboard::ProcessEvent(UINT Message, WPARAM VKCode)
 bool Engine::Input::Keyboard::IsPressed(eKeyCode keyCode) const
 {
 	if (IsValid(keyCode) == false) return false;
-	return (mCurrKeys[static_cast<uint32_t>(keyCode)] == true
-		&& mPrevKeys[static_cast<uint32_t>(keyCode)] == false);
+	return (mCurrKeys[static_cast<int>(keyCode)] == true
+		&& mPrevKeys[static_cast<int>(keyCode)] == false);
 }
 
 /// <summary>
@@ -212,7 +212,7 @@ bool Engine::Input::Keyboard::IsPressed(eKeyCode keyCode) const
 bool Engine::Input::Keyboard::IsHeld(eKeyCode keyCode) const
 {
 	if (IsValid(keyCode) == false) return false;
-	return mCurrKeys[static_cast<uint32_t>(keyCode)] == true;
+	return mCurrKeys[static_cast<int>(keyCode)] == true;
 }
 
 /// <summary>
@@ -223,8 +223,8 @@ bool Engine::Input::Keyboard::IsHeld(eKeyCode keyCode) const
 bool Engine::Input::Keyboard::IsReleased(eKeyCode keyCode) const
 {
 	if (IsValid(keyCode) == false) return false;
-	return mCurrKeys[static_cast<uint32_t>(keyCode)] == false
-		&& mPrevKeys[static_cast<uint32_t>(keyCode)] == true;
+	return mCurrKeys[static_cast<int>(keyCode)] == false
+		&& mPrevKeys[static_cast<int>(keyCode)] == true;
 }
 
 /// <summary>

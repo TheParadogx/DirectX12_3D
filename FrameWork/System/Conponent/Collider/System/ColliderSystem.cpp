@@ -111,7 +111,7 @@ void Engine::System::ColliderSystem::CheckCollition(entt::registry& Registry)
 				//	同一オブジェクトかどうかの判定
 				if (entityA == entityB)
 				{
-					return;
+					continue;
 				}
 
 				//	コンポーネントの取得

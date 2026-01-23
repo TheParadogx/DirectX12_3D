@@ -16,6 +16,7 @@
 #include"Application/Components/Damage/DamageSystem.hpp"
 #include"Application/Components/InputMove/MoveComponentSystem.hpp"
 #include"Application/Components/GameRule/GameRuleSystem.hpp"
+#include"Application/Components/Invincible/InvincibleSystem.hpp"
 
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Objects/CreateObjects.hpp"
@@ -33,16 +34,18 @@ namespace Engine::Scene
 		camera->Create();
 
 		//	ƒVƒXƒeƒ€’Ç‰Á
-		System::SystemManager::GetInstance()->AddSystem<System::CameraControlSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::SocketComponentSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::HpRenderSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::InputRequestSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::DamageSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::CameraControlSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::GameRuleSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::InvincibleSystem>();
 
 		System::ColliderSystem::Initialize();
+		System::ColliderSystem::AddCollisionPair<System::PlayerTag, System::EnemyTag>({true,false,false,false});
 		System::ColliderSystem::AddCollisionPair<System::WeaponTag, System::EnemyTag>({ false,false });
 
 		System::ObjectsFactory::CreateField();

@@ -19,7 +19,7 @@ bool Engine::Input::InputManager::Initialize()
 	AddAction("Select", { eKeyCode::Space,ePadButton::A,eMouseButton::Left });
 	AddAction("Cancel", { eKeyCode::Escape,ePadButton::B });
 	AddAction("Attack", { eKeyCode::Count,ePadButton::R2,eMouseButton::Left });
-	AddAction("Jump", { eKeyCode::Space,ePadButton::A });
+	AddAction("Sprint", { eKeyCode::LShift,ePadButton::L3});
 
 	return true;
 }
