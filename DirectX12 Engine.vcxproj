@@ -160,6 +160,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Application\Components\Invincible\InvincibleSystem.hpp" />
+    <ClInclude Include="Source\Application\Components\Invincible\InvincibleTag.hpp" />
     <ClInclude Include="Source\Application\Components\GameRule\GameRuleSystem.hpp" />
     <ClInclude Include="Source\Application\Components\GameRule\GameRuleComponent.hpp" />
     <ClInclude Include="Source\Application\Scene\GameClear\GameClear.hpp" />
@@ -286,6 +288,7 @@
     <ClInclude Include="Source\Application\Scene\Title\TitleScene.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Application\Components\Invincible\InvincibleSystem.cpp" />
     <ClCompile Include="Source\Application\Components\GameRule\GameRuleSystem.cpp" />
     <ClCompile Include="Source\Application\Scene\GameClear\GameClear.cpp" />
     <ClCompile Include="Source\Application\Scene\GameOver\GameOverScene.cpp" />

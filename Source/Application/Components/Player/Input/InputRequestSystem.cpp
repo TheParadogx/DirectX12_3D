@@ -25,7 +25,7 @@ void Engine::System::InputRequestSystem::PreUpdate(entt::registry& Reg, double D
 			}
 
 			//	ƒ_ƒbƒVƒ…
-			if (Input::InputManager::GetInstance()->IsActionHeld("Sprint"))
+			if (Input::InputManager::GetInstance()->IsActionPressed("Sprint"))
 			{
 				req.Flags |= eActionInputFlags::SprintRequested;
 			}

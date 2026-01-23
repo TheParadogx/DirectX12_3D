@@ -3,6 +3,7 @@
 #include "Application/Components/Tag/TagComponent.hpp"
 #include"Application/Components/InputMove/MoveComponent.hpp"
 #include"Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
+#include"Application/Components/Invincible/InvincibleTag.hpp"
 
 #include"System/Conponent/Collider/ColliderComponent.hpp"
 
@@ -45,14 +46,16 @@ bool Engine::System::PlayerStateSystem::CheckSprintRequest(PlayerStateComponent&
 {
 	const auto& curr = state.State;
 
-	const bool HasInputVec = InputVec.SqrLength() > 0;
-	const bool CanPrevState = 
+	if (InputVec.SqrLength() <= 0)
+	{
+		return false;
+	}
+
+	return 
 		curr == ePlayerState::Idle ||
 		curr == ePlayerState::Run ||
 		curr == ePlayerState::Sprint ||
 		curr == ePlayerState::Attack;
-
-	return HasInputVec == true && CanPrevState == true;
 }
 
 /// <summary>
@@ -209,9 +212,10 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				{
 					ChangeState(Reg, state, ePlayerState::Sprint);
 					fbx.CurrAnimation = "Sprint";
+					Reg.emplace_or_replace<InvincibleComponet>(entity);
 				}
 				//	ˆÚ“®—Ê‚Ì‘ã“ü
-				move.TargetDir = req.InputVec;
+				move.TargetDir = req.InputVec * 30;
 				return;
 			}
 
