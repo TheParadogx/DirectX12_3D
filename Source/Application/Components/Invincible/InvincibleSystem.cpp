@@ -2,7 +2,8 @@
 #include "InvincibleSystem.hpp"
 #include"InvincibleTag.hpp"
 
-void Engine::System::InvincibleSystem::PostUpdate(entt::registry& Reg, double DeltaTime)
+
+void Engine::System::InvincibleSystem::MainUpdate(entt::registry& Reg, double DeltaTime)
 {
 	auto view = Reg.view<InvincibleComponet>();
 	view.each([&](entt::entity entity, InvincibleComponet& invi)
@@ -15,5 +16,4 @@ void Engine::System::InvincibleSystem::PostUpdate(entt::registry& Reg, double De
 			}
 
 		});
-
 }

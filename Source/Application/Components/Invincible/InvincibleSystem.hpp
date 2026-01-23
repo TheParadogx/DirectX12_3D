@@ -10,8 +10,7 @@ namespace Engine::System
 		/// </summary>
 		/// <param name="Reg"></param>
 		/// <param name="DeltaTime"></param>
-		void PostUpdate(entt::registry& Reg, double DeltaTime)override;
-
+		void MainUpdate(entt::registry& Reg, double DeltaTime)override;
 	private:
 
 	};
