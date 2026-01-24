@@ -95,7 +95,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	move.MoveSpeed = 20.0f;
 
 	//	武器
-	auto sword = CreateSword(player);
+	auto sword = CreateSword(player,"hand_r");
 	state.Weapon = sword;
 
 	//	タグ
@@ -120,18 +120,24 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	transform.Rotation = Math::Quaternion::Identity;
 
 	//	fbxのリソース
-	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/MachanicGirl/Girl.fbx.bin");
+	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Aurora/Aurora.fbx.bin");
+	//res->LoadAnimation("Attack", "Assets/Fbx/Aurora/Animation/Primary_Attack_C.fbx.anm");
+	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/DarkKnight/Female_Dark_Knight.fbx.bin.txt");
+	// Primary_Attack_C.fbx.anm
+
+
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
 	res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
+	res->LoadAnimation("Run", "Assets/Mannequin/Animation/MM_Run_Fwd.FBX.anm");
 	res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
 	res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
-	res->LoadAnimation("Roll", "Assets/Mannequin/Animation/Roll.fbx.anm");
 	res->LoadAnimation("Sprint", "Assets/Mannequin/Animation/Sprint.fbx.anm");
+	res->LoadAnimation("At", "Assets/Mannequin/Animation/Primary_Attack_C.fbx.anm");
 
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
-	fbx.CurrAnimation = "Sprint";
+	fbx.CurrAnimation = "Idle";
 	fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	//	ステータス
@@ -146,11 +152,6 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	//	体力バー
 	auto& hpBar = registry.emplace<System::HpRenderComponent>(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0));
 	hpBar.SetPosition({ 100,100 });
-
-	//	当たり判定
-	//auto& collider = registry.emplace<AABBColliderComponent>(enemy);
-	//collider.Collider.SetVolume({ 2.0f,8.0f,2.0f });
-	//collider.Offset = { 0.0f, collider.Collider.GetVolume().y * 0.5f, 0.0f };
 
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();
@@ -189,7 +190,7 @@ void Engine::System::ObjectsFactory::CreateField()
 	//collider.Offset = { 0.0f, 5.0f, 0.0f };
 }
 
-entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent)
+entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent, const std::string& BoneName)
 {
 	auto manager = EntityManager::GetInstance();
 	auto& registry = EntityManager::GetInstance()->GetRegistry();
@@ -219,7 +220,7 @@ entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent)
 	//	アタッチ
 	auto& socket = registry.emplace<SocketComponent>(sword);
 	socket.Parent = Parent;
-	socket.BoneName = "hand_r";
+	socket.BoneName = BoneName;
 	socket.OffsetPos = { 0.46,-0.33,0.11 };
 	socket.OffsetRot = { -0.8,0.176,0.32,0.46 };
 	//socket.PivotOffset = { -0.39,2.27,-0.22 };

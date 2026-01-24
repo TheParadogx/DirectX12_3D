@@ -1,2 +1,0 @@
-NumFrame:36
-NumBone:89
