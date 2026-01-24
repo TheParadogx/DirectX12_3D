@@ -6,7 +6,8 @@ namespace Engine::System
 	class CameraControlSystem : public ISystem
 	{
 	public:
-		virtual void MainUpdate(entt::registry& Reg, double DeltaTime) override;
+		virtual void PostUpdate(entt::registry& Reg, double DeltaTime) override;
+
 	private:
 
 	};

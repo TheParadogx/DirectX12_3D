@@ -14,17 +14,13 @@
 /// <summary>
 /// 座標位置が確定した親オブジェクトの指定したボーン座標にセット
 /// </summary>
+#if true
 void Engine::System::SocketComponentSystem::PostUpdate(entt::registry& Reg, double DeltaTime)
 {
     OnGui(Reg);
 
-}
-
-void Engine::System::SocketComponentSystem::Render(entt::registry& Reg)
-{
-
-    auto view = Reg.view<Transform3D, SocketComponent>();
-    view.each([&](auto entity, auto& trans, auto& socket)
+    auto view = Reg.view<Transform3D, SocketComponent,FbxComponent>();
+    view.each([&](auto entity, auto& trans, auto& socket,FbxComponent& fbx)
         {
             //	有効な親か判定
             if (Reg.valid(socket.Parent) == false)
@@ -58,7 +54,7 @@ void Engine::System::SocketComponentSystem::Render(entt::registry& Reg)
             NormalizeQuat(boneRot); // 親ボーンのデータも念のため正規化
 
             // 最終的な回転
-            Math::Quaternion finalRot =socket.OffsetRot * boneRot;
+            Math::Quaternion finalRot = socket.OffsetRot * boneRot;
             NormalizeQuat(finalRot);
 
             // ベクトル回転関数の安全化
@@ -80,6 +76,10 @@ void Engine::System::SocketComponentSystem::Render(entt::registry& Reg)
             trans.Position = worldSocketPos - rotatedPivot;
             trans.Rotation = finalRot;
 
+            fbx.Mesh->SetPosition(trans.Position);
+            fbx.Mesh->SetScale(trans.Scale);
+            fbx.Mesh->SetRotation(trans.Rotation * fbx.OffsetRotation);
+
             // デバッグ表示
             Graphics::Renderer::GetInstance()->DrawGizmo(worldSocketPos, boneRot, 1.0f);
             Graphics::Renderer::GetInstance()->DrawGizmo(trans.Position, trans.Rotation, 0.2f);
@@ -87,6 +87,8 @@ void Engine::System::SocketComponentSystem::Render(entt::registry& Reg)
         });
 
 }
+#else
+#endif // true
 
 /// <summary>
 /// ImGuiでオフセットをいじるための
