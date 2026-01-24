@@ -12,11 +12,6 @@ namespace Engine::System
 		/// </summary>
 		virtual void PostUpdate(entt::registry& Reg, double DeltaTime)override;
 
-		/// <summary>
-		/// デバック表示
-		/// </summary>
-		/// <param name="Reg"></param>
-		virtual void Render(entt::registry& Reg)override;
 	private:
 		/// <summary>
 		/// ImGuiでオフセットをいじるための
