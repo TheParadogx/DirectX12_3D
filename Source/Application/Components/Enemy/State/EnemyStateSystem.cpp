@@ -7,7 +7,7 @@
 #include "System/Conponent/Collider/ColliderComponent.hpp"
 #include "System/Conponent/Fbx/FbxMeshConponent.hpp"
 #include "System/Conponent/Transform/TransformConponent.hpp"
-
+#include "System/Conponent/Rigidbody/RigidbodyComponent.hpp"
 
 /// <summary>
 /// 状態の終了の判定
@@ -74,8 +74,23 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 
 				//	回転の適応
 				trans.Rotation = Math::Quaternion::Slerp(trans.Rotation, targetRot, state.Chase.RotationSpeed * DeltaTime);
+				
+				//	移動の取得
+				if (Rigidbody3D* rigid = Reg.try_get<Rigidbody3D>(entity))
+				{
+					//	向きだけを取り出す
+					Math::Vector3 moveDir = toPlayer;
+					moveDir.Normalize();
 
-				//	前に歩く
+					//	移動量セット
+					rigid->Velocity = moveDir * state.Chase.MoveSpeed;
+				}
+
+				if (state.State != eEnemyState::Chase)
+				{
+					state.State = eEnemyState::Chase;
+					fbx.CurrAnimation = "Jog";
+				}
 				return;
 			}
 

@@ -131,6 +131,10 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	transform.Scale = { Scale ,Scale ,Scale };
 	transform.Rotation = Math::Quaternion::Identity;
 
+	//	移動量（物理）
+	auto& rigidbody = registry.emplace<Rigidbody3D>(enemy);
+
+
 	//	素材テスト
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
 	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
@@ -153,7 +157,7 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
 	fbx.CurrAnimation = "Idle";
-	//fbx.Mesh->SetColor(Graphics::Color::Red());
+	fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);

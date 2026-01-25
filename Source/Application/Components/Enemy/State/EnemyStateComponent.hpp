@@ -20,7 +20,7 @@ namespace Engine::System
 		{
 			float DetectionRange = 100.0f;	// 索敵範囲
 			float AttackRange = 2.5f;		// 攻撃範囲
-			float MoveSpeed = 3.0f;			// 移動速度
+			float MoveSpeed = 10.0f;			// 移動速度
 			float RotationSpeed = 5.0f;		// プレイヤーに向く回転速度
 		};
 
