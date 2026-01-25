@@ -4,6 +4,7 @@ namespace Engine::System
 {
 	struct PlayerTag {};
 	struct EnemyTag {};
-	struct WeaponTag{};
+	struct PlayerWeaponTag{};
+	struct EnemyWeaponTag {};
 	struct DeadTag{};
 }

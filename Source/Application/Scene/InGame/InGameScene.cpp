@@ -49,7 +49,7 @@ namespace Engine::Scene
 
 		System::ColliderSystem::Initialize();
 		System::ColliderSystem::AddCollisionPair<System::PlayerTag, System::EnemyTag>({true,false,false,false});
-		System::ColliderSystem::AddCollisionPair<System::WeaponTag, System::EnemyTag>({ false,false });
+		System::ColliderSystem::AddCollisionPair<System::PlayerWeaponTag, System::EnemyTag>({ false,false });
 
 		System::ObjectsFactory::CreateField();
 		System::ObjectsFactory::CreatePlayer();

@@ -49,22 +49,21 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 			//	距離
 			float distance = Math::Vector3::Distance(PlayerPos, trans.Position);
 
-			//	攻撃
-			//if (distance < state.Chase.AttackRange)
-			//{
-			//	//	攻撃に移動する処理
-			//	if (state.State != eEnemyState::Attack)
-			//	{
-			//		state.State = eEnemyState::Attack;
-			//		fbx.CurrAnimation = "Attack_A";
-			//		//	アニメーションの作成速度を変更してもいい
-			//	}
-			//	return;
-			//}
-
-			
+			// 攻撃
+			if (distance < state.Chase.AttackRange)
+			{
+				//	攻撃に移動する処理
+				if (state.State != eEnemyState::Attack)
+				{
+					//	状態のリセット関数を呼び出す。
+					state.State = eEnemyState::Attack;
+					fbx.CurrAnimation = "Attack_A";
+					//	アニメーションの作成速度を変更する（予定）
+				}
+				return;
+			}
 			//	追跡
-			if (distance < state.Chase.DetectionRange)
+			else if (distance < state.Chase.DetectionRange)
 			{
 				//	移動ベクトル
 				Math::Vector3 toPlayer = PlayerPos - trans.Position;

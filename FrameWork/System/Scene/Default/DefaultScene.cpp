@@ -65,7 +65,7 @@ bool Engine::System::DefaultScene::Initialize()
     //  当たり判定のシステム
     System::ColliderSystem::Initialize();
     System::ColliderSystem::AddCollisionPair<PlayerTag, EnemyTag>({  });
-    System::ColliderSystem::AddCollisionPair<WeaponTag, EnemyTag>({ false,false,true,false});
+    System::ColliderSystem::AddCollisionPair<PlayerWeaponTag, EnemyTag>({ false,false,true,false});
 
     //  フィールド
     System::ObjectsFactory::CreateField();
