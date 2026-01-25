@@ -107,7 +107,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	move.MoveSpeed = 20.0f;
 
 	//	武器
-	auto sword = CreateSword(player,"RightHand");
+	auto sword = CreatePlayerWeapon(player,"RightHand");
 	state.Weapon = sword;
 
 	//	タグ
@@ -179,7 +179,7 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	registry.emplace<ColliderComponent>(enemy, std::move(col));
 
 	//	武器
-	auto sword = CreateSword(enemy, "RightHand");
+	auto sword = CreateEnemyWeapon(enemy, "RightHand");
 
 
 	//　状態管理
@@ -266,7 +266,7 @@ void Engine::System::ObjectsFactory::CreateTest()
 
 }
 
-entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent, const std::string& BoneName)
+entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Parent, const std::string& BoneName)
 {
 	auto manager = EntityManager::GetInstance();
 	auto& registry = EntityManager::GetInstance()->GetRegistry();
@@ -305,6 +305,45 @@ entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent, co
 	damage.DamageValue = 250.0f;
 
 	registry.emplace<PlayerWeaponTag>(sword);
+
+	return sword;
+}
+
+entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName)
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 1.0f;
+	auto sword = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(sword);
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::Identity;
+
+	//	fbxのリソース
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/Sword.fbx.bin");
+	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/MM_Sword.fbx.bin");
+
+
+	//	fbxのモデル
+	auto& fbx = registry.emplace<FbxComponent>(sword, res, false);
+	fbx.CurrAnimation = "";
+	fbx.Mesh->SetColor(Graphics::Color::Red());
+
+	//	アタッチ
+	auto& socket = registry.emplace<SocketComponent>(sword);
+	socket.Parent = Parent;
+	socket.BoneName = BoneName;
+	socket.OffsetPos = { 1.82,0.51,-0.46 };
+	socket.OffsetRot = { -0.7,-0.685,0.192,0.007 };
+	socket.PivotOffset = { 0,1.98,0.0 };
+
+	auto& damage = registry.emplace<AttackPowerComponent>(sword);
+	damage.DamageValue = 250.0f;
+
+	registry.emplace<EnemyWeaponTag>(sword);
 
 	return sword;
 }
