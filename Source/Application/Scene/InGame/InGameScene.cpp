@@ -18,6 +18,8 @@
 #include"Application/Components/GameRule/GameRuleSystem.hpp"
 #include"Application/Components/Invincible/InvincibleSystem.hpp"
 
+#include"Application/Components/Enemy/State/EnemyStateSystem.hpp"
+
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Objects/CreateObjects.hpp"
 
@@ -38,6 +40,7 @@ namespace Engine::Scene
 		System::SystemManager::GetInstance()->AddSystem<System::HpRenderSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::InputRequestSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::EnemyStateSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::DamageSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::CameraControlSystem>();

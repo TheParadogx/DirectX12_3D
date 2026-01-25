@@ -20,6 +20,8 @@
 #include"Application/Components/Player/PlayerState/PlayerStateComponent.hpp"
 #include"Application/Components/Player/Input/InputRequestComponent.hpp"
 
+#include "Application/Components/Enemy/State/EnemyStateComponent.hpp"
+
 #include"Application/Components/Tag/TagComponent.hpp"
 
 
@@ -150,7 +152,7 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
-	fbx.CurrAnimation = "Idle";
+	fbx.CurrAnimation = "Attack_A";
 	//fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	//	ステータス
@@ -171,6 +173,9 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
 	registry.emplace<ColliderComponent>(enemy, std::move(col));
+
+	//　状態管理
+	registry.emplace<EnemyStateComponent>(enemy);
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
