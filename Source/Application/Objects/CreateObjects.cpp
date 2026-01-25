@@ -152,7 +152,7 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
-	fbx.CurrAnimation = "Attack_A";
+	fbx.CurrAnimation = "Idle";
 	//fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	//	ステータス

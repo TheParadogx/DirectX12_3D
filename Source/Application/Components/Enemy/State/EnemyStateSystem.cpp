@@ -26,9 +26,6 @@ void Engine::System::EnemyStateSystem::PreUpdate(entt::registry& Reg, double Del
 /// <param name="DeltaTime"></param>
 void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double DeltaTime)
 {
-	auto view = Reg.view<EnemyStateComponent, FbxComponent>(entt::exclude<DeadTag>);
-	bool ret = false;
-
 	//	プレイヤーの座標取得
 	auto Player_view = Reg.view<Transform3D, PlayerTag>(entt::exclude<DeadTag>);
 	Math::Vector3 PlayerPos = {};
@@ -39,20 +36,52 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 			PlayerPos = trans.Position;
 		});
 
+	auto view = Reg.view<EnemyStateComponent, FbxComponent,Transform3D>(entt::exclude<DeadTag>);
+	bool ret = false;
+
 	//	状態遷移
-	view.each([&](auto entity, EnemyStateComponent& state, FbxComponent& fbx) 
+	view.each([&](auto entity, EnemyStateComponent& state, FbxComponent& fbx, Transform3D& trans)
 		{
 			/*
 			* 処理によって行動を変化させる
 			*/
 
-			//	追跡
+			//	距離
+			float distance = Math::Vector3::Distance(PlayerPos, trans.Position);
 
-			//	待機状態
-			if (state.State == eEnemyState::Idle)
+			//	攻撃
+			//if (distance < state.Chase.AttackRange)
+			//{
+			//	//	攻撃に移動する処理
+			//	if (state.State != eEnemyState::Attack)
+			//	{
+			//		state.State = eEnemyState::Attack;
+			//		fbx.CurrAnimation = "Attack_A";
+			//		//	アニメーションの作成速度を変更してもいい
+			//	}
+			//	return;
+			//}
+
+			
+			//	追跡
+			if (distance < state.Chase.DetectionRange)
 			{
+				//	移動ベクトル
+				Math::Vector3 toPlayer = PlayerPos - trans.Position;
+
+				//	方向ベクトルの作成
+				Math::Quaternion targetRot = Math::Quaternion::LookRotation(toPlayer);
+
+				//	回転の適応
+				trans.Rotation = Math::Quaternion::Slerp(trans.Rotation, targetRot, state.Chase.RotationSpeed * DeltaTime);
+
+				//	前に歩く
+				return;
 			}
 
+			//	待機状態
+			state.State = eEnemyState::Idle;
+			fbx.CurrAnimation = "Idle";
 
 		});
 

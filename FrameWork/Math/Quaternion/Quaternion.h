@@ -41,7 +41,6 @@ namespace Math
 		//	行列に変換
 		Matrix3x3 ToMatrix3x3()const;
 
-
 	public:
 		//	行列から回転の抽出
 		static Quaternion FromMatrix(const Matrix& m);
@@ -64,6 +63,14 @@ namespace Math
 
 		//	球面線形補間
 		static Quaternion Slerp(const Quaternion& a, const Quaternion& b, float t);
+
+		/// <summary>
+		/// 指定した方向を向くクォータニオンを生成する
+		/// </summary>
+		/// <param name="Direction">向きたい方向ベクトル</param>
+		/// <returns>回転クォータニオン</returns>
+		static Quaternion LookRotation(const Vector3& Direction);
+
 
 		//	オペレーター
 	public:
