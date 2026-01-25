@@ -47,7 +47,7 @@ void Engine::System::MoveComponentSystem::MainUpdate(entt::registry& Reg, double
 			//	移動速度計算（ダッシュなど）
 			float speed = move.MoveSpeed;
 			//	ダッシュ
-			if (state.State == ePlayerState::Sprint)
+			if (state.State == ePlayerState::Dodge)
 			{
 				speed *= move.SprintMulti;
 			}

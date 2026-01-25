@@ -39,13 +39,23 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	transform.Scale = { Scale ,Scale ,Scale };
 	transform.Rotation = Math::Quaternion::Identity;
 
-	//	fbxのリソース
-	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
-	res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
-	res->LoadAnimation("Run", "Assets/Mannequin/Animation/MM_Run_Fwd.FBX.anm");
-	res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
-	res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
-	res->LoadAnimation("Sprint", "Assets/Mannequin/Animation/Sprint.fbx.anm");
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
+	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
+	res->LoadAnimation("Jog", "Assets/Fbx/Ganfaul/Animation/Jog.fbx.anm");
+	res->LoadAnimation("Dodge", "Assets/Fbx/Ganfaul/Animation/Dodge.fbx.anm");
+	res->LoadAnimation("Attack_A", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
+	res->LoadAnimation("Attack_B", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
+	res->LoadAnimation("Attack_C", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
+	res->LoadAnimation("Attack_D", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
+
+
+	////	fbxのリソース
+	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
+	//res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
+	//res->LoadAnimation("Run", "Assets/Mannequin/Animation/MM_Run_Fwd.FBX.anm");
+	//res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
+	//res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
+	//res->LoadAnimation("Sprint", "Assets/Mannequin/Animation/Sprint.fbx.anm");
 
 
 	//	fbxのモデル
@@ -95,7 +105,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	move.MoveSpeed = 20.0f;
 
 	//	武器
-	auto sword = CreateSword(player,"hand_r");
+	auto sword = CreateSword(player,"RightHand");
 	state.Weapon = sword;
 
 	//	タグ
@@ -119,9 +129,17 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	transform.Scale = { Scale ,Scale ,Scale };
 	transform.Rotation = Math::Quaternion::Identity;
 
+	//	素材テスト
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
-	res->LoadAnimation("Attack", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
-		//	fbxのリソース
+	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
+	res->LoadAnimation("Jog", "Assets/Fbx/Ganfaul/Animation/Jog.fbx.anm");
+	res->LoadAnimation("Dodge", "Assets/Fbx/Ganfaul/Animation/Dodge.fbx.anm");
+	res->LoadAnimation("Attack_A", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
+	res->LoadAnimation("Attack_B", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
+	res->LoadAnimation("Attack_C", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
+	res->LoadAnimation("Attack_D", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
+	
+	//	fbxのリソース
 	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
 	//res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
 	//res->LoadAnimation("Run", "Assets/Mannequin/Animation/MM_Run_Fwd.FBX.anm");
@@ -132,7 +150,7 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
-	fbx.CurrAnimation = "Attack";
+	fbx.CurrAnimation = "Idle";
 	//fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	//	ステータス
@@ -185,6 +203,56 @@ void Engine::System::ObjectsFactory::CreateField()
 	//collider.Offset = { 0.0f, 5.0f, 0.0f };
 }
 
+void Engine::System::ObjectsFactory::CreateTest()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 0.05f;
+
+	auto test = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(test);
+	transform.Position = { 0.0f,0.0f,20.0f };
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::Identity;
+
+	//	素材テスト
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
+	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
+	res->LoadAnimation("Jog", "Assets/Fbx/Ganfaul/Animation/Jog.fbx.anm");
+	res->LoadAnimation("Dodge", "Assets/Fbx/Ganfaul/Animation/Dodge.fbx.anm");
+	res->LoadAnimation("Attack_A", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
+	res->LoadAnimation("Attack_B", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
+	res->LoadAnimation("Attack_C", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
+	res->LoadAnimation("Attack_D", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
+
+	//	fbxのリソース
+	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
+	//res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
+	//res->LoadAnimation("Run", "Assets/Mannequin/Animation/MM_Run_Fwd.FBX.anm");
+	//res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
+	//res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
+
+
+
+	//	fbxのモデル
+	auto& fbx = registry.emplace<FbxComponent>(test, res);
+	fbx.CurrAnimation = "Dodge";
+	//fbx.Mesh->SetColor(Graphics::Color::Red());
+
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
+	collider->SetVolume({ 2.0f,8.0f,2.0f });
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	registry.emplace<ColliderComponent>(test, std::move(col));
+
+	//	タグ
+	//registry.emplace<EnemyTag>(test);
+
+}
+
 entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent, const std::string& BoneName)
 {
 	auto manager = EntityManager::GetInstance();
@@ -216,9 +284,9 @@ entt::entity Engine::System::ObjectsFactory::CreateSword(entt::entity Parent, co
 	auto& socket = registry.emplace<SocketComponent>(sword);
 	socket.Parent = Parent;
 	socket.BoneName = BoneName;
-	socket.OffsetPos = { 0.46,-0.33,0.11 };
-	socket.OffsetRot = { -0.8,0.176,0.32,0.46 };
-	//socket.PivotOffset = { -0.39,2.27,-0.22 };
+	socket.OffsetPos = {1.82,0.51,-0.46 };
+	socket.OffsetRot = { -0.7,-0.685,0.192,0.007 };
+	socket.PivotOffset = { 0,1.98,0.0 };
 
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
 	damage.DamageValue = 250.0f;

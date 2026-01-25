@@ -11,5 +11,6 @@ namespace Engine::System
 		static entt::entity CreatePlayer();
 		static void CreateEnemy();
 		static void CreateField();
+		static void CreateTest();
 	};
 }

@@ -27,11 +27,11 @@ void Engine::System::InputRequestSystem::PreUpdate(entt::registry& Reg, double D
 			//	É_ÉbÉVÉÖ
 			if (Input::InputManager::GetInstance()->IsActionPressed("Sprint"))
 			{
-				req.Flags |= eActionInputFlags::SprintRequested;
+				req.Flags |= eActionInputFlags::DodgeRequested;
 			}
 			else
 			{
-				req.Flags &= ~eActionInputFlags::SprintRequested;
+				req.Flags &= ~eActionInputFlags::DodgeRequested;
 			}
 
 			//	çUåÇ
