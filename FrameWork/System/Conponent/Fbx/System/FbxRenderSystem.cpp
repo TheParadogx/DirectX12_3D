@@ -16,11 +16,15 @@ namespace Engine::System
 	void FbxRenderSystem::Update(entt::registry& Reg, double DeltaTime)
 	{
 		//	Fbxと座標系を持っているオブジェクトの取得
-		auto view = Reg.view<FbxComponent>();
+		auto view = Reg.view<FbxComponent, Transform3D>();
 
-		view.each([&](auto entity, auto& fbx)
+
+		view.each([&](auto entity, FbxComponent& fbx, Transform3D& trans)
 		{
 				float speed = fbx.AnimationScale * static_cast<float>(DeltaTime);
+				fbx.Mesh->SetPosition(trans.Position);
+				fbx.Mesh->SetScale(trans.Scale);
+				fbx.Mesh->SetRotation(trans.Rotation * fbx.OffsetRotation);
 				fbx.Mesh->Animate(fbx.CurrAnimation, speed, fbx.IsLoop);
 		});
 
@@ -34,13 +38,10 @@ namespace Engine::System
 	void FbxRenderSystem::Render(entt::registry& Reg)
 	{
 		//	Fbxと座標系を持っているオブジェクトの取得
-		auto view = Reg.view<FbxComponent,Transform3D>();
+		auto view = Reg.view<FbxComponent>();
 
-		view.each([&](auto entity, auto& fbx, auto& trans)
+		view.each([&](auto entity, auto& fbx)
 		{
-			fbx.Mesh->SetPosition(trans.Position);
-			fbx.Mesh->SetScale(trans.Scale);
-			fbx.Mesh->SetRotation(trans.Rotation * fbx.OffsetRotation);
 			fbx.Mesh->Render();
 		});
 	}
