@@ -1,10 +1,25 @@
 #pragma once
 #include"System/Entity/System/Base/ISystem.hpp"
+#include"System/Conponent/Fbx/FbxMeshConponent.hpp"
+#include "Application/Components/Enemy/State/EnemyStateComponent.hpp"
+
 
 namespace Engine::System
 {
 	class EnemyStateSystem : public ISystem
 	{
+
+		/// <summary>
+		/// ó‘Ô‚ÌI—¹
+		/// </summary>
+		/// <param name="Reg"></param>
+		void ExitState(entt::registry& Reg,EnemyStateComponent& State, FbxComponent& Fbx);
+
+		/// <summary>
+		/// UŒ‚‚ÌI—¹
+		/// </summary>
+		/// <returns>true:I—¹</returns>
+		bool OnAttackFinished(entt::registry& Reg, entt::entity entity, FbxComponent& fbx);
 	public:
 
 		/// <summary>

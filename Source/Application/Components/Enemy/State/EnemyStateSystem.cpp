@@ -1,7 +1,6 @@
 #include "pch.h"
 #include "EnemyStateSystem.hpp"
 
-#include "Application/Components/Enemy/State/EnemyStateComponent.hpp"
 #include "Application/Components/Tag/TagComponent.hpp"
 
 #include "System/Conponent/Collider/ColliderComponent.hpp"
@@ -12,12 +11,82 @@
 #include "Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
 
 /// <summary>
+/// 状態の終了
+/// </summary>
+/// <param name="Reg"></param>
+void Engine::System::EnemyStateSystem::ExitState(entt::registry& Reg,EnemyStateComponent& State, FbxComponent& Fbx)
+{
+	switch (State.State)
+	{
+	case eEnemyState::Idle:
+		break;
+	case eEnemyState::Chase:
+		break;
+	case eEnemyState::Attack:
+		State.State = eEnemyState::Idle;
+		Fbx.CurrAnimation = "Idle";
+		Fbx.IsLoop = true;
+		Fbx.AnimationScale = 1.0f;
+
+		//	当たり判定の削除
+		if (Reg.all_of<ColliderComponent>(State.Weapon))
+		{
+			Reg.remove<ColliderComponent>(State.Weapon);
+		}
+		if (Reg.all_of<HitHistoryComponent>(State.Weapon))
+		{
+			Reg.remove<HitHistoryComponent>(State.Weapon);
+		}
+
+		break;
+
+	}
+
+}
+
+/// <summary>
+/// 攻撃の終了
+/// </summary>
+/// <returns></returns>
+bool Engine::System::EnemyStateSystem::OnAttackFinished(entt::registry& Reg, entt::entity entity, FbxComponent& fbx)
+{
+	if (fbx.Mesh->GetAnimationFinish() == false)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+/// <summary>
 /// 状態の終了の判定
 /// </summary>
 /// <param name="Reg"></param>
 /// <param name="DeltaTime"></param>
 void Engine::System::EnemyStateSystem::PreUpdate(entt::registry& Reg, double DeltaTime)
 {
+	auto view = Reg.view<EnemyStateComponent, FbxComponent,EnemyTag>(entt::exclude<DeadTag>);
+	view.each([&](auto entity, EnemyStateComponent& state, FbxComponent& fbx)
+		{
+			//	当たり判定の終了
+			switch (state.State)
+			{
+			case eEnemyState::Attack:
+				if (OnAttackFinished(Reg, entity, fbx))
+				{
+					//	状態の終了
+					ExitState(Reg, state, fbx);
+				}
+
+				break;
+			case eEnemyState::Chase:
+				break;
+			case eEnemyState::Idle:
+				break;
+			}
+
+		});
+
 
 }
 
@@ -57,6 +126,9 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 				//	攻撃に移動する処理
 				if (state.State != eEnemyState::Attack)
 				{
+					//	前状態の終了
+					ExitState(Reg, state, fbx);
+
 					Math::Vector3 toPlayer = PlayerPos - trans.Position;
 
 					//	方向ベクトルの作成
@@ -68,7 +140,8 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 					//	状態のリセット関数を呼び出す。
 					state.State = eEnemyState::Attack;
 					fbx.CurrAnimation = "Attack_D";
-					fbx.AnimationScale = 1.0f;
+					fbx.IsLoop = false;
+					fbx.AnimationScale = 0.5f;
 
 					//	攻撃の当たり判定をつける。(素材が今は一緒なので同じ処理で大丈夫)
 					Reg.emplace_or_replace<HitHistoryComponent>(state.Weapon);
@@ -85,6 +158,7 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 			//	追跡
 			else if (distance < state.Chase.DetectionRange)
 			{
+
 				//	移動ベクトル
 				Math::Vector3 toPlayer = PlayerPos - trans.Position;
 
@@ -107,6 +181,7 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 
 				if (state.State != eEnemyState::Chase)
 				{
+					ExitState(Reg, state, fbx);
 					state.State = eEnemyState::Chase;
 					fbx.CurrAnimation = "Jog";
 				}
@@ -114,6 +189,10 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 			}
 
 			//	待機状態
+			if (state.State != eEnemyState::Idle)
+			{
+				ExitState(Reg, state, fbx);
+			}
 			state.State = eEnemyState::Idle;
 			fbx.CurrAnimation = "Idle";
 
