@@ -19,7 +19,7 @@ bool Engine::System::PlayerStateSystem::CheckRunRequest(PlayerStateComponent& st
 	return  
 		curr == ePlayerState::Idle	||
 		curr == ePlayerState::Run	||
-		curr == ePlayerState::Sprint;
+		curr == ePlayerState::Dodge;
 
 }
 
@@ -33,7 +33,7 @@ bool Engine::System::PlayerStateSystem::CheckAttackRequest(PlayerStateComponent&
 	return
 		curr == ePlayerState::Idle ||
 		curr == ePlayerState::Run ||
-		curr == ePlayerState::Sprint ||
+		curr == ePlayerState::Dodge ||
 		curr == ePlayerState::Attack;
 }
 
@@ -85,7 +85,7 @@ void Engine::System::PlayerStateSystem::ExitState(entt::registry& Reg)
 				fbx.CurrAnimation = "Idle";
 				fbx.IsLoop = true;
 				break;
-			case ePlayerState::Sprint:
+			case ePlayerState::Dodge:
 				state.State = ePlayerState::Idle;
 				fbx.CurrAnimation = "Idle";
 				break;
@@ -180,10 +180,11 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 					ExitState(Reg);
 				}
 			}
-			else if (state.State == ePlayerState::Sprint)
+			//	ここだけど状態の自動終了と無敵は分離して考えて、アニメーションの終了とかにするほうがいいかもしれない
+			else if (state.State == ePlayerState::Dodge)
 			{
-				//	スプリントのリクエストがない
-				if (HasFlag(req.Flags, eActionInputFlags::SprintRequested) == false)
+				//	回避のリクエストがない
+				if (HasFlag(req.Flags, eActionInputFlags::DodgeRequested) == false)
 				{
 					return false;
 				}
@@ -229,14 +230,14 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 		{
 
 			//	スプリント
-			ret = (HasFlag(req.Flags, eActionInputFlags::SprintRequested) == true)
+			ret = (HasFlag(req.Flags, eActionInputFlags::DodgeRequested) == true)
 				&& (this->CheckSprintRequest(state, req.InputVec) == true);
 			if (ret == true)
 			{
-				if (state.State != ePlayerState::Sprint)
+				if (state.State != ePlayerState::Dodge)
 				{
-					ChangeState(Reg, state, ePlayerState::Sprint);
-					fbx.CurrAnimation = "Sprint";
+					ChangeState(Reg, state, ePlayerState::Dodge);
+					fbx.CurrAnimation = "Dodge";
 					Reg.emplace_or_replace<InvincibleComponet>(entity);
 
 					//	カウント加算
@@ -266,10 +267,10 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				{
 					//	状態変更
 					ChangeState(Reg, state, ePlayerState::Attack);
-					fbx.CurrAnimation = "Attack";
+					fbx.CurrAnimation = "Attack_A";
 					fbx.IsLoop = false;
-					fbx.AnimationScale = 2.5f;
-					//fbx.AnimationScale = 0.2f;
+					//fbx.AnimationScale = 2.5f;
+					fbx.AnimationScale = 1.0f;
 
 					//	武器に必要なものをアタッチ
 					Reg.emplace_or_replace<HitHistoryComponent>(state.Weapon);
@@ -292,7 +293,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				{
 					state.State = ePlayerState::Run;
 					//	ここに切り替え時に1回だけ通したい処理などを入れてもいい
-					fbx.CurrAnimation = "Run";
+					fbx.CurrAnimation = "Jog";
 				}
 				//	移動量の代入
 				move.TargetDir = req.InputVec;
