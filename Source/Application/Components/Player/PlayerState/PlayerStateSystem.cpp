@@ -269,8 +269,8 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					ChangeState(Reg, state, ePlayerState::Attack);
 					fbx.CurrAnimation = "Attack_A";
 					fbx.IsLoop = false;
-					fbx.AnimationScale = 2.5f;
-					//fbx.AnimationScale = 0.2f;
+					//fbx.AnimationScale = 2.5f;
+					fbx.AnimationScale = 1.0f;
 
 					//	武器に必要なものをアタッチ
 					Reg.emplace_or_replace<HitHistoryComponent>(state.Weapon);

@@ -1,4 +1,5 @@
 #pragma once
+#include<entt/entt.hpp>
 
 namespace Engine::System
 {
@@ -29,5 +30,8 @@ namespace Engine::System
 
 		//	追跡用のデータ
 		ChaseData Chase;
+
+		//	武器
+		entt::entity Weapon = entt::null;
 	};
 }

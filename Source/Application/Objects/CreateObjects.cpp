@@ -178,12 +178,12 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
 	registry.emplace<ColliderComponent>(enemy, std::move(col));
 
+	//　状態管理
+	auto& state = registry.emplace<EnemyStateComponent>(enemy);
+
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
-
-
-	//　状態管理
-	registry.emplace<EnemyStateComponent>(enemy);
+	state.Weapon = sword;
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
@@ -344,6 +344,7 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 	damage.DamageValue = 250.0f;
 
 	registry.emplace<EnemyWeaponTag>(sword);
+	
 
 	return sword;
 }

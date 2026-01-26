@@ -9,6 +9,8 @@
 #include "System/Conponent/Transform/TransformConponent.hpp"
 #include "System/Conponent/Rigidbody/RigidbodyComponent.hpp"
 
+#include "Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
+
 /// <summary>
 /// 状態の終了の判定
 /// </summary>
@@ -55,10 +57,28 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 				//	攻撃に移動する処理
 				if (state.State != eEnemyState::Attack)
 				{
+					Math::Vector3 toPlayer = PlayerPos - trans.Position;
+
+					//	方向ベクトルの作成
+					Math::Quaternion targetRot = Math::Quaternion::LookRotation(toPlayer);
+
+					//	回転の適応
+					trans.Rotation = Math::Quaternion::Slerp(trans.Rotation, targetRot, state.Chase.RotationSpeed * DeltaTime);
+
 					//	状態のリセット関数を呼び出す。
 					state.State = eEnemyState::Attack;
-					fbx.CurrAnimation = "Attack_A";
-					//	アニメーションの作成速度を変更する（予定）
+					fbx.CurrAnimation = "Attack_D";
+					fbx.AnimationScale = 1.0f;
+
+					//	攻撃の当たり判定をつける。(素材が今は一緒なので同じ処理で大丈夫)
+					Reg.emplace_or_replace<HitHistoryComponent>(state.Weapon);
+
+					//	ここで当たり判定をアタッチする。
+					auto col = ColliderComponent::Create<OBBCollider>();
+					auto collider = col.GetPtr<OBBCollider>();
+					collider->SetVolume({ 1.0f,4.0f,1.0f });
+					col.Offset = { 0.0f, -4.0f, 0.0f };
+					Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
 				}
 				return;
 			}
