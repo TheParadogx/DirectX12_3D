@@ -198,17 +198,17 @@ void Engine::System::ObjectsFactory::CreateField()
 	auto field = manager->CreateEntity();
 
 	//	サイズ
-	const Math::Vector3 volume = { 100,10,100 };
+	const float volume = 1.8f;
 
 	//	座標
 	auto& trans = registry.emplace<Transform3D>(field);
-	trans.Position = { 0.0f,-10.0f,0.0f };
-	trans.Scale = volume;
+	trans.Position = { 0.0f,0.0f,0.0f };
+	trans.Scale = { volume,volume,volume };
 
 	//	fbx
-	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Cube/Cube.fbx.bin");
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Field/Field.fbx.bin");
 	auto& fbx = registry.emplace<FbxComponent>(field, res,false);
-	fbx.Mesh->SetColor(Graphics::Color::Cyan());
+	//fbx.Mesh->SetColor(Graphics::Color::Cyan());
 
 	//	collider
 	//auto& collider = registry.emplace<AABBColliderComponent>(field);

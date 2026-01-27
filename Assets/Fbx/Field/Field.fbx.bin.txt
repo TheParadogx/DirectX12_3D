@@ -1,0 +1,6 @@
+VertexCount:17
+PolygonCount:16
+MeshCount:1
+MaterialCount:1
+Material[T_StoneTiles_02_Mat]:T_StoneTiles_02_Diffuse.png
+Mesh[T_StoneTiles_02_Mat]:T_StoneTiles_02_Diffuse.png
