@@ -318,7 +318,7 @@ namespace Engine::Graphics
 	/// <returns>ŽOŠpŒ`</returns>
 	D3D_PRIMITIVE_TOPOLOGY SkyBoxPipeline::GetTopology()const
 	{
-		return D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+		return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 	}
 
 

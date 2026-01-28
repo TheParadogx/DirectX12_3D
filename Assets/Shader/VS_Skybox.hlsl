@@ -21,18 +21,20 @@ VS_OUTPUT main(VS_INPUT input)
 {
     VS_OUTPUT output;
 
-    // 1. 頂点の位置を計算
-    // スカイボックスは常にカメラ（View行列の移動成分）に追従させる
-    float4 worldPos = mul(float4(input.Position, 1.0f), World);
-    float4 viewPos  = mul(worldPos, View);
-    output.SV_Position = mul(viewPos, Projection);
+    // View行列から回転成分だけを取り出す (4x4 を 3x3 にキャスト)
+    float3x3 viewRotation = (float3x3) View;
+    
+    // 回転だけを適用し、移動を無視する
+    // mul(input.Position, viewRotation) でもOK。World行列は不要になります。
+    float3 rotatedPos = mul(input.Position, viewRotation);
+    
+    // 投影行列を掛ける
+    output.SV_Position = mul(float4(rotatedPos, 1.0f), Projection);
 
-    // 2. 【重要】深度値を 1.0 (一番奥) に固定するトリック
-    // 出力座標の z を w と同じにすることで、除算後に z/w = 1.0 になる
+    // 深度値を 1.0 に固定 (これは今のままで完璧です)
     output.SV_Position.z = output.SV_Position.w;
 
-    // 3. ローカル座標をそのままサンプリング用ベクトルとして渡す
-    // 中心(0,0,0)から立方体の各頂点への方向が、そのまま空の色を取り出す方向になる
+    // ローカル座標をベクトルとして渡す
     output.TexCoord = input.Position;
 
     return output;
