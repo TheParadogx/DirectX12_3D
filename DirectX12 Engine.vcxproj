@@ -161,6 +161,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.hpp" />
+    <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.hpp" />
+    <ClInclude Include="FrameWork\Graphics\SkyBox\SkyBox.hpp" />
     <ClInclude Include="Source\Application\Components\Enemy\State\EnemyStateSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Invincible\InvincibleSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Invincible\InvincibleTag.hpp" />
@@ -292,6 +294,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.cpp" />
+    <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.cpp" />
+    <ClCompile Include="FrameWork\Graphics\SkyBox\SkyBox.cpp" />
     <ClCompile Include="Source\Application\Components\Enemy\State\EnemyStateSystem.cpp" />
     <ClCompile Include="Source\Application\Components\Invincible\InvincibleSystem.cpp" />
     <ClCompile Include="Source\Application\Components\GameRule\GameRuleSystem.cpp" />
@@ -460,6 +464,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Assets\Shader\PS_Skybox.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Assets\Shader\PS_UITexture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -473,6 +484,14 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\VS_Skybox.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

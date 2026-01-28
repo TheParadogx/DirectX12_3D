@@ -171,8 +171,8 @@ void Engine::App::Application::PostUpdate(double dt)
 /// </summary>
 void Engine::App::Application::Render()
 {
-    mSystems->Render(mEntitys->GetRegistry());
     mScene->Render();
+    mSystems->Render(mEntitys->GetRegistry());
     GET_INPUT_MANAGER->Update();
 }
 

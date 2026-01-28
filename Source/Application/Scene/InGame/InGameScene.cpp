@@ -23,8 +23,16 @@
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Objects/CreateObjects.hpp"
 
+#include"Graphics/SkyBox/Resource/SkyBoxResource.hpp"
+#include"Graphics/SkyBox/SkyBox.hpp"
+
+
+
 namespace Engine::Scene
 {
+	static Graphics::SkyBoxResource res;
+	static Graphics::SkyBox skybox;
+
 	/// <summary>
 	///	初期化
 	/// </summary>
@@ -56,6 +64,10 @@ namespace Engine::Scene
 		System::ObjectsFactory::CreatePlayer();
 		System::ObjectsFactory::CreateEnemy();
 
+		//	テスト用
+		bool ret = res.Create("Assets/SkyBox/cubemap.dds");
+		skybox.Create(&res);
+
 		return true;
 	}
 
@@ -66,6 +78,14 @@ namespace Engine::Scene
 	void InGame::PostUpdate(double FixedDeltaTime)
 	{
 
+	}
+
+	/// <summary>
+	/// 描画
+	/// </summary>
+	void InGame::Render()
+	{
+		skybox.Render();
 	}
 
 	/// <summary>
