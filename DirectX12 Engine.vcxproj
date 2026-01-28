@@ -160,6 +160,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\Graphics\DebugRender\DebugRender.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\SkyBox.hpp" />
@@ -294,6 +295,7 @@
     <ClInclude Include="Source\Application\Scene\Title\TitleScene.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameWork\Graphics\DebugRender\DebugRender.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\SkyBox.cpp" />

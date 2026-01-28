@@ -36,6 +36,11 @@ namespace Engine::System
 		/// <param name="DeltaTime"></param>
 		void MainUpdate(entt::registry& Reg, double DeltaTime)override;
 
+		/// <summary>
+		/// デバックの描画
+		/// </summary>
+		/// <param name="Reg"></param>
+		void Render(entt::registry& Reg)override;
 
 	};
 
