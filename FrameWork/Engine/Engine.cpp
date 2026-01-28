@@ -21,6 +21,7 @@
 //  resource
 #include"Graphics/FbxMesh/Resource/Manager/FbxResourceManager.hpp"
 #include"Graphics/Texture/Manager/TextureManager.hpp"
+#include"Graphics/SkyBox/Resource/SkyBoxResourceManager.hpp"
 
 //	audio
 #include"Audio/Resource/Manager/AudioResourceManager.hpp"
@@ -118,8 +119,6 @@ bool Engine::Core::Engine::Initialize()
 	Input::InputManager::Create();
 	Input::InputManager::GetInstance()->Initialize();
 
-
-
 	//	イベント管理の作成
 	System::EventManager::Create();
 
@@ -129,6 +128,7 @@ bool Engine::Core::Engine::Initialize()
 	//	リソース管理
 	Graphics::FbxResourceManager::Create();
 	Graphics::TextureManager::Create();
+	Graphics::SkyBoxResourceManager::Create();
 
 	return true;
 }
