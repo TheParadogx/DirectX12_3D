@@ -10,6 +10,7 @@
 #include"Graphics/FbxMesh/Pipeline/FbxPipeline.hpp"
 #include"Graphics/Line/Pipeline/LinePipeline.hpp"
 #include"Graphics/UI/Pipeline/UISpritePipeline.hpp"
+#include"Graphics/SkyBox/Pipeline/SkyBoxPipeline.hpp"
 
 #include<cstdint>
 #include<memory>
@@ -63,6 +64,13 @@ namespace Engine::Graphics
 			UINT IndexCount, UINT StartIndex);
 
 		/// <summary>
+		/// SkyBoxの描画
+		/// </summary>
+		/// <param name="VBv">スカイボックスの頂点バッファビュー</param>
+		/// <param name="vertexCount">頂点数（通常36）</param>
+		void DrawSkyBox(const D3D12_VERTEX_BUFFER_VIEW& VBv, UINT vertexCount);
+
+		/// <summary>
 		/// ワールド空間へのライン描画
 		/// </summary>
 		/// <param name="lineVertices">頂点配列の先頭アドレス</param>
@@ -103,6 +111,10 @@ namespace Engine::Graphics
 		/// </summary>
 		void SetUISpritePipeline();
 
+		/// <summary>
+		/// skybox pipeline
+		/// </summary>
+		void SetSkyBoxPipeline();
 	private:
 		/// <summary>
 		/// 基本描画関数
@@ -167,6 +179,11 @@ namespace Engine::Graphics
 		/// UIスプライト用のパイプラインのセット
 		/// </summary>
 		UISpritePipeline mUISpritePipeline;
+
+		/// <summary>
+		/// スカイボックス用のパイプライン
+		/// </summary>
+		SkyBoxPipeline mSkyBoxPipeline;
 
 		/// <summary>
 		/// dx12コマンドリスト

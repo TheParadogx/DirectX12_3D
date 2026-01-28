@@ -160,7 +160,22 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.hpp" />
+    <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.hpp" />
+    <ClInclude Include="FrameWork\Graphics\SkyBox\SkyBox.hpp" />
+    <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResourceManager.hpp" />
+    <ClInclude Include="Source\Application\Components\Enemy\State\EnemyStateSystem.hpp" />
+    <ClInclude Include="Source\Application\Components\Invincible\InvincibleSystem.hpp" />
+    <ClInclude Include="Source\Application\Components\Invincible\InvincibleTag.hpp" />
+    <ClInclude Include="Source\Application\Components\GameRule\GameRuleSystem.hpp" />
+    <ClInclude Include="Source\Application\Components\GameRule\GameRuleComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Enemy\State\EnemyStateComponent.hpp" />
+    <ClInclude Include="Source\Application\Scene\GameClear\GameClear.hpp" />
+    <ClInclude Include="Source\Application\Scene\GameOver\GameOverScene.hpp" />
+    <ClInclude Include="Source\Application\Debug\AppDebug\AppDebug.hpp" />
     <ClInclude Include="FrameWork\System\Collider\CollisionEvents\CollisionEvent.hpp" />
+    <ClInclude Include="Source\Application\Macro\ProjMacros.hpp" />
+    <ClInclude Include="Source\Application\Scene\InGame\InGameScene.hpp" />
     <ClInclude Include="Source\Application\Components\Damage\AttackPowerComponent.hpp" />
     <ClInclude Include="Source\Application\Components\Damage\DamageSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Player\Input\InputRequestSystem.hpp" />
@@ -276,8 +291,20 @@
     <ClInclude Include="FrameWork\Graphics\UI\UISprite.hpp" />
     <ClInclude Include="FrameWork\Graphics\UI\Pipeline\UISpritePipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\Texture\Manager\TextureManager.hpp" />
+    <ClInclude Include="Source\Application\Scene\Title\TitleScene.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.cpp" />
+    <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.cpp" />
+    <ClCompile Include="FrameWork\Graphics\SkyBox\SkyBox.cpp" />
+    <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResourceManager.cpp" />
+    <ClCompile Include="Source\Application\Components\Enemy\State\EnemyStateSystem.cpp" />
+    <ClCompile Include="Source\Application\Components\Invincible\InvincibleSystem.cpp" />
+    <ClCompile Include="Source\Application\Components\GameRule\GameRuleSystem.cpp" />
+    <ClCompile Include="Source\Application\Scene\GameClear\GameClear.cpp" />
+    <ClCompile Include="Source\Application\Scene\GameOver\GameOverScene.cpp" />
+    <ClCompile Include="Source\Application\Debug\AppDebug\AppDebug.cpp" />
+    <ClCompile Include="Source\Application\Scene\InGame\InGameScene.cpp" />
     <ClCompile Include="Source\Application\Components\Damage\DamageSystem.cpp" />
     <ClCompile Include="Source\Application\Components\Player\Input\InputRequestSystem.cpp" />
     <ClCompile Include="External\Plugin\ImGui\ImGuizmo.cpp">
@@ -406,6 +433,7 @@
     <ClCompile Include="Source\Application\Components\InputMove\MoveComponentSystem.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\Objects\CreateObjects.cpp" />
+    <ClCompile Include="Source\Application\Scene\Title\TitleScene.cpp" />
     <ClCompile Include="Source\main.cpp">
       <SubType>
       </SubType>
@@ -438,6 +466,13 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="Assets\Shader\PS_Skybox.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Assets\Shader\PS_UITexture.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
@@ -451,6 +486,14 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\VS_Skybox.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

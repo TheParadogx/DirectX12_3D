@@ -178,4 +178,17 @@ namespace Math
 		return ret;
 	}
 
+	Quaternion Quaternion::LookRotation(const Vector3& Direction)
+	{
+		//	方向ベクトルがほぼない状態
+		if (Direction.SqrLength() < 0.0001f) return Quaternion::Identity;
+
+		// Y軸（高さ）を無視して水平方向の角度を出す場合
+		// ※モデルの正面が Vector3::Forward (0,0,1) であることを前提とする
+		float angle = atan2f(Direction.x, Direction.z);
+
+		// Y軸（Vector3::Up）を回転軸としてクォータニオンを生成
+		return Quaternion::AngleAxis(angle, Vector3::Forward);
+	}
+
 }

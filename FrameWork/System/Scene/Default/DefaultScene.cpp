@@ -37,12 +37,12 @@
 #include"Graphics/Texture/Manager/TextureManager.hpp"
 #include"Graphics/UI/UISprite.hpp"
 
-static Engine::System::Camera sCamera;
 
 bool Engine::System::DefaultScene::Initialize()
 {
     bool ret = false;
-    ret = sCamera.Create();
+    Camera* camera = new Camera();
+    ret = camera->Create();
     if (ret == false)
     {
         return false;
@@ -64,8 +64,8 @@ bool Engine::System::DefaultScene::Initialize()
 
     //  当たり判定のシステム
     System::ColliderSystem::Initialize();
-    //System::ColliderSystem::AddCollisionPair<PlayerTag, EnemyTag>({ true,false });
-    System::ColliderSystem::AddCollisionPair<WeaponTag, EnemyTag>({ false,false });
+    System::ColliderSystem::AddCollisionPair<PlayerTag, EnemyTag>({  });
+    System::ColliderSystem::AddCollisionPair<PlayerWeaponTag, EnemyTag>({ false,false,true,false});
 
     //  フィールド
     System::ObjectsFactory::CreateField();
@@ -75,27 +75,15 @@ bool Engine::System::DefaultScene::Initialize()
 
     //  敵の作成
     System::ObjectsFactory::CreateEnemy();
-    //System::ObjectsFactory::CreateSword(player);
 
 	return true;
 }
 
-void Engine::System::DefaultScene::Update(double DeltaTime)
-{
-}
-
-void Engine::System::DefaultScene::FixedUpdate(double FixedDeltaTime)
-{
-
-}
 
 void Engine::System::DefaultScene::ImGuiUpdate()
 {
 }
 
-void Engine::System::DefaultScene::Render()
-{
-}
 
 void Engine::System::DefaultScene::Release()
 {

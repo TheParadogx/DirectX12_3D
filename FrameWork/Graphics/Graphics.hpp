@@ -76,4 +76,12 @@ namespace Engine::Graphics
 		std::array<float, 4> Weight;
 	};
 
+	/// <summary>
+	/// スカイボックス描画用の頂点構造体
+	/// </summary>
+	struct SkyBoxVertex
+	{
+		Math::Vector3 Position;
+	};
+
 }

@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "SceneManager.hpp"
 
+#include"Graphics/DirectX/DirectX12.hpp"
+#include"System/Entity/System/Manager/SystemManager.hpp"
 
 /// <summary>
 ///	‰Šú‰»
@@ -30,11 +32,11 @@ void Engine::System::SceneManager::Update(double DeltaTime)
 /// <summary>
 /// ŒÅ’èXV
 /// </summary>
-void Engine::System::SceneManager::FixedUpdate(double  FixedDeltaTime)
+void Engine::System::SceneManager::PostUpdate(double  FixedDeltaTime)
 {
 	if (mScene != nullptr)
 	{
-		mScene->FixedUpdate(FixedDeltaTime);
+		mScene->PostUpdate(FixedDeltaTime);
 	}
 }
 
@@ -70,6 +72,9 @@ void Engine::System::SceneManager::PostPresentUpdate()
 		return;
 	}
 
+	Graphics::DirectX::GetInstance()->WaitForGPU();
+	SystemManager::GetInstance()->AllClearSystem();
+
 	if (mScene != nullptr)
 	{
 		mScene->Release();
@@ -80,4 +85,22 @@ void Engine::System::SceneManager::PostPresentUpdate()
 	mNextScene = nullptr;
 
 	mScene->Initialize();
+}
+
+/// <summary>
+/// ¡‚ÌScene‚ğ“Ç‚İ‚İ’¼‚·
+/// </summary>
+void Engine::System::SceneManager::ReloadCurrentScene()
+{
+	mNextScene = mReloader();
+}
+
+std::string Engine::System::SceneManager::CurrentSceneName()
+{
+	if (mScene == nullptr)
+	{
+		return "None";
+	}
+
+	return mScene->GetSceneName();
 }

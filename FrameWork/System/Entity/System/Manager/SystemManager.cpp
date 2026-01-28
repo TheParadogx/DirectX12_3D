@@ -17,11 +17,9 @@ namespace Engine::System
 		//	ユーザー定義
 		for (const auto& System : mSystems)
 		{
-			System->MainUpdate(Reg, DeltaTime);
+			System->PreUpdate(Reg, DeltaTime);
 		}
 
-		//	Fbxアニメーション
-		System::FbxRenderSystem::Update(Reg, DeltaTime);
 	}
 	
 	/// <summary>
@@ -34,7 +32,7 @@ namespace Engine::System
 		//	ユーザー定義システム
 		for (const auto& System : mSystems)
 		{
-			System->PreUpdate(Reg, DeltaTime);
+			System->MainUpdate(Reg, DeltaTime);
 		}
 
 		//	移動
@@ -42,8 +40,13 @@ namespace Engine::System
 
 		//	当たり判定位置の更新
 		System::ColliderSystem::Update(Reg);
+
 		//	当たり判定
 		System::ColliderSystem::CheckCollition(Reg);
+
+
+		//	Fbxアニメーション
+		System::FbxRenderSystem::Update(Reg, DeltaTime);
 
 	}
 
@@ -59,6 +62,7 @@ namespace Engine::System
 		{
 			System->PostUpdate(Reg, DeltaTime);
 		}
+
 
 		//	事後更新
 		System::ColliderSystem::OnGui(Reg);
@@ -83,5 +87,10 @@ namespace Engine::System
 		{
 			System->Render(Reg);
 		}
+	}
+
+	void SystemManager::AllClearSystem()
+	{
+		mSystems.clear();
 	}
 }

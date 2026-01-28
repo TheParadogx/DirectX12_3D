@@ -15,6 +15,23 @@
 #include "Audio/Resource/Manager/AudioResourceManager.hpp"
 #include "Audio/Manager/AudioManager.hpp"
 
+#include"Application/Debug/AppDebug/AppDebug.hpp"
+#include"Application/Macro/ProjMacros.hpp"
+
+#include"Scene/Title/TitleScene.hpp"
+#include"Scene/InGame/InGameScene.hpp"
+
+void Engine::App::Application::CreateStartScene()
+{
+
+#if START_SCENE == 0
+    mScene->ChangeScene<Scene::Title>();
+
+#elif START_SCENE == 1
+    mScene->ChangeScene<Scene::InGame>();
+
+#endif // START_SCENE
+}
 
 /// <summary>
 /// ƒƒCƒ“ƒ‹[ƒv
@@ -31,7 +48,8 @@ void Engine::App::Application::Run()
 
         this->Tick();
         mEngine->EndFrame();
-	}
+        mScene->PostPresentUpdate();
+    }
 }
 
 /// <summary>
@@ -62,7 +80,8 @@ bool Engine::App::Application::Initialize()
     //  SceneŠÇ—
     System::SceneManager::Create();
     mScene = System::SceneManager::GetInstance();
-    mScene->ChangeScene<System::DefaultScene>();
+    CreateStartScene();
+    //mScene->ChangeScene<System::DefaultScene>();
     ret = mScene->Initialize();
     if (ret == false)
     {
@@ -124,9 +143,7 @@ void Engine::App::Application::Tick()
 /// </summary>
 void Engine::App::Application::PreUpdate(double dt)
 {
-    GET_INPUT_MANAGER->Update();
     mSystems->PreUpdate(mEntitys->GetRegistry(), dt);
-    mScene->Update(dt);
 
 }
 
@@ -136,7 +153,7 @@ void Engine::App::Application::PreUpdate(double dt)
 void Engine::App::Application::MainUpdate(double dt)
 {
     mSystems->MainUpdate(mEntitys->GetRegistry(), dt);
-    mScene->FixedUpdate(dt);
+    mScene->Update(dt);
 }
 
 /// <summary>
@@ -145,6 +162,8 @@ void Engine::App::Application::MainUpdate(double dt)
 void Engine::App::Application::PostUpdate(double dt)
 {
     mSystems->PostUpdate(mEntitys->GetRegistry(), dt);
+    mScene->PostUpdate(dt);
+    Debug::AppDebugUI::UpdateImGui();
 }
 
 /// <summary>
@@ -152,8 +171,9 @@ void Engine::App::Application::PostUpdate(double dt)
 /// </summary>
 void Engine::App::Application::Render()
 {
-    mSystems->Render(mEntitys->GetRegistry());
     mScene->Render();
+    mSystems->Render(mEntitys->GetRegistry());
+    GET_INPUT_MANAGER->Update();
 }
 
 /// <summary>

@@ -8,15 +8,16 @@
 #include"System/Camera/Camera.hpp"
 #include"Math/Math.h"
 
-void Engine::System::CameraControlSystem::MainUpdate(entt::registry& Reg, double DeltaTime)
+
+void Engine::System::CameraControlSystem::PostUpdate(entt::registry& Reg, double DeltaTime)
 {
 	//	コンポーネントを持つオブジェクトの取得
-	//	入力の取得
+//	入力の取得
 	auto view = Reg.view<CameraControlComponent>();
 	auto input = Input::InputManager::GetInstance();
 
 	view.each([&](auto entity, auto& ctrl)
-	{
+		{
 			//	ターゲットその存在確認
 			if (ctrl.TargetEntity == entt::null || Reg.valid(ctrl.TargetEntity) == false)
 			{
@@ -57,9 +58,8 @@ void Engine::System::CameraControlSystem::MainUpdate(entt::registry& Reg, double
 			//	カメラ本体に反映
 			if (Camera::Main != nullptr)
 			{
-				Camera::Main->Update(cameraPos,LookAtPos, Math::Vector3::Up);
+				Camera::Main->Update(cameraPos, LookAtPos, Math::Vector3::Up);
 			}
 
-	});
-
+		});
 }

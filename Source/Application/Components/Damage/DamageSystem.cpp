@@ -5,6 +5,7 @@
 #include"System/Collider/CollisionEvents/CollisionEvent.hpp"
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
+#include"Application/Components/Invincible/InvincibleTag.hpp"
 
 /// <summary>
 /// ダメージ処理
@@ -17,13 +18,19 @@ void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaT
 	auto view = Reg.view<AttackPowerComponent, CollisionEvent>();
 	view.each([&](entt::entity entity, AttackPowerComponent& attack, CollisionEvent& collision)
 		{
-			auto* history = Reg.try_get<HitHistoryComponent>(entity);
+			HitHistoryComponent* history = Reg.try_get<HitHistoryComponent>(entity);
 
 			//	被害者
 			for (auto victim : collision.HitEntitys)
 			{
-				//	既に衝突 or 履歴保持がないときは終了しない
+				//	既に衝突 or 履歴保持がないときは終了
 				if (history != nullptr && history->HitList.contains(victim))
+				{
+					continue;
+				}
+
+				//	無敵状態なら終了
+				if (Reg.all_of<InvincibleComponet>(victim)) 
 				{
 					continue;
 				}
