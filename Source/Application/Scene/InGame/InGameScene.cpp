@@ -23,16 +23,10 @@
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Objects/CreateObjects.hpp"
 
-#include"Graphics/SkyBox/Resource/SkyBoxResource.hpp"
-#include"Graphics/SkyBox/SkyBox.hpp"
-
-
+#include"Graphics/SkyBox/Resource/SkyBoxResourceManager.hpp"
 
 namespace Engine::Scene
 {
-	static Graphics::SkyBoxResource res;
-	static Graphics::SkyBox skybox;
-
 	/// <summary>
 	///	初期化
 	/// </summary>
@@ -65,8 +59,9 @@ namespace Engine::Scene
 		System::ObjectsFactory::CreateEnemy();
 
 		//	テスト用
-		bool ret = res.Create("Assets/SkyBox/cubemap.dds");
-		skybox.Create(&res);
+		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");
+		mSkyBox = std::make_unique<Graphics::SkyBox>();
+		mSkyBox->Create(SkyBoxResource);
 
 		return true;
 	}
@@ -85,7 +80,7 @@ namespace Engine::Scene
 	/// </summary>
 	void InGame::Render()
 	{
-		skybox.Render();
+		mSkyBox->Render();
 	}
 
 	/// <summary>

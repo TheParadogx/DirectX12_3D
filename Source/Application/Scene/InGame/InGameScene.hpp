@@ -1,5 +1,8 @@
 #pragma once
 #include"System/Scene/IScene.hpp"
+#include"Graphics/SkyBox/SkyBox.hpp"
+
+#include<memory>
 
 namespace Engine::Scene
 {
@@ -33,7 +36,10 @@ namespace Engine::Scene
 			return "InGame";
 		}
 	private:
-
+		/// <summary>
+		/// スカイボックス
+		/// </summary>
+		std::unique_ptr<Graphics::SkyBox> mSkyBox;
 	};
 }
 

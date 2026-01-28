@@ -163,6 +163,7 @@
     <ClInclude Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\SkyBox.hpp" />
+    <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResourceManager.hpp" />
     <ClInclude Include="Source\Application\Components\Enemy\State\EnemyStateSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Invincible\InvincibleSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Invincible\InvincibleTag.hpp" />
@@ -296,6 +297,7 @@
     <ClCompile Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\SkyBox.cpp" />
+    <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResourceManager.cpp" />
     <ClCompile Include="Source\Application\Components\Enemy\State\EnemyStateSystem.cpp" />
     <ClCompile Include="Source\Application\Components\Invincible\InvincibleSystem.cpp" />
     <ClCompile Include="Source\Application\Components\GameRule\GameRuleSystem.cpp" />
