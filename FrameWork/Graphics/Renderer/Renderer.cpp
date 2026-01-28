@@ -65,6 +65,11 @@ void Engine::Graphics::Renderer::OnCreate()
 		LOG_CRITICAL("Failed Create UISpritePipeline.");
 	}
 
+	ret = mSkyBoxPipeline.Create();
+	if (ret == false)
+	{
+		LOG_CRITICAL("Failed Create SkyBoxPipeline.");
+	}
 
 	//	CmdList
 	mCmdList = Graphics::DirectX::GetInstance()->GetCommandList();
@@ -211,6 +216,20 @@ void Engine::Graphics::Renderer::DrawMesh(const D3D12_VERTEX_BUFFER_VIEW& VBv, c
 }
 
 /// <summary>
+/// SkyBoxの描画
+/// </summary>
+/// <param name="VBv">スカイボックスの頂点バッファビュー</param>
+/// <param name="vertexCount">頂点数（通常36）</param>
+void Engine::Graphics::Renderer::DrawSkyBox(const D3D12_VERTEX_BUFFER_VIEW& VBv, UINT vertexCount)
+{
+	// スカイボックスはインデックスバッファを使わない
+	mCmdList->IASetVertexBuffers(0, 1, &VBv);
+
+	// インデックスなしの描画命令
+	mCmdList->DrawInstanced(vertexCount, 1, 0, 0);
+}
+
+/// <summary>
 /// ワールド空間へのライン描画
 /// </summary>
 /// <param name="lineVertices">頂点配列の先頭アドレス</param>
@@ -315,4 +334,11 @@ void Engine::Graphics::Renderer::SetUISpritePipeline()
 	this->SetRootSignature(mUISpritePipeline.GetRootSignature());
 	this->SetPipelineState(mUISpritePipeline.GetPipelineState());
 	this->SetTopology(mUISpritePipeline.GetTopology());
+}
+
+void Engine::Graphics::Renderer::SetSkyBoxPipeline()
+{
+	this->SetRootSignature(mSkyBoxPipeline.GetRootSignature());
+	this->SetPipelineState(mSkyBoxPipeline.GetPipelineState());
+	this->SetTopology(mSkyBoxPipeline.GetTopology());
 }

@@ -86,13 +86,16 @@ bool Engine::Graphics::Texture::Create(const std::filesystem::path& FilePath)
 
 	//	読み込んだテクスチャからコピー用情報の取得
 	const D3D12_RESOURCE_DESC TextureResourceDesc = GetTextureResourceDesc(texMetaData);
-	D3D12_PLACED_SUBRESOURCE_FOOTPRINT footpoint = {};
-	UINT row = 0;
-	UINT64 rowsizeinbyte = 0;
-	UINT64 totalbyte = 0;
+
+	UINT numSubresources = static_cast<UINT>(texMetaData.mipLevels * texMetaData.arraySize);
+	std::vector<D3D12_PLACED_SUBRESOURCE_FOOTPRINT> footprints(numSubresources);
+	std::vector<UINT> numRows(numSubresources);
+	std::vector<UINT64> rowSizeInBytes(numSubresources);
+	UINT64 totalByte = 0;
+
 	device->GetCopyableFootprints(
-		&TextureResourceDesc, 0, 1, 0,
-		&footpoint, &row, &rowsizeinbyte, &totalbyte);
+		&TextureResourceDesc, 0, numSubresources, 0,
+		footprints.data(), numRows.data(), rowSizeInBytes.data(), &totalByte);
 
 	mw::CmdAllocatorPtr tempAlloc;
 	hr = device->CreateCommandAllocator(D3D12_COMMAND_LIST_TYPE_DIRECT, IID_PPV_ARGS(&tempAlloc));
@@ -120,7 +123,7 @@ bool Engine::Graphics::Texture::Create(const std::filesystem::path& FilePath)
 	D3D12_RESOURCE_DESC UploadResourceDesc = {};
 	UploadResourceDesc.Format = DXGI_FORMAT_UNKNOWN;
 	UploadResourceDesc.Dimension = D3D12_RESOURCE_DIMENSION_BUFFER;
-	UploadResourceDesc.Width = totalbyte;
+	UploadResourceDesc.Width = totalByte;
 	UploadResourceDesc.Height = 1;
 	UploadResourceDesc.DepthOrArraySize = 1;
 	UploadResourceDesc.MipLevels = 1;
@@ -157,47 +160,45 @@ bool Engine::Graphics::Texture::Create(const std::filesystem::path& FilePath)
 		return false;
 	}
 
-	void* Data = nullptr;
-	hr = UploadBuffer->Map(0, nullptr, &Data);
+	void* pData = nullptr;
+	hr = UploadBuffer->Map(0, nullptr, &pData);
 	if (SUCCEEDED(hr))
 	{
-		// footpoint は GetCopyableFootprints で取得済み
-		const BYTE* srcPixels = scratchImage.GetPixels();
-		const UINT srcRowPitch = image->rowPitch;         // CPU側の1行バイト数
-		const UINT numRows = row;                       // GetCopyableFootprints で得た行数
-		const UINT64 dstRowPitch = footpoint.Footprint.RowPitch; // GPU 側の RowPitch (aligned)
-		const UINT64 dstOffset = footpoint.Offset;     // 通常は 0 だが使うのが安全
-
-		BYTE* dstBase = reinterpret_cast<BYTE*>(Data) + dstOffset;
-
-		for (UINT r = 0; r < numRows; ++r)
+		for (UINT i = 0; i < numSubresources; ++i)
 		{
-			// コピー先行先頭アドレス + r * dstRowPitch
-			BYTE* dstRow = dstBase + static_cast<size_t>(r) * static_cast<size_t>(dstRowPitch);
-			const BYTE* srcRow = srcPixels + static_cast<size_t>(r) * static_cast<size_t>(srcRowPitch);
+			const DXTex::Image* img = scratchImage.GetImage(
+				i % texMetaData.mipLevels, // MipIndex
+				i / texMetaData.mipLevels, // ArrayIndex (CubeFace)
+				0                          // SliceIndex
+			);
 
-			// CPU側の1行分だけコピーする（RowPitch が >= srcRowPitch）
-			memcpy(dstRow, srcRow, srcRowPitch);
-			// もし dstRowPitch > srcRowPitch でゼロクリアが必要なら以下を有効に
-			// if (dstRowPitch > srcRowPitch) memset(dstRow + srcRowPitch, 0, dstRowPitch - srcRowPitch);
+			BYTE* pDst = reinterpret_cast<BYTE*>(pData) + footprints[i].Offset;
+			const BYTE* pSrc = img->pixels;
+
+			for (UINT r = 0; r < numRows[i]; ++r)
+			{
+				memcpy(pDst + (static_cast<size_t>(r) * footprints[i].Footprint.RowPitch),
+					pSrc + (static_cast<size_t>(r) * img->rowPitch),
+					img->rowPitch);
+			}
 		}
 		UploadBuffer->Unmap(0, nullptr);
 	}
 
-	//	コピー元バッファ設定(アップロード側)
-	D3D12_TEXTURE_COPY_LOCATION Src = {};
-	Src.pResource = UploadBuffer.Get();
-	Src.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
-	Src.PlacedFootprint = footpoint;
+	for (UINT i = 0; i < numSubresources; ++i)
+	{
+		D3D12_TEXTURE_COPY_LOCATION Src = {};
+		Src.pResource = UploadBuffer.Get();
+		Src.Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT;
+		Src.PlacedFootprint = footprints[i];
 
-	//	コピー先バッファ設定(テクスチャとして参照する側)
-	D3D12_TEXTURE_COPY_LOCATION Dest = {};
-	Dest.pResource = mResource.Get();
-	Dest.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
-	Dest.SubresourceIndex = 0;
+		D3D12_TEXTURE_COPY_LOCATION Dest = {};
+		Dest.pResource = mResource.Get();
+		Dest.Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX;
+		Dest.SubresourceIndex = i;
 
-	//	バッファのコピー
-	tempCmdList->CopyTextureRegion(&Dest, 0, 0, 0, &Src, nullptr);
+		tempCmdList->CopyTextureRegion(&Dest, 0, 0, 0, &Src, nullptr);
+	}
 	
 	//	バリアー処理
 	D3D12_RESOURCE_BARRIER Barrier = {};
@@ -223,8 +224,23 @@ bool Engine::Graphics::Texture::Create(const std::filesystem::path& FilePath)
 	D3D12_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
 	srvDesc.Format = texMetaData.format;
 	srvDesc.Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
-	srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
-	srvDesc.Texture2D.MipLevels = texMetaData.mipLevels;
+	if (texMetaData.IsCubemap())
+	{
+		// キューブマップ（6面）として設定
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURECUBE;
+		srvDesc.TextureCube.MostDetailedMip = 0;
+		srvDesc.TextureCube.MipLevels = static_cast<UINT>(texMetaData.mipLevels);
+		srvDesc.TextureCube.ResourceMinLODClamp = 0.0f;
+	}
+	else
+	{
+		// 通常の2Dテクスチャとして設定
+		srvDesc.ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		srvDesc.Texture2D.MipLevels = static_cast<UINT>(texMetaData.mipLevels);
+		srvDesc.Texture2D.PlaneSlice = 0;
+		srvDesc.Texture2D.ResourceMinLODClamp = 0.0f;
+	}
 
 	auto GDHManager = Graphics::GraphicsDescriptorHeapManager::GetInstance();
 	mHeapInfo = GDHManager->Issuance(1);

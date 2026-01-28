@@ -1,24 +1,23 @@
 #pragma once
 
 #include"Graphics/DirectX/TypeAlias/DirectX12TypeAlias.hpp"
-
+#include "Graphics/Texture/Texture.hpp"
 #include<cstdint>
 #include <memory>
 #include<filesystem>
 
 namespace Engine::Graphics
 {
-	class Texture;
 	class SkyBoxResource
 	{
 		/// <summary>
 		/// 立方体メッシュの作成
 		/// </summary>
 		/// <returns>true:成功</returns>
-		bool CreateNesh();
+		bool CreateMesh();
 
 	public:
-		SkyBoxResource();
+		SkyBoxResource() = default;
 		virtual ~SkyBoxResource();
 
 		/// <summary>
@@ -35,18 +34,18 @@ namespace Engine::Graphics
 
 		//	ゲッター
 		D3D12_VERTEX_BUFFER_VIEW GetVertexBufferView() const;
-
+		Texture* GetTexture()const;
 	private:
 		/// <summary>
 		/// 頂点バッファ
 		/// </summary>
 		mw::ResourcePtr mVB = nullptr;
-		D3D12_VERTEX_BUFFER_VIEW mVBView;
+		D3D12_VERTEX_BUFFER_VIEW mVBView = {};
 
 		/// <summary>
 		/// キューブマップテクスチャ
 		/// </summary>
-		Texture* mSkyTexture = nullptr;
+		std::unique_ptr<Texture> mSkyTexture = nullptr;
 
 		/// <summary>
 		/// 6面＊2枚＊3頂点＝３２頂点

@@ -132,10 +132,11 @@ namespace Engine::Graphics
 		// 定数バッファ用の設定 (行列送信用: b0)
 		D3D12_ROOT_PARAMETER RootParams[2] = {};
 
-		RootParams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV; // 行列は直接CBVとして送るのが楽
+		// あなたの ConstantBuffer::Set の実装に合わせて TYPE_CBV に戻します
+		RootParams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
 		RootParams[0].Descriptor.ShaderRegister = 0;
 		RootParams[0].Descriptor.RegisterSpace = 0;
-		RootParams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX; // 行列は主にVSで使う
+		RootParams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_VERTEX;
 
 		// テクスチャ(CubeMap)用の設定 (SRV: t0)
 		D3D12_DESCRIPTOR_RANGE Range = {};
@@ -204,8 +205,8 @@ namespace Engine::Graphics
 	bool SkyBoxPipeline::CreatePipeline()
 	{
 		// 1. スカイボックス専用シェーダーのコンパイル
-		auto VS = CompileShader("Assets/Shader/SkyboxVS.hlsl", "main", "vs_5_0");
-		auto PS = CompileShader("Assets/Shader/SkyboxPS.hlsl", "main", "ps_5_0");
+		auto VS = CompileShader("Assets/Shader/VS_Skybox.hlsl", "main", "vs_5_0");
+		auto PS = CompileShader("Assets/Shader/PS_Skybox.hlsl", "main", "ps_5_0");
 
 		if (VS == nullptr || PS == nullptr)
 		{

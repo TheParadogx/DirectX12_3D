@@ -19,6 +19,11 @@ namespace Engine::Scene
 		void PostUpdate(double FixedDeltaTime)override;
 
 		/// <summary>
+		/// •`‰æ
+		/// </summary>
+		void Render()override;
+
+		/// <summary>
 		/// I—¹ˆ—
 		/// </summary>
 		void Release()override;
