@@ -19,7 +19,7 @@ namespace Engine::System
 	{
 		struct ChaseData
 		{
-			float DetectionRange = 100.0f;	// õ“G”ÍˆÍ
+			float DetectionRange = 20.0f;	// õ“G”ÍˆÍ
 			float AttackRange = 10.0f;		// UŒ‚”ÍˆÍ
 			float MoveSpeed = 10.0f;			// ˆÚ“®‘¬“x
 			float RotationSpeed = 5.0f;		// ƒvƒŒƒCƒ„[‚ÉŒü‚­‰ñ“]‘¬“x

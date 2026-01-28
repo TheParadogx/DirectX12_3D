@@ -10,6 +10,8 @@
 
 #include "Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
 
+#include "Graphics/DebugRender/DebugRender.hpp"
+
 /// <summary>
 /// 状態の終了
 /// </summary>
@@ -198,4 +200,17 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 
 		});
 
+}
+
+/// <summary>
+/// デバックの描画
+/// </summary>
+/// <param name="Reg"></param>
+void Engine::System::EnemyStateSystem::Render(entt::registry& Reg)
+{
+	auto view = Reg.view<EnemyStateComponent, Transform3D>(entt::exclude<DeadTag>);
+	view.each([&](auto entity, EnemyStateComponent& state, Transform3D& trans) 
+		{
+			Graphics::DebugRender::DrawDebugCircle(trans.Position, state.Chase.DetectionRange, Graphics::Color::Cyan(), 32);
+		});
 }
