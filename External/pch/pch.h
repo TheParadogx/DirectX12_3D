@@ -56,6 +56,8 @@
 #include<wrl/client.h>
 #include<dxgi1_6.h>
 #include<d3d12.h>
+#include<d3dcompiler.h>
+
 
 // ŠO•”ƒ‰ƒCƒuƒ‰ƒŠ
 #include<Plugin/ImGui/imgui.h>

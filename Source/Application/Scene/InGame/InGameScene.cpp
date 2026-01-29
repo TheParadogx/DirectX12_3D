@@ -25,8 +25,13 @@
 
 #include"Graphics/SkyBox/Resource/SkyBoxResourceManager.hpp"
 
+#include"Graphics/VFX/VfxSprite.hpp"
+#include"Graphics/Texture/Manager/TextureManager.hpp"
+
+
 namespace Engine::Scene
 {
+
 	/// <summary>
 	///	初期化
 	/// </summary>
@@ -58,7 +63,6 @@ namespace Engine::Scene
 		System::ObjectsFactory::CreatePlayer();
 		System::ObjectsFactory::CreateEnemy();
 
-		//	テスト用
 		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");
 		mSkyBox = std::make_unique<Graphics::SkyBox>();
 		mSkyBox->Create(SkyBoxResource);

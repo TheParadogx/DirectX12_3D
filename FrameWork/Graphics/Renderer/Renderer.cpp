@@ -40,6 +40,7 @@ void Engine::Graphics::Renderer::OnCreate()
 		LOG_CRITICAL("Failed Create RendererConstantBuffer.");
 	}
 
+
 	//	Pipeline
 	ret = mSpritePipeline.Create();
 	if (ret == false)
@@ -70,6 +71,14 @@ void Engine::Graphics::Renderer::OnCreate()
 	{
 		LOG_CRITICAL("Failed Create SkyBoxPipeline.");
 	}
+
+	ret = mVfxPipeline.Create();
+	if (ret == false)
+	{
+		LOG_CRITICAL("Failed Create VfxPipeline.");
+	}
+
+
 
 	//	CmdList
 	mCmdList = Graphics::DirectX::GetInstance()->GetCommandList();
@@ -216,6 +225,19 @@ void Engine::Graphics::Renderer::DrawMesh(const D3D12_VERTEX_BUFFER_VIEW& VBv, c
 }
 
 /// <summary>
+/// Vfxの描画
+/// </summary>
+/// <param name="VBv"></param>
+/// <param name="VertexCount"></param>
+void Engine::Graphics::Renderer::DrawVfx(const D3D12_VERTEX_BUFFER_VIEW& VBv, UINT VertexCount)
+{
+	mCmdList->IASetVertexBuffers(0, 1, &VBv);
+	mCmdList->IASetIndexBuffer(nullptr);
+	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	mCmdList->DrawInstanced(VertexCount, 1, 0, 0);
+}
+
+/// <summary>
 /// SkyBoxの描画
 /// </summary>
 /// <param name="VBv">スカイボックスの頂点バッファビュー</param>
@@ -228,6 +250,7 @@ void Engine::Graphics::Renderer::DrawSkyBox(const D3D12_VERTEX_BUFFER_VIEW& VBv,
 	// インデックスなしの描画命令
 	mCmdList->DrawInstanced(vertexCount, 1, 0, 0);
 }
+
 
 /// <summary>
 /// ワールド空間へのライン描画
@@ -329,6 +352,9 @@ void Engine::Graphics::Renderer::SetLinePipeline()
 
 }
 
+/// <summary>
+/// UI用のspriteパイプラインのセット
+/// </summary>
 void Engine::Graphics::Renderer::SetUISpritePipeline()
 {
 	this->SetRootSignature(mUISpritePipeline.GetRootSignature());
@@ -336,9 +362,23 @@ void Engine::Graphics::Renderer::SetUISpritePipeline()
 	this->SetTopology(mUISpritePipeline.GetTopology());
 }
 
+/// <summary>
+/// skybox pipeline
+/// </summary>
 void Engine::Graphics::Renderer::SetSkyBoxPipeline()
 {
 	this->SetRootSignature(mSkyBoxPipeline.GetRootSignature());
 	this->SetPipelineState(mSkyBoxPipeline.GetPipelineState());
 	this->SetTopology(mSkyBoxPipeline.GetTopology());
 }
+
+/// <summary>
+/// VFX用のパイプライン
+/// </summary>
+void Engine::Graphics::Renderer::SetVfxPipeline()
+{
+	this->SetRootSignature(mVfxPipeline.GetRootSignature());
+	this->SetPipelineState(mVfxPipeline.GetPipelineState());
+	this->SetTopology(mVfxPipeline.GetTopology());
+}
+
