@@ -116,13 +116,15 @@ void Engine::Graphics::VertexBuffer::Set() const
 }
 void Engine::Graphics::VertexBuffer::Set(const size_t Offset, const size_t Stride, const size_t Size) const
 {
-	D3D12_VERTEX_BUFFER_VIEW vbv = {};
-	vbv.BufferLocation = mBufferLocation + static_cast<D3D12_GPU_VIRTUAL_ADDRESS>(Offset);
-	vbv.SizeInBytes = static_cast<UINT>(Size);
-	vbv.StrideInBytes = static_cast<UINT>(Stride);
-	ID3D12GraphicsCommandList* comandlist = Graphics::DirectX::GetInstance()->GetCommandList();
-	comandlist->IASetVertexBuffers(0, 1, &vbv);
+	auto cmdList = DirectX::GetInstance()->GetCommandList();
 
+	D3D12_VERTEX_BUFFER_VIEW vbView = {};
+	// バッファの先頭アドレス + 今回のオフセット
+	vbView.BufferLocation = mBufferResource->GetGPUVirtualAddress() + Offset;
+	vbView.SizeInBytes = static_cast<UINT>(Size);
+	vbView.StrideInBytes = static_cast<UINT>(Stride); // ここがズレると表示が化ける
+
+	cmdList->IASetVertexBuffers(0, 1, &vbView);
 }
 
 /// <summary>

@@ -21,16 +21,6 @@ namespace Engine::Graphics
 		YAxis,    // Y軸だけカメラを向く（木のモデルなど）
 	};
 
-	// 定数バッファ：HLSLの cbuffer VfxBuffer : register(b0) と一致させる
-	// 16バイト境界を守るため alignas を指定
-	struct alignas(16) VfxConstantBuffer
-	{
-		Math::Matrix matWVP;    // 行列
-		Math::Vector2 uvOffset; // UVスクロール
-		float intensity;        // 輝度
-		float padding;          // 境界調整用
-	};
-
 	class Texture;
 	class VfxSprite
 	{

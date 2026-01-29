@@ -4,6 +4,7 @@
 #include"Math/Vector3/Vector3.h"
 #include"Math/Vector2/Vector2.h"
 #include"System/Memory/Memory.hpp"
+#include"Math/Matrix/Matrix.h"
 
 namespace Engine::Graphics
 {
@@ -94,4 +95,13 @@ namespace Engine::Graphics
 		Graphics::Color Color;    // COLOR  (float4)
 	};
 
+	// 定数バッファ：HLSLの cbuffer VfxBuffer : register(b0) と一致させる
+// 16バイト境界を守るため alignas を指定
+	struct alignas(16) VfxConstantBuffer
+	{
+		Math::Matrix matWVP;    // 行列
+		Math::Vector2 uvOffset; // UVスクロール
+		float intensity;        // 輝度
+		float padding;          // 境界調整用
+	};
 }

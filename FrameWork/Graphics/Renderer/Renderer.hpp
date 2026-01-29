@@ -168,6 +168,7 @@ namespace Engine::Graphics
 		std::unique_ptr<VertexBuffer> mVertexBuffer;
 		std::unique_ptr<IndexBuffer>  mIndexBuffer;
 		std::unique_ptr<ConstantBuffer> mConstantBuffer;
+		std::unique_ptr<ConstantBuffer> mVfxConstantBuffer;
 
 		size_t mVertexBufferOffset = 0;
 		size_t mIndexBufferOffset = 0;

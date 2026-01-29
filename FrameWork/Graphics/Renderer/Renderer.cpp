@@ -15,9 +15,12 @@ void Engine::Graphics::Renderer::OnCreate()
 
 	//	Vertex
 	mVertexBuffer = std::make_unique<VertexBuffer>();
+	//ret = mVertexBuffer->Create(
+	//	PerMaxVertexBufferSize * 2,
+	//	sizeof(LineVertex));
 	ret = mVertexBuffer->Create(
 		PerMaxVertexBufferSize * 2,
-		sizeof(LineVertex));
+		1);
 	if (ret == false)
 	{
 		LOG_CRITICAL("Failed Create RendererVertexBuffer.");
@@ -38,6 +41,13 @@ void Engine::Graphics::Renderer::OnCreate()
 	if (ret == false)
 	{
 		LOG_CRITICAL("Failed Create RendererConstantBuffer.");
+	}
+
+	mVfxConstantBuffer = std::make_unique<ConstantBuffer>();
+	ret = mVfxConstantBuffer->Create(sizeof(VfxConstantBuffer));
+	if (ret == false)
+	{
+		LOG_CRITICAL("Failed Create VfxConstantBuffer.");
 	}
 
 	//	Pipeline
@@ -133,46 +143,41 @@ void Engine::Graphics::Renderer::DrawSprite(const SpriteVertex* spriteVertices, 
 /// </summary>
 void Engine::Graphics::Renderer::Draw(const void* VertexData, const size_t VertexStride, const size_t VertexCount, const void* IndexData, const eIndexBufferFormat IndexFormat, const size_t IndexCount)
 {
-	//	不正なメモリの使われ方をしているか検知
+	// --- 【修正】頂点バッファのアライメント調整 ---
+		// 次のデータの開始地点が Stride の倍数になるように繰り上げる
+	if (VertexStride > 0) {
+		mVertexBufferOffset = (mVertexBufferOffset + (VertexStride - 1)) & ~(VertexStride - 1);
+	}
+
 	const size_t vertexSize = VertexStride * VertexCount;
-	if (mUsingVertexBufferSize + vertexSize > PerMaxVertexBufferSize)
-	{
-		//	1フレームに使える頂点バッファが不足（普通は起こらない）
+	if (mUsingVertexBufferSize + vertexSize > PerMaxVertexBufferSize) {
 		LOG_CRITICAL("Not Enough Renderer VertexBuffer.");
 	}
 
-	//	頂点バッファの更新とセット
-	mVertexBuffer->Update(VertexData, mVertexBufferOffset,vertexSize);
+	// データの更新とセット
+	mVertexBuffer->Update(VertexData, mVertexBufferOffset, vertexSize);
 	mVertexBuffer->Set(mVertexBufferOffset, VertexStride, vertexSize);
 
-	size_t indexStride = 0;
-	switch (IndexFormat)
-	{
-	case eIndexBufferFormat::Uint32:
-		indexStride = sizeof(uint32_t);
-		break;
-	case eIndexBufferFormat::Uint16:
-		indexStride = sizeof(uint16_t);
-		break;
-	default:
-		break;
-	}
+	// --- 【修正】インデックスのアライメント調整 ---
+	size_t indexStride = (IndexFormat == eIndexBufferFormat::Uint32) ? 4 : 2;
+	mIndexBufferOffset = (mIndexBufferOffset + (indexStride - 1)) & ~(indexStride - 1);
 
 	const size_t indexSize = indexStride * IndexCount;
-	if (mUsingIndexBufferSize + indexSize > PerMaxIndexBufferSize)
-	{
+	if (mUsingIndexBufferSize + indexSize > PerMaxIndexBufferSize) {
 		LOG_CRITICAL("Not Enough Renderer IndexBuffer.");
 	}
 
 	mIndexBuffer->Update(IndexData, mIndexBufferOffset, indexSize);
 	mIndexBuffer->Set(IndexFormat, mIndexBufferOffset, indexSize);
 
-	mCmdList->DrawIndexedInstanced(
-		static_cast<UINT>(IndexCount), 1, 0, 0, 0);
+	// 描画実行
+	mCmdList->DrawIndexedInstanced(static_cast<UINT>(IndexCount), 1, 0, 0, 0);
 
+	// 使用量の更新
 	mUsingVertexBufferSize += vertexSize;
 	mUsingIndexBufferSize += indexSize;
 
+	// オフセットを更新
 	mVertexBufferOffset += vertexSize;
 	mIndexBufferOffset += indexSize;
 }
@@ -385,6 +390,6 @@ void Engine::Graphics::Renderer::SetVfxPipeline()
 /// </summary>
 void Engine::Graphics::Renderer::SetVfxConstantBuffer(uint32_t rootIndex, const void* data, size_t size)
 {
-	mConstantBuffer->Update(data); // データをバッファに転送
-	mConstantBuffer->Set(rootIndex); // 指定したルートインデックスにバインド
+	mVfxConstantBuffer->Update(data); // VFX専用バッファを更新
+	mVfxConstantBuffer->Set(rootIndex); // こちらをバインド
 }

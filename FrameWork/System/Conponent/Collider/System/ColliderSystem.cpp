@@ -187,12 +187,7 @@ void Engine::System::ColliderSystem::PostUpdate(entt::registry& Registry)
 /// </summary>
 void Engine::System::ColliderSystem::Debug(entt::registry& Registry)
 {
-	//auto view = Registry.view<AABBColliderComponent>();
-	//view.each([](auto& col)
-	//{
-	//	col.Collider.DebugRender();
-	//});
-
+#if _DEBUG 
 	auto view = Registry.view<Transform3D, ColliderComponent>();
 	view.each([](Transform3D& trans, ColliderComponent& col)
 		{
@@ -209,6 +204,7 @@ void Engine::System::ColliderSystem::Debug(entt::registry& Registry)
 			}
 		});
 
+#endif // _DEBUG
 }
 
 /// <summary>

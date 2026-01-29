@@ -45,27 +45,16 @@ namespace Engine::Graphics
     void VfxSprite::Render()
     {
         using namespace System;
-
         if (Camera::Main == nullptr) return;
-        //  カメラ情報の取得
-        const Math::Matrix& view = Camera::Main->GetView();
-        const Math::Matrix& proj = Camera::Main->GetProjection();
 
-        // パイプライン設定 (VFX用加算合成PSO)
         Renderer* renderer = Renderer::GetInstance();
         renderer->SetVfxPipeline();
-        //  コマンドリスト
-        auto cmdList = DirectX::GetInstance()->GetCommandList();
 
-        //  テクスチャのセット
-        if (mTexture != nullptr) 
-        {
-            mTexture->Set(1);
-        }
+        if (mTexture) mTexture->Set(1);
 
+        // 行列計算（ビルボード対応）
         Math::Matrix world;
         if (mBillboardType != eVfxBillboardType::None) {
-            // カメラのベクトルを使って正面を向かせる
             Math::Vector3 right = Camera::Main->GetRight();
             Math::Vector3 up = Camera::Main->GetUp();
             Math::Vector3 forward = Camera::Main->GetForward();
@@ -85,28 +74,23 @@ namespace Engine::Graphics
             world = mS * mR * mT;
         }
 
-        // WVP (ワールド・ビュー・プロジェクション)
         Math::Matrix wvp = world * Camera::Main->GetView() * Camera::Main->GetProjection();
 
-        // 4. 定数バッファの構築と転送（VfxPipelineのRootParam 0 は CBV）
         VfxConstantBuffer cb;
-        cb.matWVP = Math::Matrix::Transpose(wvp); // GPU用に転置
+        cb.matWVP = Math::Matrix::Transpose(wvp);
         cb.uvOffset = mUVOffset;
         cb.intensity = mIntensity;
         cb.padding = 0.0f;
 
-        // UISpriteのようにConstantsで送るには構造体が大きすぎるため、
-    // 本来は renderer->SetVfxConstantBuffer(0, &cb, sizeof(cb)); を使いたいですが、
-    // まだ未実装であれば、暫定的に以下のように書けます。
+        // Rendererを通してCBVセット
         renderer->SetVfxConstantBuffer(0, &cb, sizeof(cb));
 
-        // 5. 頂点データ（色は動的に更新）
+        // 頂点カラーの同期（変数をColorに変更）
         for (auto& v : mVertices) {
             v.Color = mBaseColor;
         }
 
-        // 6. 描画（UISpriteと同じくRenderer::Draw経由で）
         static constexpr uint16_t Indices[6] = { 0, 1, 2, 1, 3, 2 };
         renderer->DrawVfx(mVertices.data(), 4, Indices, 6);
     }
-}
+   }

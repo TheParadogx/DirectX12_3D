@@ -208,9 +208,13 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 /// <param name="Reg"></param>
 void Engine::System::EnemyStateSystem::Render(entt::registry& Reg)
 {
+#if _DEBUG
+
+
 	auto view = Reg.view<EnemyStateComponent, Transform3D>(entt::exclude<DeadTag>);
 	view.each([&](auto entity, EnemyStateComponent& state, Transform3D& trans) 
 		{
 			Graphics::DebugRender::DrawDebugCircle(trans.Position, state.Chase.DetectionRange, Graphics::Color::Cyan(), 32);
 		});
+#endif // _DEBUG
 }
