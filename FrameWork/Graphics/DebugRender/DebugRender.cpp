@@ -28,3 +28,33 @@ void Engine::Graphics::DebugRender::DrawDebugCircle(const Math::Vector3& Center,
         indices.data(), indices.size()
     );
 }
+
+void Engine::Graphics::DebugRender::DrawDebugQuad(const Math::Matrix& World, float Width, float Height, const Graphics::Color& Color)
+{
+    // ローカル座標での4隅 (ピボット中央想定、必要に応じて修正してください)
+    float halfW = Width * 0.5f;
+    float halfH = Height * 0.5f;
+
+    Math::Vector3 localPos[4] = {
+        { -halfW, -halfH, 0.0f }, // 左下
+        { -halfW,  halfH, 0.0f }, // 左上
+        {  halfW,  halfH, 0.0f }, // 右上
+        {  halfW, -halfH, 0.0f }  // 右下
+    };
+
+    std::vector<LineVertex> vertices(4);
+    for (int i = 0; i < 4; ++i) {
+        // 行列を使ってワールド座標へ変換
+        // Vector3::TransformCoord (あるいは相当する行列乗算) を使用
+        vertices[i].Position = Math::Vector3::TransformCoord(localPos[i], World);
+        vertices[i].color = Color;
+    }
+
+    // 4つの点をつなぐインデックス (0-1, 1-2, 2-3, 3-0)
+    uint16_t indices[] = { 0, 1, 1, 2, 2, 3, 3, 0 };
+
+    Renderer::GetInstance()->DrawLines(
+        vertices.data(), (UINT)vertices.size(),
+        indices, _countof(indices)
+    );
+}

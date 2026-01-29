@@ -231,12 +231,9 @@ void Engine::Graphics::Renderer::DrawMesh(const D3D12_VERTEX_BUFFER_VIEW& VBv, c
 /// <param name="VertexCount"></param>
 void Engine::Graphics::Renderer::DrawVfx(const D3D12_VERTEX_BUFFER_VIEW& VBv, UINT VertexCount)
 {
-	// 頂点バッファをセット（インデックスバッファは不要）
 	mCmdList->IASetVertexBuffers(0, 1, &VBv);
-
-	// インデックスなしの描画コマンドを発行
-	// 第1引数: 頂点数 (4)
-	// 第2引数: インスタンス数 (1)
+	mCmdList->IASetIndexBuffer(nullptr);
+	mCmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	mCmdList->DrawInstanced(VertexCount, 1, 0, 0);
 }
 

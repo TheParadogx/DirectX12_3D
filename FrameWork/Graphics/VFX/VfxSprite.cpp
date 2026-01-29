@@ -5,19 +5,21 @@
 #include "System/Camera/Camera.hpp"
 #include "Graphics/ConstantBuffer/ConstantBuffer.hpp"
 #include "Graphics/DirectX/DirectX12.hpp"
+#include "Graphics/DebugRender/DebugRender.hpp"
+
 
 namespace Engine::Graphics {
 
 	VfxMesh::VfxMesh()
 		:mVertexBuffer(nullptr)
 		, mTexture(nullptr)
-		, mPosition(0,0,0)
+		, mPosition(0,10,0)
 		, mRotation(Math::Quaternion::Identity)
 		, mScale(1,1,1)
-		, mSize(0,0)
+		, mSize(5,5)
 		, mPivot(0,0)
 		, mColor(Color::White())
-		, mIsBillBoard(true)
+		, mIsBillBoard(false)
 		, mTimer(0)
 	{
 	}
@@ -59,17 +61,21 @@ namespace Engine::Graphics {
 	/// <returns></returns>
 	bool VfxMesh::CreateMesh()
 	{
-		// サイズとピボットから、ローカル空間での 4 頂点を算出
+		// mSizeとmPivotに基づいた動的な頂点計算
 		float left = -mSize.x * (0.5f + mPivot.x);
 		float right = mSize.x * (0.5f - mPivot.x);
 		float bottom = -mSize.y * (0.5f + mPivot.y);
 		float top = mSize.y * (0.5f - mPivot.y);
 
-		// 4頂点で Z 文字を描く順序 (TRIANGLESTRIP 用)
 		Vertex vertices[] = {
+			// 1つ目の三角形
 			{ Math::Vector3(left,  bottom, 0.0f), Math::Vector2(0.0f, 1.0f) }, // 左下
 			{ Math::Vector3(left,  top,    0.0f), Math::Vector2(0.0f, 0.0f) }, // 左上
 			{ Math::Vector3(right, bottom, 0.0f), Math::Vector2(1.0f, 1.0f) }, // 右下
+
+			// 2つ目の三角形
+			{ Math::Vector3(right, bottom, 0.0f), Math::Vector2(1.0f, 1.0f) }, // 右下
+			{ Math::Vector3(left,  top,    0.0f), Math::Vector2(0.0f, 0.0f) }, // 左上
 			{ Math::Vector3(right, top,    0.0f), Math::Vector2(1.0f, 0.0f) }, // 右上
 		};
 
@@ -90,7 +96,8 @@ namespace Engine::Graphics {
 			D3D12_RESOURCE_STATE_GENERIC_READ, nullptr, IID_PPV_ARGS(&mVertexBuffer));
 
 		void* pData = nullptr;
-		mVertexBuffer->Map(0, nullptr, &pData);
+		D3D12_RANGE readRange = { 0, 0 }; // CPUからは読み取らない
+		mVertexBuffer->Map(0, &readRange, &pData);
 		memcpy(pData, vertices, sizeof(vertices));
 		mVertexBuffer->Unmap(0, nullptr);
 
@@ -145,6 +152,7 @@ namespace Engine::Graphics {
 		if (mTexture == nullptr || mVertexBuffer == nullptr) return;
 
 		Renderer* renderer = Renderer::GetInstance();
+		renderer->SetVfxPipeline();
 
 		//	定数バッファの更新
 		VfxConstantBufferInfo cb;
@@ -160,6 +168,8 @@ namespace Engine::Graphics {
 		mTexture->Set(1);
 
 		//	描画
-		renderer->DrawVfx(mVBView, 4);
+		renderer->DrawVfx(mVBView, 6);
+
+		DebugRender::DrawDebugQuad(mWorldMatrix, mSize.x, mSize.y, Color::Green());
 	}
 }

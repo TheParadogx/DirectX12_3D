@@ -48,6 +48,9 @@ namespace Engine::Graphics
 		//	スケール
 		const Math::Vector3& GetScale()const { return mScale; }
 		void SetScale(const Math::Vector3& scale) { mScale = scale; }
+		//	サイズ
+
+
 		//	色
 		void SetColor(const Color& color) { mColor = color; }
 

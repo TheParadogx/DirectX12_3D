@@ -15,6 +15,8 @@ namespace Engine::Graphics
 		/// <param name="Color">êF</param>
 		/// <param name="Segments">í∏ì_êî</param>
 		static void DrawDebugCircle(const Math::Vector3& Center, float Radius, const Graphics::Color& Color,const int Segments = 32);
+
+		static void DrawDebugQuad(const Math::Matrix& World, float Width, float Height, const Graphics::Color& Color);
 	};
 }
 

@@ -5,29 +5,31 @@
 
 namespace
 {
-    // シェーダーコンパイル用の共通ラムダ
-    auto CompileShader = [](const char* FileName, const char* EntryPoint, const char* Target)
+    //	シェーダーコンパイル用処理
+    auto CompileShader = [](const char* FileName, const char* FunctionName, const char* ShaderModel)
         {
-            mw::BlobPtr shader = nullptr;
-            mw::BlobPtr error = nullptr;
+            size_t wLen = 0;
+            wchar_t wideFileName[256] = {};
+            //	ファイル名変換
+            mbstowcs_s(&wLen, wideFileName, ARRAYSIZE(wideFileName), FileName, _TRUNCATE);
 
-            wchar_t widePath[256];
-            size_t converted;
-            mbstowcs_s(&converted, widePath, FileName, _TRUNCATE);
+            //	シェーダー作成
+            mw::BlobPtr ShaderBlob = nullptr;
+            mw::BlobPtr ErrorBlob = nullptr;
 
-            HRESULT hr = D3DCompileFromFile(
-                widePath, nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
-                EntryPoint, Target,
+            const HRESULT hr = D3DCompileFromFile(wideFileName,
+                nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE,
+                FunctionName, ShaderModel,
                 D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION,
-                0, &shader, &error);
+                0, ShaderBlob.GetAddressOf(), ErrorBlob.GetAddressOf());
 
-            if (FAILED(hr)) {
-                if (error) {
-                    LOG_ERROR((char*)error->GetBufferPointer());
-                }
-                return mw::BlobPtr(nullptr);
+            if (FAILED(hr))
+            {
+                OutputDebugString((char*)ErrorBlob->GetBufferPointer());
+                ErrorBlob.Reset();
             }
-            return shader;
+
+            return ShaderBlob;
         };
 }
 
@@ -50,17 +52,19 @@ namespace Engine::Graphics
     {
         // パラメータ0: 定数バッファ(b0) [World, ViewProj, Color]
         // パラメータ1: テクスチャ(t0)
-        D3D12_ROOT_PARAMETER RootParams[2] = {};
+        std::array<D3D12_ROOT_PARAMETER, 2> RootParams = {};
 
         RootParams[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
         RootParams[0].Descriptor.ShaderRegister = 0;
         RootParams[0].Descriptor.RegisterSpace = 0;
         RootParams[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
 
+        //  テクスチャ
         D3D12_DESCRIPTOR_RANGE range = {};
         range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
         range.NumDescriptors = 1;
         range.BaseShaderRegister = 0;
+        range.RegisterSpace = 0;
         range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
         RootParams[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
@@ -73,22 +77,35 @@ namespace Engine::Graphics
         sampler.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
         sampler.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
         sampler.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+        sampler.MipLODBias = 0.0f;
+        sampler.MaxAnisotropy = 1; // 16だと重い場合があるので一旦1で
         sampler.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
+        sampler.BorderColor = D3D12_STATIC_BORDER_COLOR_OPAQUE_BLACK;
+        sampler.MinLOD = 0.0f;
         sampler.MaxLOD = D3D12_FLOAT32_MAX;
         sampler.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+        sampler.ShaderRegister = 0;
+        sampler.RegisterSpace = 0;
 
         D3D12_ROOT_SIGNATURE_DESC rsDesc = {};
-        rsDesc.NumParameters = _countof(RootParams);
-        rsDesc.pParameters = RootParams;
+        rsDesc.NumParameters = static_cast<UINT>(RootParams.size());
+        rsDesc.pParameters = RootParams.data();
         rsDesc.NumStaticSamplers = 1;
         rsDesc.pStaticSamplers = &sampler;
         rsDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
 
         mw::BlobPtr blob, error;
-        if (FAILED(D3D12SerializeRootSignature(&rsDesc, D3D_ROOT_SIGNATURE_VERSION_1, &blob, &error))) return false;
+        HRESULT hr = D3D12SerializeRootSignature(&rsDesc, D3D_ROOT_SIGNATURE_VERSION_1, blob.GetAddressOf(), error.GetAddressOf());
+        if (FAILED(hr)) return false;
 
         ID3D12Device* device = DirectX::GetInstance()->GetDevice();
-        return SUCCEEDED(device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&mRootSignature)));
+        hr = device->CreateRootSignature(0, blob->GetBufferPointer(), blob->GetBufferSize(), IID_PPV_ARGS(&mRootSignature));
+        if (FAILED(hr))
+        {
+            return false;
+        }
+
+        return true;
     }
 
     bool VFXPipeline::CreatePipeline()
@@ -99,41 +116,94 @@ namespace Engine::Graphics
 
         if (VS == nullptr || PS == nullptr) return false;
 
-        // VfxVertex構造体 { Vector3, Vector2 } に合わせる
-        D3D12_INPUT_ELEMENT_DESC inputLayout[] = {
-            { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-            { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0 },
-        };
+        std::vector<D3D12_INPUT_ELEMENT_DESC> inputLayouts;
+        D3D12_INPUT_ELEMENT_DESC element = {};
+        element.AlignedByteOffset = D3D12_APPEND_ALIGNED_ELEMENT;
+        element.InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA;
+        element.InstanceDataStepRate = 0;
+        element.InputSlot = 0;
+
+        element.SemanticName = "POSITION";
+        element.SemanticIndex = 0;
+        element.Format = DXGI_FORMAT_R32G32B32_FLOAT;//float3
+        inputLayouts.push_back(element);
+
+        element.SemanticName = "TEXCOORD";
+        element.SemanticIndex = 0;
+        element.Format = DXGI_FORMAT_R32G32_FLOAT;//float2
+        inputLayouts.push_back(element);
+
 
         D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc = {};
         psoDesc.pRootSignature = mRootSignature.Get();
+
         psoDesc.VS = { VS->GetBufferPointer(), VS->GetBufferSize() };
         psoDesc.PS = { PS->GetBufferPointer(), PS->GetBufferSize() };
-        psoDesc.InputLayout = { inputLayout, _countof(inputLayout) };
+        psoDesc.InputLayout.pInputElementDescs = inputLayouts.data();
+        psoDesc.InputLayout.NumElements = static_cast<UINT>(inputLayouts.size());
+
+        //コンパイルしたピクセルシェーダーの情報を格納
+        psoDesc.PS.pShaderBytecode = PS->GetBufferPointer();
+        psoDesc.PS.BytecodeLength = PS->GetBufferSize();
+
+        //	ブレンドステート設定
         psoDesc.BlendState = GetBlendStateDesc();
+        //	ラスタライザー設定
         psoDesc.RasterizerState = GetRasterizerDesc();
+        //	深度ステンシル設定
         psoDesc.DepthStencilState = GetDepthStencilDesc();
 
-        // VfxMesh::RenderのIASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP)に合わせる
+        psoDesc.SampleMask = D3D12_DEFAULT_SAMPLE_MASK;
+        psoDesc.IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED;
         psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
 
+        //	描画先のレンダーターゲットの設定
+        for (auto& rtv : psoDesc.RTVFormats)
+        {
+            rtv = DXGI_FORMAT_UNKNOWN;
+        }
         psoDesc.NumRenderTargets = 1;
-        psoDesc.RTVFormats[0] = DXGI_FORMAT_R8G8B8A8_UNORM;
+        for (UINT i = 0; i < psoDesc.NumRenderTargets; i++)
+        {
+            psoDesc.RTVFormats[i] = DXGI_FORMAT_R8G8B8A8_UNORM;
+        }
+
         psoDesc.DSVFormat = DXGI_FORMAT_D32_FLOAT;
         psoDesc.SampleDesc.Count = 1;
+        psoDesc.SampleDesc.Quality = 0;
 
-        ID3D12Device* device = DirectX::GetInstance()->GetDevice();
-        return SUCCEEDED(device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&mPipelineState)));
+        ID3D12Device* device = Graphics::DirectX::GetInstance()->GetDevice();
+        const HRESULT hr = device->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&mPipelineState));
+        if (FAILED(hr))
+        {
+            LOG_ERROR("Failed CreateGraphicsPipelineState.");
+            return false;
+        }
+        return true;
     }
 
     D3D12_DEPTH_STENCIL_DESC VFXPipeline::GetDepthStencilDesc()
     {
         D3D12_DEPTH_STENCIL_DESC Desc = {};
-        Desc.DepthEnable = TRUE;                            // 背景に隠れるようにテストは有効
-        Desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;  // エフェクト自身の厚みはZバッファに書かない
-        Desc.DepthFunc = D3D12_COMPARISON_FUNC_LESS_EQUAL;
+        Desc.DepthEnable = TRUE;
+        Desc.DepthWriteMask = D3D12_DEPTH_WRITE_MASK_ZERO;
+        Desc.DepthFunc = D3D12_COMPARISON_FUNC_LESS;
         Desc.StencilEnable = FALSE;
+        Desc.StencilReadMask = D3D12_DEFAULT_STENCIL_READ_MASK;
+        Desc.StencilWriteMask = D3D12_DEFAULT_STENCIL_WRITE_MASK;
+
+        const D3D12_DEPTH_STENCILOP_DESC defaultStencilOp =
+        {
+            D3D12_STENCIL_OP_KEEP,
+            D3D12_STENCIL_OP_KEEP,
+            D3D12_STENCIL_OP_KEEP,
+            D3D12_COMPARISON_FUNC_NEVER
+        };
+        Desc.BackFace = defaultStencilOp;
+        Desc.FrontFace = defaultStencilOp;
+
         return Desc;
+
     }
 
     D3D12_BLEND_DESC VFXPipeline::GetBlendStateDesc()
@@ -142,18 +212,27 @@ namespace Engine::Graphics
         Desc.AlphaToCoverageEnable = FALSE;
         Desc.IndependentBlendEnable = FALSE;
 
-        D3D12_RENDER_TARGET_BLEND_DESC& rt = Desc.RenderTarget[0];
-        rt.BlendEnable = TRUE;
+        D3D12_RENDER_TARGET_BLEND_DESC rtDesc = {};
+        rtDesc.BlendEnable = TRUE; // エフェクトなのでTRUE
+        rtDesc.LogicOpEnable = FALSE;
 
-        // 加算合成 (SrcAlphaに応じて加算)
-        rt.SrcBlend = D3D12_BLEND_SRC_ALPHA;
-        rt.DestBlend = D3D12_BLEND_ONE;
-        rt.BlendOp = D3D12_BLEND_OP_ADD;
-        rt.SrcBlendAlpha = D3D12_BLEND_ONE;
-        rt.DestBlendAlpha = D3D12_BLEND_ZERO;
-        rt.BlendOpAlpha = D3D12_BLEND_OP_ADD;
-        rt.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+        // --- ここがVFXの肝（加算合成） ---
+        rtDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;  // 自分の色にアルファを掛ける
+        rtDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;        // 背景の色はそのまま100%使う（足し算）
+        rtDesc.BlendOp = D3D12_BLEND_OP_ADD;
+        // ------------------------------
 
+        rtDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
+        rtDesc.DestBlendAlpha = D3D12_BLEND_ZERO;
+        rtDesc.BlendOpAlpha = D3D12_BLEND_OP_ADD;
+        rtDesc.LogicOp = D3D12_LOGIC_OP_NOOP;
+        rtDesc.RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL;
+
+        // FBXと同じように全ターゲットに適用（これで構造が一致する）
+        for (auto& rt : Desc.RenderTarget)
+        {
+            rt = rtDesc;
+        }
         return Desc;
     }
 
@@ -172,6 +251,7 @@ namespace Engine::Graphics
     D3D_PRIMITIVE_TOPOLOGY VFXPipeline::GetTopology()const
     {
         // CreateMeshの設計（4頂点）に合わせる
-        return D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+        //return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
+        return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
     }
 }
