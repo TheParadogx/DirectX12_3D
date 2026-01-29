@@ -216,11 +216,10 @@ namespace Engine::Graphics
         rtDesc.BlendEnable = TRUE; // エフェクトなのでTRUE
         rtDesc.LogicOpEnable = FALSE;
 
-        // --- ここがVFXの肝（加算合成） ---
         rtDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;  // 自分の色にアルファを掛ける
-        rtDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;        // 背景の色はそのまま100%使う（足し算）
+        rtDesc.DestBlend = D3D12_BLEND_ONE;        // 背景の色はそのまま100%使う（めっちゃブレンド）
+        //rtDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA; //  普通のまま使いたいとき
         rtDesc.BlendOp = D3D12_BLEND_OP_ADD;
-        // ------------------------------
 
         rtDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
         rtDesc.DestBlendAlpha = D3D12_BLEND_ZERO;
@@ -240,8 +239,17 @@ namespace Engine::Graphics
     {
         D3D12_RASTERIZER_DESC Desc = {};
         Desc.FillMode = D3D12_FILL_MODE_SOLID;
-        Desc.CullMode = D3D12_CULL_MODE_NONE; // 両面表示
+        Desc.CullMode = D3D12_CULL_MODE_NONE;
+        Desc.FrontCounterClockwise = FALSE;
+        Desc.DepthBias = D3D12_DEFAULT_DEPTH_BIAS;
+        Desc.DepthBiasClamp = D3D12_DEFAULT_DEPTH_BIAS_CLAMP;
+        Desc.SlopeScaledDepthBias = D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS;
         Desc.DepthClipEnable = TRUE;
+        Desc.MultisampleEnable = FALSE;
+        Desc.AntialiasedLineEnable = FALSE;
+        Desc.ForcedSampleCount = 0;
+        Desc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
+
         return Desc;
     }
 

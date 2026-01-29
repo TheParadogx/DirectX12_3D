@@ -114,32 +114,24 @@ namespace Engine::Graphics {
 	void VfxMesh::Update(float DeltaTime)
 	{
 		//	時間の経過などをさせてもいい
+		mTimer += DeltaTime;
 
-		if (mIsBillBoard)
-		{
-			// 1. 各成分の行列を作成
-			Math::Matrix S = Math::Matrix::Scaling(mScale.x, mScale.y, mScale.z);
-			Math::Matrix T;
-			T.Translate(mPosition); // 既存のTranslateメソッドを使用
+		if (mIsBillBoard) {
+			// 自分からカメラへの方向ベクトルを作成
+			Math::Vector3 cameraPos = System::Camera::Main->GetPosition();
+			Math::Vector3 toCamera = cameraPos - mPosition;
 
-			// 2. ビルボード回転行列の作成
-			// カメラの右・上・前ベクトルをそのまま回転軸にする
-			const auto& right = System::Camera::Main->GetRight();
-			const auto& up = System::Camera::Main->GetUp();
-			const auto& fwd = System::Camera::Main->GetForward();
+			// その方向を向くクォータニオンを作成
+			mRotation = Math::Quaternion::LookRotation(toCamera,Math::Vector3::Up);
 
-			Math::Matrix R = Math::Matrix::identity;
-			R._11 = right.x; R._12 = right.y; R._13 = right.z;
-			R._21 = up.x;    R._22 = up.y;    R._23 = up.z;
-			R._31 = fwd.x;   R._32 = fwd.y;   R._33 = fwd.z;
+			Math::Vector3 finalScale(mScale.x * mSize.x, mScale.y * mSize.y, mScale.z);
 
-			// 3. 合成 (自作Mathのオペレータを使用)
-			mWorldMatrix = S * R * T;
+			// 行列を更新（サイズと位置を適用）
+			mWorldMatrix.Update(mPosition, mRotation, finalScale);
 		}
-		else
-		{
-			// 通常時は Matrix 構造体の Update メソッドにお任せ
-			mWorldMatrix.Update(mPosition, mRotation, mScale);
+		else {
+			Math::Vector3 finalScale(mScale.x * mSize.x, mScale.y * mSize.y, mScale.z);
+			mWorldMatrix.Update(mPosition, mRotation, finalScale);
 		}
 
 	}
@@ -172,4 +164,7 @@ namespace Engine::Graphics {
 
 		DebugRender::DrawDebugQuad(mWorldMatrix, mSize.x, mSize.y, Color::Green());
 	}
+
+
+
 }

@@ -230,5 +230,18 @@ namespace Math
 			const float f = 1.0f / a;
 			return Vector3(x * f, y * f, z * f);
 		}
+
+		inline Vector3& operator*=(const Vector3& a)
+		{
+			x *= a.x;
+			y *= a.y;
+			z *= a.z;
+			return *this;
+		}
+
+		inline Vector3 operator*(const Vector3& a)const
+		{
+			return Vector3(x * a.x, y * a.y, z * a.z);
+		}
 	};
 }

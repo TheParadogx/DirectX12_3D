@@ -49,10 +49,30 @@ namespace Engine::Graphics
 		const Math::Vector3& GetScale()const { return mScale; }
 		void SetScale(const Math::Vector3& scale) { mScale = scale; }
 		//	サイズ
+		const Math::Vector2& GetSize() const { return mSize; }
+		void SetSize(const Math::Vector2& size) { mSize = size; }
 
+		// ピボット (0.5, 0.5 で中心、0.5, 1.0 で足元など)
+		const Math::Vector2& GetPivot() const { return mPivot; }
+		void SetPivot(const Math::Vector2& pivot) { mPivot = pivot; }
 
-		//	色
+		// ビルボード設定
+		bool IsBillboard() const { return mIsBillBoard; }
+		void SetIsBillboard(bool isBillboard) { mIsBillBoard = isBillboard; }
+
+		// --- 外観・時間 ---
+		const Color& GetColor() const { return mColor; }
 		void SetColor(const Color& color) { mColor = color; }
+
+		float GetTimer() const { return mTimer; }
+		void SetTimer(float timer) { mTimer = timer; }
+
+
+		void SetRotationToGround() {
+			// X軸周りに90度回転させるクォータニオンを作成
+			// 90度 = 1.570796f ラジアン
+			mRotation = Math::Quaternion::AngleAxis(1.570796f, Math::Vector3(1.0f, 0.0f, 0.0f));
+		}
 
 	private:
 		/// <summary>

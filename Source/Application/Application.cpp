@@ -97,7 +97,9 @@ bool Engine::App::Application::Initialize()
     auto VfxResrouce = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/test.png");
     Vfx.Create(VfxResrouce);
     Vfx.SetPosition({ 0,10,0 });
-
+    Vfx.SetIsBillboard(true);
+    //Vfx.SetRotation(Math::Quaternion::AngleAxis(Math::RAD * 90, Math::Vector3::Right));
+    //Vfx.SetRotationToGround();
 
     return true;
 }

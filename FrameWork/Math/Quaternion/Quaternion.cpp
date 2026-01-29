@@ -178,7 +178,7 @@ namespace Math
 		return ret;
 	}
 
-	Quaternion Quaternion::LookRotation(const Vector3& Direction)
+	Quaternion Quaternion::LookRotation(const Vector3& Direction, const Vector3& UpAxis)
 	{
 		//	方向ベクトルがほぼない状態
 		if (Direction.SqrLength() < 0.0001f) return Quaternion::Identity;
@@ -188,7 +188,7 @@ namespace Math
 		float angle = atan2f(Direction.x, Direction.z);
 
 		// Y軸（Vector3::Up）を回転軸としてクォータニオンを生成
-		return Quaternion::AngleAxis(angle, Vector3::Forward);
+		return Quaternion::AngleAxis(angle, UpAxis);
 	}
 
 }
