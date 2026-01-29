@@ -65,20 +65,18 @@ namespace Engine::Graphics
 			UINT IndexCount, UINT StartIndex);
 
 		/// <summary>
+		/// Vfxの描画
+		/// </summary>
+		/// <param name="VBv"></param>
+		/// <param name="VertexCount"></param>
+		void DrawVfx(const D3D12_VERTEX_BUFFER_VIEW& VBv, UINT VertexCount);
+
+		/// <summary>
 		/// SkyBoxの描画
 		/// </summary>
 		/// <param name="VBv">スカイボックスの頂点バッファビュー</param>
 		/// <param name="vertexCount">頂点数（通常36）</param>
 		void DrawSkyBox(const D3D12_VERTEX_BUFFER_VIEW& VBv, UINT vertexCount);
-
-		/// <summary>
-		/// Vfxの描画
-		/// </summary>
-		/// <param name="v"></param>
-		/// <param name="vNum"></param>
-		/// <param name="i"></param>
-		/// <param name="iNum"></param>
-		void DrawVfx(const VfxVertex* v, size_t vNum, const uint16_t* i, size_t iNum);
 
 		/// <summary>
 		/// ワールド空間へのライン描画
@@ -130,11 +128,6 @@ namespace Engine::Graphics
 		/// VFX用のパイプライン
 		/// </summary>
 		void SetVfxPipeline();
-
-		/// <summary>
-		/// VFX用の定数バッファをセットする
-		/// </summary>
-		void SetVfxConstantBuffer(uint32_t rootIndex, const void* data, size_t size);
 	private:
 		/// <summary>
 		/// 基本描画関数

@@ -40,6 +40,7 @@ void Engine::Graphics::Renderer::OnCreate()
 		LOG_CRITICAL("Failed Create RendererConstantBuffer.");
 	}
 
+
 	//	Pipeline
 	ret = mSpritePipeline.Create();
 	if (ret == false)
@@ -224,6 +225,22 @@ void Engine::Graphics::Renderer::DrawMesh(const D3D12_VERTEX_BUFFER_VIEW& VBv, c
 }
 
 /// <summary>
+/// Vfxの描画
+/// </summary>
+/// <param name="VBv"></param>
+/// <param name="VertexCount"></param>
+void Engine::Graphics::Renderer::DrawVfx(const D3D12_VERTEX_BUFFER_VIEW& VBv, UINT VertexCount)
+{
+	// 頂点バッファをセット（インデックスバッファは不要）
+	mCmdList->IASetVertexBuffers(0, 1, &VBv);
+
+	// インデックスなしの描画コマンドを発行
+	// 第1引数: 頂点数 (4)
+	// 第2引数: インスタンス数 (1)
+	mCmdList->DrawInstanced(VertexCount, 1, 0, 0);
+}
+
+/// <summary>
 /// SkyBoxの描画
 /// </summary>
 /// <param name="VBv">スカイボックスの頂点バッファビュー</param>
@@ -237,18 +254,6 @@ void Engine::Graphics::Renderer::DrawSkyBox(const D3D12_VERTEX_BUFFER_VIEW& VBv,
 	mCmdList->DrawInstanced(vertexCount, 1, 0, 0);
 }
 
-/// <summary>
-/// Vfxの描画
-/// </summary>
-/// <param name="v"></param>
-/// <param name="vNum"></param>
-/// <param name="i"></param>
-/// <param name="iNum"></param>
-void Engine::Graphics::Renderer::DrawVfx(const VfxVertex* v, size_t vNum, const uint16_t* i, size_t iNum)
-{
-	// 既存の Draw メソッドが VfxVertex のサイズも許容するように呼び出す
-	Draw(v, sizeof(VfxVertex), vNum, i, eIndexBufferFormat::Uint16, iNum);
-}
 
 /// <summary>
 /// ワールド空間へのライン描画
@@ -380,11 +385,3 @@ void Engine::Graphics::Renderer::SetVfxPipeline()
 	this->SetTopology(mVfxPipeline.GetTopology());
 }
 
-/// <summary>
-/// VFX用の定数バッファをセットする
-/// </summary>
-void Engine::Graphics::Renderer::SetVfxConstantBuffer(uint32_t rootIndex, const void* data, size_t size)
-{
-	mConstantBuffer->Update(data); // データをバッファに転送
-	mConstantBuffer->Set(rootIndex); // 指定したルートインデックスにバインド
-}

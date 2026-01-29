@@ -678,11 +678,13 @@
   <ItemGroup>
     <None Include="Document\CodingConventions\CodingConventions.md" />
     <None Include="packages.config" />
+    <None Include="Assets\Shader\VfxShader.hlsli" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\PS_UITexture.hlsl" />
     <FxCompile Include="Assets\Shader\PS_Skybox.hlsl" />
     <FxCompile Include="Assets\Shader\VS_Skybox.hlsl" />
-    <FxCompile Include="Assets\Shader\VfxShader.hlsl" />
+    <FxCompile Include="Assets\Shader\VS_Vfx.hlsl" />
+    <FxCompile Include="Assets\Shader\PS_Vfx.hlsl" />
   </ItemGroup>
 </Project>
