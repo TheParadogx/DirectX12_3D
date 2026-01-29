@@ -31,8 +31,6 @@
 
 namespace Engine::Scene
 {
-	static Graphics::VfxSprite vfx;
-
 	/// <summary>
 	///	初期化
 	/// </summary>
@@ -68,16 +66,6 @@ namespace Engine::Scene
 		mSkyBox = std::make_unique<Graphics::SkyBox>();
 		mSkyBox->Create(SkyBoxResource);
 
-		//	テスト用
-		auto vfxResource = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/luffy.dds");
-		vfx.Create(vfxResource);
-		vfx.SetPosition({ 0.0f, 0.0f, 5.0f }); // カメラの目の前
-		vfx.SetScale({ 1.0f, 1.0f, 1.0f });    // 適切なサイズ
-		vfx.SetColor(Graphics::Color::White());// 色の変化なし
-		vfx.SetIntensity(1.0f);                // 標準の明るさ
-		vfx.SetScrollSpeed({ 0.0f, 0.0f });    // スクロール停止
-		vfx.SetBillboardType(Graphics::eVfxBillboardType::None); // まずは固定して確認
-
 		return true;
 	}
 
@@ -96,7 +84,6 @@ namespace Engine::Scene
 	void InGame::Render()
 	{
 		mSkyBox->Render();
-		vfx.Render();
 	}
 
 	/// <summary>
