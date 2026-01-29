@@ -17,7 +17,6 @@ namespace Engine::Graphics
         , mScrollSpeed(0, 0)
         , mIntensity(1.0f)
 	{
-
 	}
 
     bool VfxSprite::Create(Texture* texture)
@@ -28,12 +27,26 @@ namespace Engine::Graphics
         float hW = texture->GetWidth() * 0.5f;
         float hH = texture->GetHeight() * 0.5f;
 
-        // std::array への頂点データ設定
-        mVertices[0] = { {-hW,  hH, 0.0f}, {0.0f, 0.0f}, Color::White() };
-        mVertices[1] = { {-hW, -hH, 0.0f}, {0.0f, 1.0f}, Color::White() };
-        mVertices[2] = { { hW,  hH, 0.0f}, {1.0f, 0.0f}, Color::White() };
-        mVertices[3] = { { hW, -hH, 0.0f}, {1.0f, 1.0f}, Color::White() };
+        // 1.0サイズの正方形を作成（頂点順序とUVを厳密に合わせる）
+            // 0: 左上
+        mVertices[0].Position = { -0.5f,  0.5f, 0.0f };
+        mVertices[0].UV = { 0.0f,  0.0f };
+        mVertices[0].Color = Color::White();
 
+        // 1: 右上
+        mVertices[1].Position = { 0.5f,  0.5f, 0.0f };
+        mVertices[1].UV = { 1.0f,  0.0f };
+        mVertices[1].Color = Color::White();
+
+        // 2: 左下
+        mVertices[2].Position = { -0.5f, -0.5f, 0.0f };
+        mVertices[2].UV = { 0.0f,  1.0f };
+        mVertices[2].Color = Color::White();
+
+        // 3: 右下
+        mVertices[3].Position = { 0.5f, -0.5f, 0.0f };
+        mVertices[3].UV = { 1.0f,  1.0f };
+        mVertices[3].Color = Color::White();
         return true;
     }
     void VfxSprite::Update(float deltaTime)
@@ -50,7 +63,7 @@ namespace Engine::Graphics
         Renderer* renderer = Renderer::GetInstance();
         renderer->SetVfxPipeline();
 
-        if (mTexture) mTexture->Set(1);
+        //if (mTexture) mTexture->Set(0);
 
         // 行列計算（ビルボード対応）
         Math::Matrix world;
@@ -74,15 +87,13 @@ namespace Engine::Graphics
             world = mS * mR * mT;
         }
 
-        Math::Matrix wvp = world * Camera::Main->GetView() * Camera::Main->GetProjection();
+        Math::Matrix testWVP = Math::Matrix::identity;
+        // scale は 1.0 だと小さすぎるかもしれないので 0.5 くらいで
+        testWVP = Math::Matrix::Scaling(0.5f, 0.5f, 1.0f);
 
         VfxConstantBuffer cb;
-        cb.matWVP = Math::Matrix::Transpose(wvp);
-        cb.uvOffset = mUVOffset;
-        cb.intensity = mIntensity;
-        cb.padding = 0.0f;
-
-        // Rendererを通してCBVセット
+        cb.matWVP = Math::Matrix::Transpose(testWVP); // 2D表示
+        cb.intensity = 1.0f;
         renderer->SetVfxConstantBuffer(0, &cb, sizeof(cb));
 
         // 頂点カラーの同期（変数をColorに変更）

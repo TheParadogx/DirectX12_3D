@@ -58,7 +58,7 @@ namespace Engine::Scene
 		System::ColliderSystem::AddCollisionPair<System::PlayerWeaponTag, System::EnemyTag>({ false,false });
 		System::ColliderSystem::AddCollisionPair<System::EnemyWeaponTag, System::PlayerTag>({ false,false });
 
-		System::ObjectsFactory::CreateField();
+		//System::ObjectsFactory::CreateField();
 		System::ObjectsFactory::CreatePlayer();
 		System::ObjectsFactory::CreateEnemy();
 
@@ -83,7 +83,7 @@ namespace Engine::Scene
 	/// </summary>
 	void InGame::Render()
 	{
-		mSkyBox->Render();
+		//mSkyBox->Render();
 	}
 
 	/// <summary>

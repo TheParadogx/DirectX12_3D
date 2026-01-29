@@ -170,8 +170,16 @@ void Engine::Graphics::Renderer::Draw(const void* VertexData, const size_t Verte
 	mIndexBuffer->Update(IndexData, mIndexBufferOffset, indexSize);
 	mIndexBuffer->Set(IndexFormat, mIndexBufferOffset, indexSize);
 
+
 	// 描画実行
-	mCmdList->DrawIndexedInstanced(static_cast<UINT>(IndexCount), 1, 0, 0, 0);
+	mCmdList->DrawIndexedInstanced(
+		static_cast<UINT>(IndexCount),
+		1,
+		0, // すでに IndexBuffer->Set でオフセットを指定済みの場合は 0
+		0, // すでに VertexBuffer->Set でオフセットを指定済みの場合は 0
+		0
+	);
+
 
 	// 使用量の更新
 	mUsingVertexBufferSize += vertexSize;

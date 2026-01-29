@@ -98,14 +98,10 @@ bool Engine::App::Application::Initialize()
     //	テスト用
     auto vfxResource = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/luffy.dds");
     ret = vfx.Create(vfxResource);
-    vfx.SetPosition({ 10.0f, 10.0f, 10.0f }); // カメラの目の前
-    float scale = 1.0f;
-    vfx.SetScale({ scale, scale, scale });    // 適切なサイズ
-    vfx.SetColor(Graphics::Color::White());// 色の変化なし
-    vfx.SetIntensity(1.0f);                // 標準の明るさ
-    vfx.SetScrollSpeed({ 0.0f, 0.0f });    // スクロール停止
-    vfx.SetBillboardType(Graphics::eVfxBillboardType::None); // まずは固定して確認
-
+    vfx.SetPosition({ 0, 0, 5 });
+    vfx.SetScale({ 2.0f, 2.0f, 2.0f }); // 少し大きめに
+    vfx.SetAngle({ 0, 0, 0 });          // 回転なし
+    vfx.SetBillboardType(Graphics::eVfxBillboardType::None);
 
     return true;
 }
