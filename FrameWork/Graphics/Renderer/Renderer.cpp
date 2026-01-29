@@ -71,6 +71,14 @@ void Engine::Graphics::Renderer::OnCreate()
 		LOG_CRITICAL("Failed Create SkyBoxPipeline.");
 	}
 
+	ret = mVfxPipeline.Create();
+	if (ret == false)
+	{
+		LOG_CRITICAL("Failed Create VfxPipeline.");
+	}
+
+
+
 	//	CmdList
 	mCmdList = Graphics::DirectX::GetInstance()->GetCommandList();
 
@@ -230,6 +238,19 @@ void Engine::Graphics::Renderer::DrawSkyBox(const D3D12_VERTEX_BUFFER_VIEW& VBv,
 }
 
 /// <summary>
+/// Vfxの描画
+/// </summary>
+/// <param name="v"></param>
+/// <param name="vNum"></param>
+/// <param name="i"></param>
+/// <param name="iNum"></param>
+void Engine::Graphics::Renderer::DrawVfx(const VfxVertex* v, size_t vNum, const uint16_t* i, size_t iNum)
+{
+	// 既存の Draw メソッドが VfxVertex のサイズも許容するように呼び出す
+	Draw(v, sizeof(VfxVertex), vNum, i, eIndexBufferFormat::Uint16, iNum);
+}
+
+/// <summary>
 /// ワールド空間へのライン描画
 /// </summary>
 /// <param name="lineVertices">頂点配列の先頭アドレス</param>
@@ -329,6 +350,9 @@ void Engine::Graphics::Renderer::SetLinePipeline()
 
 }
 
+/// <summary>
+/// UI用のspriteパイプラインのセット
+/// </summary>
 void Engine::Graphics::Renderer::SetUISpritePipeline()
 {
 	this->SetRootSignature(mUISpritePipeline.GetRootSignature());
@@ -336,9 +360,31 @@ void Engine::Graphics::Renderer::SetUISpritePipeline()
 	this->SetTopology(mUISpritePipeline.GetTopology());
 }
 
+/// <summary>
+/// skybox pipeline
+/// </summary>
 void Engine::Graphics::Renderer::SetSkyBoxPipeline()
 {
 	this->SetRootSignature(mSkyBoxPipeline.GetRootSignature());
 	this->SetPipelineState(mSkyBoxPipeline.GetPipelineState());
 	this->SetTopology(mSkyBoxPipeline.GetTopology());
+}
+
+/// <summary>
+/// VFX用のパイプライン
+/// </summary>
+void Engine::Graphics::Renderer::SetVfxPipeline()
+{
+	this->SetRootSignature(mVfxPipeline.GetRootSignature());
+	this->SetPipelineState(mVfxPipeline.GetPipelineState());
+	this->SetTopology(mVfxPipeline.GetTopology());
+}
+
+/// <summary>
+/// VFX用の定数バッファをセットする
+/// </summary>
+void Engine::Graphics::Renderer::SetVfxConstantBuffer(uint32_t rootIndex, const void* data, size_t size)
+{
+	mConstantBuffer->Update(data); // データをバッファに転送
+	mConstantBuffer->Set(rootIndex); // 指定したルートインデックスにバインド
 }

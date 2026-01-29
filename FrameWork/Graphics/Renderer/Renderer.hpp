@@ -11,6 +11,7 @@
 #include"Graphics/Line/Pipeline/LinePipeline.hpp"
 #include"Graphics/UI/Pipeline/UISpritePipeline.hpp"
 #include"Graphics/SkyBox/Pipeline/SkyBoxPipeline.hpp"
+#include"Graphics/VFX/Pipeline/VFXPipeline.hpp"
 
 #include<cstdint>
 #include<memory>
@@ -71,6 +72,15 @@ namespace Engine::Graphics
 		void DrawSkyBox(const D3D12_VERTEX_BUFFER_VIEW& VBv, UINT vertexCount);
 
 		/// <summary>
+		/// Vfxの描画
+		/// </summary>
+		/// <param name="v"></param>
+		/// <param name="vNum"></param>
+		/// <param name="i"></param>
+		/// <param name="iNum"></param>
+		void DrawVfx(const VfxVertex* v, size_t vNum, const uint16_t* i, size_t iNum);
+
+		/// <summary>
 		/// ワールド空間へのライン描画
 		/// </summary>
 		/// <param name="lineVertices">頂点配列の先頭アドレス</param>
@@ -115,6 +125,16 @@ namespace Engine::Graphics
 		/// skybox pipeline
 		/// </summary>
 		void SetSkyBoxPipeline();
+
+		/// <summary>
+		/// VFX用のパイプライン
+		/// </summary>
+		void SetVfxPipeline();
+
+		/// <summary>
+		/// VFX用の定数バッファをセットする
+		/// </summary>
+		void SetVfxConstantBuffer(uint32_t rootIndex, const void* data, size_t size);
 	private:
 		/// <summary>
 		/// 基本描画関数
@@ -184,6 +204,11 @@ namespace Engine::Graphics
 		/// スカイボックス用のパイプライン
 		/// </summary>
 		SkyBoxPipeline mSkyBoxPipeline;
+
+		/// <summary>
+		/// VFX用のパイプライン
+		/// </summary>
+		VFXPipeline mVfxPipeline;
 
 		/// <summary>
 		/// dx12コマンドリスト

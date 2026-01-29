@@ -84,4 +84,14 @@ namespace Engine::Graphics
 		Math::Vector3 Position;
 	};
 
+	/// <summary>
+	/// VFXópÇÃí∏ì_ç\ë¢ëÃ
+	/// </summary>
+	struct VfxVertex
+	{
+		Math::Vector3 Position; // POSITION (float3)
+		Math::Vector2 UV;       // TEXCOORD (float2)
+		Graphics::Color Color;    // COLOR  (float4)
+	};
+
 }
