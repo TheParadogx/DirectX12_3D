@@ -117,6 +117,8 @@ namespace Engine::Graphics {
 		mTimer += DeltaTime;
 
 		if (mIsBillBoard) {
+			if (System::Camera::Main == nullptr) return;
+
 			// 自分からカメラへの方向ベクトルを作成
 			Math::Vector3 cameraPos = System::Camera::Main->GetPosition();
 			Math::Vector3 toCamera = cameraPos - mPosition;
@@ -142,9 +144,9 @@ namespace Engine::Graphics {
 	void VfxMesh::Render()
 	{
 		if (mTexture == nullptr || mVertexBuffer == nullptr) return;
+		if (System::Camera::Main == nullptr) return;
 
 		Renderer* renderer = Renderer::GetInstance();
-		renderer->SetVfxPipeline();
 
 		//	定数バッファの更新
 		VfxConstantBufferInfo cb;
