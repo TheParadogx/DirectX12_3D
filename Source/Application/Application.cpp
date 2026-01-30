@@ -21,11 +21,6 @@
 #include"Scene/Title/TitleScene.hpp"
 #include"Scene/InGame/InGameScene.hpp"
 
-#include"Graphics/VFX/VfxSprite.hpp"
-#include"Graphics/Texture/Manager/TextureManager.hpp"
-
-static Engine::Graphics::VfxMesh Vfx;
-
 void Engine::App::Application::CreateStartScene()
 {
 
@@ -93,13 +88,6 @@ bool Engine::App::Application::Initialize()
         LOG_CRITICAL("Failed Initilize SceneManager");
         return false;
     }
-
-    auto VfxResrouce = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/test.png");
-    Vfx.Create(VfxResrouce);
-    Vfx.SetPosition({ 0,10,0 });
-    Vfx.SetIsBillboard(true);
-    //Vfx.SetRotation(Math::Quaternion::AngleAxis(Math::RAD * 90, Math::Vector3::Right));
-    //Vfx.SetRotationToGround();
 
     return true;
 }
@@ -175,7 +163,6 @@ void Engine::App::Application::PostUpdate(double dt)
 {
     mSystems->PostUpdate(mEntitys->GetRegistry(), dt);
     mScene->PostUpdate(dt);
-    Vfx.Update(dt);
     Debug::AppDebugUI::UpdateImGui();
 }
 
@@ -186,7 +173,6 @@ void Engine::App::Application::Render()
 {
     mScene->Render();
     mSystems->Render(mEntitys->GetRegistry());
-    Vfx.Render();
     GET_INPUT_MANAGER->Update();
 }
 

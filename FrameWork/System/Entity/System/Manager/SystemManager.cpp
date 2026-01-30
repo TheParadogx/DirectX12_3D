@@ -6,6 +6,7 @@
 #include"System/Conponent/Rigidbody/System/RigidbodySystem.hpp"
 
 #include"System/Conponent/Sprite/System/SpriteRenderSystem.hpp"
+#include"System/Conponent/Vfx/System/VfxRenderSystem.hpp"
 
 namespace Engine::System
 {
@@ -92,7 +93,7 @@ namespace Engine::System
 		}
 
 		//	‚±‚±‚ÉVFXƒVƒXƒeƒ€
-
+		System::VfxRenderSystem::Render(Reg);
 		//	Sprite
 		System::SpriteRenderSystem::Render(Reg);
 	}
