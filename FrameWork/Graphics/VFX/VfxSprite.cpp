@@ -147,6 +147,7 @@ namespace Engine::Graphics {
 		if (System::Camera::Main == nullptr) return;
 
 		Renderer* renderer = Renderer::GetInstance();
+		renderer->SetVfxPipeline();
 
 		//	定数バッファの更新
 		VfxConstantBufferInfo cb;
