@@ -83,10 +83,6 @@ void Engine::System::MoveComponentSystem::MainUpdate(entt::registry& Reg, double
 			rigid.Velocity.x = finalVelocity.x;
 			rigid.Velocity.z = finalVelocity.z;
 
-			/*
-			* ジャンプ処理（必要になったらここに実装）
-			*/
-
 
 
 			//	入力からの移動量のリセット
