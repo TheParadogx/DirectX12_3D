@@ -7,7 +7,7 @@
 #if _DEBUG
 
 //	0: Title 1:InGame 2:GameClear 3:GameOver
-#define START_SCENE 0
+#define START_SCENE 1
 
 //	ƒŠƒŠ[ƒX
 #else
