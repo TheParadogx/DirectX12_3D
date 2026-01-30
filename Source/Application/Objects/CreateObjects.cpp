@@ -208,12 +208,7 @@ void Engine::System::ObjectsFactory::CreateField()
 	//	fbx
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Field/Field.fbx.bin");
 	auto& fbx = registry.emplace<FbxComponent>(field, res,false);
-	//fbx.Mesh->SetColor(Graphics::Color::Cyan());
 
-	//	collider
-	//auto& collider = registry.emplace<AABBColliderComponent>(field);
-	//collider.Collider.SetVolume(volume);
-	//collider.Offset = { 0.0f, 5.0f, 0.0f };
 }
 
 void Engine::System::ObjectsFactory::CreateTest()
