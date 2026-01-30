@@ -2,6 +2,7 @@
 #include<cstdint>
 #include<Plugin/entt/entt.hpp>
 
+
 namespace Engine::System
 {
 
@@ -33,6 +34,7 @@ namespace Engine::System
 			float RecoveryTimer = 0.0f;
 			float CoolDowmMax = 5.0f;
 			float DodgeInputWindow = 0.8f;
+			float MoveSpeed = 0.0f;
 			bool IsCoolDown = false;
 		} Sprint;
 

@@ -6,6 +6,7 @@
 #include"Application/Components/Invincible/InvincibleTag.hpp"
 
 #include"System/Conponent/Collider/ColliderComponent.hpp"
+#include"System/Conponent/Transform/TransformConponent.hpp"
 
 /// <summary>
 /// 走り状態に移行できるかどうかの判定
@@ -18,8 +19,7 @@ bool Engine::System::PlayerStateSystem::CheckRunRequest(PlayerStateComponent& st
 	const auto& curr = state.State;
 	return  
 		curr == ePlayerState::Idle	||
-		curr == ePlayerState::Run	||
-		curr == ePlayerState::Dodge;
+		curr == ePlayerState::Run;
 
 }
 
@@ -88,6 +88,8 @@ void Engine::System::PlayerStateSystem::ExitState(entt::registry& Reg)
 			case ePlayerState::Dodge:
 				state.State = ePlayerState::Idle;
 				fbx.CurrAnimation = "Idle";
+				fbx.AnimationScale = 1.0f;
+				fbx.IsLoop = true;
 				break;
 			default:
 				break;
@@ -183,12 +185,17 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 			//	ここだけど状態の自動終了と無敵は分離して考えて、アニメーションの終了とかにするほうがいいかもしれない
 			else if (state.State == ePlayerState::Dodge)
 			{
+
 				//	回避のリクエストがない
-				if (HasFlag(req.Flags, eActionInputFlags::DodgeRequested) == false)
+				//if (HasFlag(req.Flags, eActionInputFlags::DodgeRequested) == false)
+				//{
+				//	return;
+				//}
+
+				if (fbx.Mesh->GetAnimationFinish() == true)
 				{
-					return false;
+					ExitState(Reg);
 				}
-				ExitState(Reg);
 			}
 
 			//	タイマーのカウントダウン
@@ -211,6 +218,7 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 			}
 
 
+
 		});
 
 }
@@ -223,10 +231,10 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 	//	優先度順に並べておきます。
 	//	後から実装増やします
 
-	auto view = Reg.view<PlayerStateComponent, InputRequestComponent,FbxComponent, MoveComponent>(entt::exclude<DeadTag>);
+	auto view = Reg.view<Transform3D,PlayerStateComponent, InputRequestComponent,FbxComponent, MoveComponent>(entt::exclude<DeadTag>);
 	bool ret = false;
 
-	view.each([&](auto entity, PlayerStateComponent& state, InputRequestComponent& req, FbxComponent&fbx, MoveComponent& move)
+	view.each([&](auto entity, Transform3D& trans,PlayerStateComponent& state, InputRequestComponent& req, FbxComponent&fbx, MoveComponent& move)
 		{
 
 			//	スプリント
@@ -238,6 +246,8 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				{
 					ChangeState(Reg, state, ePlayerState::Dodge);
 					fbx.CurrAnimation = "Dodge";
+					fbx.AnimationScale = 4.0f;
+					fbx.IsLoop = false;
 					Reg.emplace_or_replace<InvincibleComponet>(entity);
 
 					//	カウント加算
@@ -254,8 +264,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 						state.Sprint.RecoveryTimer = state.Sprint.DodgeInputWindow;
 					}
 				}
-				//	移動量の代入
-				move.TargetDir = req.InputVec * 10;
+				move.ForceVelocity = trans.GetForward();
 				return;
 			}
 
@@ -296,7 +305,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					fbx.CurrAnimation = "Jog";
 				}
 				//	移動量の代入
-				move.TargetDir = req.InputVec;
+				move.InputDir = req.InputVec;
 
 				return;
 			}
@@ -309,7 +318,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				{
 					state.State = ePlayerState::Idle;
 					fbx.CurrAnimation = "Idle";
-					move.TargetDir = Math::Vector3::Zero;
+					move.InputDir = Math::Vector3::Zero;
 				}
 			}
 

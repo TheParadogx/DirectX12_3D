@@ -37,7 +37,10 @@ namespace Engine::System
 	struct MoveComponent
 	{
 		//	入力での移動量
-		Math::Vector3 TargetDir;                                                                               
+		Math::Vector3 InputDir;                                                                               
+
+		//	外部からの移動量
+		Math::Vector3 ForceVelocity;
 
 		//	移動速度
 		float MoveSpeed = 5.0f;
@@ -47,6 +50,7 @@ namespace Engine::System
 		float JumpPower = 6.0f;
 		//	回転速度
 		float TurnSpeed = 20.0f;
+		float DodgeSpeed = 30.0f;
 
 		//	カメラを基準として動くかどうか
 		bool UseCameraBasis = true;

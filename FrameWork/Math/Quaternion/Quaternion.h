@@ -90,5 +90,7 @@ namespace Math
 			const Quaternion q = Multiply(*this, a);
 			return q;
 		}
+
+
 	};
 }
