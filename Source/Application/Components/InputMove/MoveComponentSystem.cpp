@@ -74,16 +74,10 @@ void Engine::System::MoveComponentSystem::MainUpdate(entt::registry& Reg, double
 						move.TurnSpeed * (float)DeltaTime
 					);
 				}
-
 			}
-
-
-
 			//	移動速度を適応
 			rigid.Velocity.x = finalVelocity.x;
 			rigid.Velocity.z = finalVelocity.z;
-
-
 
 			//	入力からの移動量のリセット
 			move.InputDir = Math::Vector3::Zero;

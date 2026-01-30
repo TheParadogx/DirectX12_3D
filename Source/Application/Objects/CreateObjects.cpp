@@ -222,7 +222,7 @@ void Engine::System::ObjectsFactory::CreateTest()
 
 	//	ç¿ïW
 	auto& transform = registry.emplace<Transform3D>(test);
-	transform.Position = { 0.0f,0.0f,20.0f };
+	transform.Position = { 0.0f,0.0f,-20.0f };
 	transform.Scale = { Scale ,Scale ,Scale };
 	transform.Rotation = Math::Quaternion::Identity;
 
@@ -247,7 +247,7 @@ void Engine::System::ObjectsFactory::CreateTest()
 
 	//	fbxÇÃÉÇÉfÉã
 	auto& fbx = registry.emplace<FbxComponent>(test, res);
-	fbx.CurrAnimation = "Dodge";
+	fbx.CurrAnimation = "Attack_B";
 	//fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	auto col = ColliderComponent::Create<AABBCollider>();
