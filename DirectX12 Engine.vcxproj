@@ -301,6 +301,8 @@
     <ClInclude Include="FrameWork\Graphics\VFX\VfxSprite.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\System\SpriteRenderSystem.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Vfx\System\VfxRenderSystem.hpp" />
+    <ClInclude Include="Source\Application\Scene\StageSelect\StageSelectScene.hpp" />
+    <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FrameWork\Graphics\DebugRender\DebugRender.cpp" />
@@ -472,6 +474,8 @@
     <ClCompile Include="FrameWork\Graphics\VFX\VfxSprite.cpp" />
     <ClCompile Include="FrameWork\System\Conponent\Sprite\System\SpriteRenderSystem.cpp" />
     <ClCompile Include="FrameWork\System\Conponent\Vfx\System\VfxRenderSystem.cpp" />
+    <ClCompile Include="Source\Application\Scene\StageSelect\StageSelectScene.cpp" />
+    <ClCompile Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\VfxShader.hlsli">
