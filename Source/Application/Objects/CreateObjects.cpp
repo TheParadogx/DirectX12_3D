@@ -23,6 +23,7 @@
 #include "Application/Components/Enemy/State/EnemyStateComponent.hpp"
 
 #include"Application/Components/Tag/TagComponent.hpp"
+#include"Application/Components/StageComponent/StateComponent.hpp"
 
 
 entt::entity Engine::System::ObjectsFactory::CreatePlayer()
@@ -208,6 +209,12 @@ void Engine::System::ObjectsFactory::CreateField()
 	//	fbx
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Field/Field.fbx.bin");
 	auto& fbx = registry.emplace<FbxComponent>(field, res,false);
+
+	auto& stageConfig = registry.emplace<StageComponent>(field);
+	stageConfig.PlayableRadius = 80.f;
+
+	//	stage
+	registry.emplace<StageTag>(field);
 
 }
 
