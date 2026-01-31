@@ -141,7 +141,7 @@ void Engine::System::EnemyStateSystem::MainUpdate(entt::registry& Reg, double De
 
 					//	状態のリセット関数を呼び出す。
 					state.State = eEnemyState::Attack;
-					fbx.CurrAnimation = "Attack_D";
+					fbx.CurrAnimation = "Attack_3";
 					fbx.IsLoop = false;
 					fbx.AnimationScale = 0.5f;
 
