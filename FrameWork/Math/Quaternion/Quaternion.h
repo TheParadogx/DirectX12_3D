@@ -1,9 +1,9 @@
 //
 #pragma once
+#include"Math/Vector3/Vector3.h"
 
 namespace Math
 {
-	struct Vector3;
 	struct Matrix;
 	struct Matrix3x3;
 
@@ -69,7 +69,7 @@ namespace Math
 		/// </summary>
 		/// <param name="Direction">向きたい方向ベクトル</param>
 		/// <returns>回転クォータニオン</returns>
-		static Quaternion LookRotation(const Vector3& Direction);
+		static Quaternion LookRotation(const Vector3& Direction, const Vector3& UpAxis = Vector3::Forward);
 
 
 		//	オペレーター
@@ -90,5 +90,7 @@ namespace Math
 			const Quaternion q = Multiply(*this, a);
 			return q;
 		}
+
+
 	};
 }

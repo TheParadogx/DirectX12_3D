@@ -25,7 +25,7 @@ namespace Engine::System
 		/// UŒ‚‚ÌI—¹ğŒ‚Ì”»’è
 		/// </summary>
 		/// <returns>true:I—¹</returns>
-		bool IsFinishAttack(PlayerStateComponent& State, InputRequestComponent& Req, FbxComponent& Fbx);
+		bool IsFinishAttack(PlayerStateComponent& State, InputRequestComponent& Req, FbxComponent& Fbx,float DeltaTime);
 		/// <summary>
 		/// UŒ‚‚ÌI—¹
 		/// </summary>

@@ -35,7 +35,7 @@ void Engine::System::InputRequestSystem::PreUpdate(entt::registry& Reg, double D
 			}
 
 			//	UŒ‚
-			if (Input::InputManager::GetInstance()->IsActionHeld("Attack"))
+			if (Input::InputManager::GetInstance()->IsActionPressed("Attack"))
 			{
 				req.Flags |= eActionInputFlags::AttackRequested;
 			}

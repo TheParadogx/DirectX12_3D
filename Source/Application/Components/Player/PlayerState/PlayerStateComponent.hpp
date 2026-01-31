@@ -2,6 +2,7 @@
 #include<cstdint>
 #include<Plugin/entt/entt.hpp>
 
+
 namespace Engine::System
 {
 
@@ -26,15 +27,30 @@ namespace Engine::System
 		ePlayerState State = ePlayerState::Idle;
 		entt::entity Weapon = entt::null;
 
-		struct SprintData
+		//	‰ñ”ğ
+		struct DodgeData
 		{
 			int DodgeCount = 0;
 			int DodgeCountMax = 2;
 			float RecoveryTimer = 0.0f;
 			float CoolDowmMax = 5.0f;
 			float DodgeInputWindow = 0.8f;
+			float MoveSpeed = 0.0f;
 			bool IsCoolDown = false;
-		} Sprint;
+		};
+
+		//	UŒ‚
+		struct AttackData
+		{
+			int AttackCount = 0;	//	˜A‘±UŒ‚‰ñ”
+			int AttackCountMax = 4;	//	˜A‘±UŒ‚‚ÌÅ‘å”
+			float AttackInputTimer = 0.0f;	//	“ü—Íó‚¯‚Â‚¯ŠÔ
+			float AttackInputWindow = 0.1f;	//	˜A‘±UŒ‚“ü—Íó•t§ŒÀŠÔ
+			bool AttackQueued = false;	
+		};
+
+		DodgeData Dodge;
+		AttackData Attack;
 
 	};
 }

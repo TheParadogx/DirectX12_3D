@@ -6,6 +6,7 @@
 #include"System/Entity/Manager/EntityManager.hpp"
 
 #include"Application/Scene/InGame/InGameScene.hpp"
+#include"Factory/CreateTitle.hpp"
 
 /// <summary>
 ///	‰Šú‰»
@@ -13,6 +14,9 @@
 /// <returns></returns>
 bool Engine::Scene::Title::Initialize()
 {
+    //  ”wŒi
+    CreateTitleObject::TitleBG();
+
     return true;
 }
 

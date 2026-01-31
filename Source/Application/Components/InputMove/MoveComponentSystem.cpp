@@ -2,6 +2,7 @@
 #include "MoveComponentSystem.hpp"
 #include "System/Input/Manager/InputManager.hpp"
 #include"System/Camera/Camera.hpp"
+#include"Math/Matrix3x3/Matrix3x3.h"
 
 #include"Application/Components/InputMove/MoveComponent.hpp"
 #include"System/Conponent/Rigidbody/RigidbodyComponent.hpp"
@@ -36,49 +37,51 @@ void Engine::System::MoveComponentSystem::MainUpdate(entt::registry& Reg, double
 				camForward.Normalize();
 				camRight.Normalize();
 
-				worldDir = (camForward * move.TargetDir.z) + (camRight * move.TargetDir.x);
+				worldDir = (camForward * move.InputDir.z) + (camRight * move.InputDir.x);
 
 			}
 			else
 			{
-				worldDir = move.TargetDir;
+				worldDir = move.InputDir;
 			}
 
 			//	移動速度計算（ダッシュなど）
 			float speed = move.MoveSpeed;
-			//	ダッシュ
-			if (state.State == ePlayerState::Dodge)
-			{
-				speed *= move.SprintMulti;
-			}
+
+			//	最終の移動量
+			Math::Vector3 finalVelocity = worldDir * speed;
 
 			/*
 			* 移動しない状態なら移動量を消すのもここで行う
 			*/
-
-			//	移動速度を適応
-			rigid.Velocity.x = worldDir.x * speed;
-			rigid.Velocity.z = worldDir.z * speed;
-
-			/*
-			* ジャンプ処理（必要になったらここに実装）
-			*/
-
-			//	旋回
-			if (worldDir.SqrLength() > 0.001f)
+			if (state.State == ePlayerState::Dodge) 
 			{
-				float targetAngle = atan2(worldDir.x, worldDir.z);
-				Math::Quaternion targetRot = Math::Quaternion::AngleAxis(targetAngle, Math::Vector3(0, 0, 1));
-				trans.Rotation = Math::Quaternion::Slerp(
-					trans.Rotation,
-					targetRot,
-					move.TurnSpeed * (float)DeltaTime
-				);
+				finalVelocity = move.ForceVelocity * move.DodgeSpeed;
 			}
+			//	回避状態じゃないとき移動量を消す
+			else
+			{
+				move.ForceVelocity = Math::Vector3::Zero;
+
+				//	旋回
+				if (worldDir.SqrLength() > 0.001f)
+				{
+					float targetAngle = atan2(worldDir.x, worldDir.z);
+					Math::Quaternion targetRot = Math::Quaternion::AngleAxis(targetAngle, Math::Vector3(0, 0, 1));
+					trans.Rotation = Math::Quaternion::Slerp(
+						trans.Rotation,
+						targetRot,
+						move.TurnSpeed * (float)DeltaTime
+					);
+				}
+			}
+			//	移動速度を適応
+			rigid.Velocity.x = finalVelocity.x;
+			rigid.Velocity.z = finalVelocity.z;
 
 			//	入力からの移動量のリセット
-			move.TargetDir = Math::Vector3::Zero;
-
+			move.InputDir = Math::Vector3::Zero;
+			move.ForceVelocity *= 0.96f;
 		});
 
 

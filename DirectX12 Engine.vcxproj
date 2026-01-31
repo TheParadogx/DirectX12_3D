@@ -160,10 +160,13 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\Graphics\DebugRender\DebugRender.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\SkyBox.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResourceManager.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Sprite\SpriteComponent.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Vfx\VfxMeshComponent.hpp" />
     <ClInclude Include="Source\Application\Components\Enemy\State\EnemyStateSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Invincible\InvincibleSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Invincible\InvincibleTag.hpp" />
@@ -291,9 +294,15 @@
     <ClInclude Include="FrameWork\Graphics\UI\UISprite.hpp" />
     <ClInclude Include="FrameWork\Graphics\UI\Pipeline\UISpritePipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\Texture\Manager\TextureManager.hpp" />
+    <ClInclude Include="Source\Application\Scene\Title\Factory\CreateTitle.hpp" />
     <ClInclude Include="Source\Application\Scene\Title\TitleScene.hpp" />
+    <ClInclude Include="FrameWork\Graphics\VFX\Pipeline\VFXPipeline.hpp" />
+    <ClInclude Include="FrameWork\Graphics\VFX\VfxSprite.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Sprite\System\SpriteRenderSystem.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Vfx\System\VfxRenderSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameWork\Graphics\DebugRender\DebugRender.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\SkyBox.cpp" />
@@ -433,6 +442,7 @@
     <ClCompile Include="Source\Application\Components\InputMove\MoveComponentSystem.cpp" />
     <ClCompile Include="Source\Application\Application.cpp" />
     <ClCompile Include="Source\Application\Objects\CreateObjects.cpp" />
+    <ClCompile Include="Source\Application\Scene\Title\Factory\CreateTitle.cpp" />
     <ClCompile Include="Source\Application\Scene\Title\TitleScene.cpp" />
     <ClCompile Include="Source\main.cpp">
       <SubType>
@@ -457,8 +467,18 @@
     <ClCompile Include="FrameWork\Graphics\UI\UISprite.cpp" />
     <ClCompile Include="FrameWork\Graphics\UI\Pipeline\UISpritePipeline.cpp" />
     <ClCompile Include="FrameWork\Graphics\Texture\Manager\TextureManager.cpp" />
+    <ClCompile Include="FrameWork\Graphics\VFX\Pipeline\VFXPipeline.cpp" />
+    <ClCompile Include="FrameWork\Graphics\VFX\VfxSprite.cpp" />
+    <ClCompile Include="FrameWork\System\Conponent\Sprite\System\SpriteRenderSystem.cpp" />
+    <ClCompile Include="FrameWork\System\Conponent\Vfx\System\VfxRenderSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Shader\VfxShader.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </None>
     <None Include="Document\CodingConventions\CodingConventions.md">
       <SubType>
       </SubType>
@@ -487,6 +507,20 @@
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
     </FxCompile>
+    <FxCompile Include="Assets\Shader\PS_Vfx.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Pixel</ShaderType>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Pixel</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Assets\Shader\VS_Skybox.hlsl">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
@@ -494,6 +528,20 @@
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Assets\Shader\VS_Vfx.hlsl">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">5.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Vertex</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">5.0</ShaderModel>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

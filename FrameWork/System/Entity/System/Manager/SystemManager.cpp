@@ -5,6 +5,9 @@
 #include "System/Conponent/Collider/System/ColliderSystem.hpp"
 #include"System/Conponent/Rigidbody/System/RigidbodySystem.hpp"
 
+#include"System/Conponent/Sprite/System/SpriteRenderSystem.hpp"
+#include"System/Conponent/Vfx/System/VfxRenderSystem.hpp"
+
 namespace Engine::System
 {
 	/// <summary>
@@ -47,7 +50,8 @@ namespace Engine::System
 
 		//	Fbxアニメーション
 		System::FbxRenderSystem::Update(Reg, DeltaTime);
-
+		//	sprite
+		System::SpriteRenderSystem::Update(Reg);
 	}
 
 	/// <summary>
@@ -87,6 +91,11 @@ namespace Engine::System
 		{
 			System->Render(Reg);
 		}
+
+		//	ここにVFXシステム
+		System::VfxRenderSystem::Render(Reg);
+		//	Sprite
+		System::SpriteRenderSystem::Render(Reg);
 	}
 
 	void SystemManager::AllClearSystem()

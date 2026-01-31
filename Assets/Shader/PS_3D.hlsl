@@ -16,15 +16,6 @@ float ToonShadow(float DotValue)
     }
 }
 
-//float4 main(VStoPS input) : SV_Target0
-//{
-//    float3 normal = input.Normal;
-//    normal *= 0.5f;
-//    normal += 0.5f;
-//    float4 OutputColor = float4(normal, 1.0f);
-//    return OutputColor;
-//}
-
 float4 main(VStoPS input) : SV_Target0
 {
 // 1. テクスチャの色を取得
