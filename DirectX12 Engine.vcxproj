@@ -173,6 +173,7 @@
     <ClInclude Include="Source\Application\Components\GameRule\GameRuleSystem.hpp" />
     <ClInclude Include="Source\Application\Components\GameRule\GameRuleComponent.hpp" />
     <ClInclude Include="Source\Application\Components\Enemy\State\EnemyStateComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\StageComponent\StateComponent.hpp" />
     <ClInclude Include="Source\Application\Scene\GameClear\GameClear.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\GameOverScene.hpp" />
     <ClInclude Include="Source\Application\Debug\AppDebug\AppDebug.hpp" />
