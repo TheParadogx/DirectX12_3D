@@ -53,7 +53,7 @@ bool Engine::System::PlayerStateSystem::CheckSprintRequest(PlayerStateComponent&
 	}
 
 	//	クールダウン中はだめ
-	if (state.Sprint.IsCoolDown == true)
+	if (state.Dodge.IsCoolDown == true)
 	{
 		return false;
 	}
@@ -114,7 +114,7 @@ void Engine::System::PlayerStateSystem::ChangeState(entt::registry& Reg, PlayerS
 /// 攻撃の終了条件の判定
 /// </summary>
 /// <returns>true:終了</returns>
-bool Engine::System::PlayerStateSystem::IsFinishAttack(PlayerStateComponent& State, InputRequestComponent& Req, FbxComponent& Fbx)
+bool Engine::System::PlayerStateSystem::IsFinishAttack(PlayerStateComponent& State, InputRequestComponent& Req, FbxComponent& Fbx,float DeltaTime)
 {
 	//	アニメーション終了判定
 	if (Fbx.Mesh->GetAnimationFinish() == false)
@@ -122,15 +122,19 @@ bool Engine::System::PlayerStateSystem::IsFinishAttack(PlayerStateComponent& Sta
 		return false;
 	}
 
-	//	リクエストが次も攻撃かどうか
-	//if (HasFlag(Req.Flags, eActionInputFlags::AttackRequested) == true)
-	//{
+	//	時間経過
+	State.Attack.AttackInputTimer += DeltaTime;
+
+	//	受付時間を終了していたら終了
+	if (State.Attack.AttackInputTimer <= State.Attack.AttackInputWindow)
+	{
+		return false;
+	}
+
+	////	攻撃のリクエスト
+	//if (HasFlag(Req.Flags, eActionInputFlags::AttackRequested)) {
 	//	return false;
 	//}
-
-	//	スタミナを追加したらここでスタミナの残量判定をする
-
-	//	あとはコンボ数の上限とか
 
 	return true;
 }
@@ -141,6 +145,7 @@ bool Engine::System::PlayerStateSystem::IsFinishAttack(PlayerStateComponent& Sta
 void Engine::System::PlayerStateSystem::OnAttackFinished(entt::registry& Reg,entt::entity entity, PlayerStateComponent& state, InputRequestComponent& req, FbxComponent& fbx)
 {
 	state.State = ePlayerState::Idle;
+	state.Attack.AttackQueued = false;
 	fbx.CurrAnimation = "Idle";
 	fbx.IsLoop = true;
 	fbx.AnimationScale = 1.0f;
@@ -169,7 +174,7 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 			if (state.State == ePlayerState::Attack)
 			{
 				//	攻撃の終了判定
-				if (IsFinishAttack(state, req, fbx))
+				if (IsFinishAttack(state, req, fbx, DeltaTime))
 				{
 					ExitState(Reg);
 				}
@@ -185,13 +190,6 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 			//	ここだけど状態の自動終了と無敵は分離して考えて、アニメーションの終了とかにするほうがいいかもしれない
 			else if (state.State == ePlayerState::Dodge)
 			{
-
-				//	回避のリクエストがない
-				//if (HasFlag(req.Flags, eActionInputFlags::DodgeRequested) == false)
-				//{
-				//	return;
-				//}
-
 				if (fbx.Mesh->GetAnimationFinish() == true)
 				{
 					ExitState(Reg);
@@ -199,21 +197,21 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 			}
 
 			//	タイマーのカウントダウン
-			if (state.Sprint.RecoveryTimer > 0.0f)
+			if (state.Dodge.RecoveryTimer > 0.0f)
 			{
-				state.Sprint.RecoveryTimer -= DeltaTime;
+				state.Dodge.RecoveryTimer -= DeltaTime;
 			}
 			//	クールタイム終了判定
-			if (state.Sprint.IsCoolDown && state.Sprint.RecoveryTimer <= 0.0f)
+			if (state.Dodge.IsCoolDown && state.Dodge.RecoveryTimer <= 0.0f)
 			{
-				state.Sprint.IsCoolDown = false;
-				state.Sprint.DodgeCount = 0;
+				state.Dodge.IsCoolDown = false;
+				state.Dodge.DodgeCount = 0;
 				//state.Sprint.RecoveryTimer = 0;
 			}
 			//	1回以上で最大数以下の状態で連続判定の時間を過ぎたらカウントをリセットする
-			else if (!state.Sprint.IsCoolDown && state.Sprint.RecoveryTimer <= 0.0f)
+			else if (!state.Dodge.IsCoolDown && state.Dodge.RecoveryTimer <= 0.0f)
 			{
-				state.Sprint.DodgeCount = 0;
+				state.Dodge.DodgeCount = 0;
 				//state.Sprint.RecoveryTimer = 0;
 			}
 
@@ -251,34 +249,58 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					Reg.emplace_or_replace<InvincibleComponet>(entity);
 
 					//	カウント加算
-					state.Sprint.DodgeCount++;
+					state.Dodge.DodgeCount++;
 					//	カウントが上限を超えていたら
-					if (state.Sprint.DodgeCount >= state.Sprint.DodgeCountMax)
+					if (state.Dodge.DodgeCount >= state.Dodge.DodgeCountMax)
 					{
 						//	連続使用のペナルティ
-						state.Sprint.IsCoolDown = true;
-						state.Sprint.RecoveryTimer = state.Sprint.CoolDowmMax;
+						state.Dodge.IsCoolDown = true;
+						state.Dodge.RecoveryTimer = state.Dodge.CoolDowmMax;
 					}
 					else
 					{
-						state.Sprint.RecoveryTimer = state.Sprint.DodgeInputWindow;
+						state.Dodge.RecoveryTimer = state.Dodge.DodgeInputWindow;
 					}
 				}
 				move.ForceVelocity = trans.GetForward();
 				return;
 			}
 
+			// 攻撃ボタンが押されている
+			bool isRequested = HasFlag(req.Flags, eActionInputFlags::AttackRequested);
+
+			// 先行入力
+			bool canCombo = (state.State == ePlayerState::Attack && state.Attack.AttackQueued);
+
 			//	攻撃
-			ret = (HasFlag(req.Flags, eActionInputFlags::AttackRequested) == true) && (this->CheckAttackRequest(state) == true);
+			ret = (isRequested || canCombo);
 			if (ret == true)
 			{
-				if (state.State != ePlayerState::Attack)
+				// すでに攻撃中の場合はコンボ加算、そうでなければ初期化
+				if (state.State == ePlayerState::Attack) 
 				{
-					//	状態変更
+					//	攻撃中なら次の攻撃にまだ遷移しない
+					if (fbx.Mesh->GetAnimationFinish() == false)
+					{
+						state.Attack.AttackInputTimer = 0.0f;
+						state.Attack.AttackQueued = true;
+						return;
+					}
+
+					//	リセット
+					state.Attack.AttackCount++;
+					state.Attack.AttackQueued = false;
+					//	攻撃数が最大を越したらリセット
+					if (state.Attack.AttackCount >= state.Attack.AttackCountMax)
+					{
+						state.Attack.AttackCount = 0;
+					}
+				}
+				else 
+				{
 					ChangeState(Reg, state, ePlayerState::Attack);
-					fbx.CurrAnimation = "Attack_A";
+					state.Attack.AttackCount = 0;
 					fbx.IsLoop = false;
-					//fbx.AnimationScale = 2.5f;
 					fbx.AnimationScale = 1.0f;
 
 					//	武器に必要なものをアタッチ
@@ -289,8 +311,33 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					collider->SetVolume({ 1.0f,4.0f,1.0f });
 					col.Offset = { 0.0f, -4.0f, 0.0f };
 					Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
+
 				}
+				fbx.CurrAnimation = "Attack_" + std::to_string(state.Attack.AttackCount);
+
+
 				return;
+
+
+				//if (state.State != ePlayerState::Attack)
+				//{
+				//	//	状態変更
+				//	ChangeState(Reg, state, ePlayerState::Attack);
+				//	fbx.CurrAnimation = "Attack_A";
+				//	fbx.IsLoop = false;
+				//	//fbx.AnimationScale = 2.5f;
+				//	fbx.AnimationScale = 1.0f;
+
+				//	//	武器に必要なものをアタッチ
+				//	Reg.emplace_or_replace<HitHistoryComponent>(state.Weapon);
+				//	//	ここで当たり判定をアタッチする。
+				//	auto col = ColliderComponent::Create<OBBCollider>();
+				//	auto collider = col.GetPtr<OBBCollider>();
+				//	collider->SetVolume({ 1.0f,4.0f,1.0f });
+				//	col.Offset = { 0.0f, -4.0f, 0.0f };
+				//	Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
+				//}
+				//return;
 			}
 
 			//	走り

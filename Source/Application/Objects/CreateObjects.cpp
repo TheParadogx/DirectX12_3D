@@ -45,10 +45,10 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
 	res->LoadAnimation("Jog", "Assets/Fbx/Ganfaul/Animation/Jog.fbx.anm");
 	res->LoadAnimation("Dodge", "Assets/Fbx/Ganfaul/Animation/Dodge.fbx.anm");
-	res->LoadAnimation("Attack_A", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
-	res->LoadAnimation("Attack_B", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
-	res->LoadAnimation("Attack_C", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
-	res->LoadAnimation("Attack_D", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
+	res->LoadAnimation("Attack_0", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
+	res->LoadAnimation("Attack_1", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
+	res->LoadAnimation("Attack_2", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
+	res->LoadAnimation("Attack_3", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
 
 
 	////	fbxのリソース
@@ -140,10 +140,10 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
 	res->LoadAnimation("Jog", "Assets/Fbx/Ganfaul/Animation/Jog.fbx.anm");
 	res->LoadAnimation("Dodge", "Assets/Fbx/Ganfaul/Animation/Dodge.fbx.anm");
-	res->LoadAnimation("Attack_A", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
-	res->LoadAnimation("Attack_B", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
-	res->LoadAnimation("Attack_C", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
-	res->LoadAnimation("Attack_D", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
+	res->LoadAnimation("Attack_0", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
+	res->LoadAnimation("Attack_1", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
+	res->LoadAnimation("Attack_2", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
+	res->LoadAnimation("Attack_3", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
 	
 	//	fbxのリソース
 	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
@@ -222,7 +222,7 @@ void Engine::System::ObjectsFactory::CreateTest()
 
 	//	座標
 	auto& transform = registry.emplace<Transform3D>(test);
-	transform.Position = { 0.0f,0.0f,20.0f };
+	transform.Position = { 0.0f,0.0f,-20.0f };
 	transform.Scale = { Scale ,Scale ,Scale };
 	transform.Rotation = Math::Quaternion::Identity;
 
@@ -231,10 +231,10 @@ void Engine::System::ObjectsFactory::CreateTest()
 	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
 	res->LoadAnimation("Jog", "Assets/Fbx/Ganfaul/Animation/Jog.fbx.anm");
 	res->LoadAnimation("Dodge", "Assets/Fbx/Ganfaul/Animation/Dodge.fbx.anm");
-	res->LoadAnimation("Attack_A", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
-	res->LoadAnimation("Attack_B", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
-	res->LoadAnimation("Attack_C", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
-	res->LoadAnimation("Attack_D", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
+	res->LoadAnimation("Attack_0", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
+	res->LoadAnimation("Attack_1", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
+	res->LoadAnimation("Attack_2", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
+	res->LoadAnimation("Attack_3", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
 
 	//	fbxのリソース
 	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
@@ -247,7 +247,7 @@ void Engine::System::ObjectsFactory::CreateTest()
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(test, res);
-	fbx.CurrAnimation = "Dodge";
+	fbx.CurrAnimation = "Attack_3";
 	//fbx.Mesh->SetColor(Graphics::Color::Red());
 
 	auto col = ColliderComponent::Create<AABBCollider>();
