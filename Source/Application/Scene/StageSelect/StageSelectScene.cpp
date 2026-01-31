@@ -14,6 +14,7 @@
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Objects/CreateObjects.hpp"
 #include"Application/Scene/StageSelect/Object/StageSelectObjFactory.hpp"
+#include"Application/Objects/EnemyRank.hpp"
 
 //	UseSystem
 #include"Application/Components/CameraWork/System/CameraControlSystem.hpp"
@@ -21,6 +22,7 @@
 #include"Application/Components/Player/Input/InputRequestSystem.hpp"
 #include"Application/Components/Player/PlayerState/PlayerStateSystem.hpp"
 #include"Application/Components/InputMove/MoveComponentSystem.hpp"
+
 
 
 bool Engine::Scene::StageSelect::Initialize()

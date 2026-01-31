@@ -31,6 +31,10 @@
 
 namespace Engine::Scene
 {
+	InGame::InGame(System::EnemyRank Rank)
+		:mSelectEnemy(Rank)
+	{
+	}
 
 	/// <summary>
 	///	èâä˙âª
@@ -61,6 +65,24 @@ namespace Engine::Scene
 
 		System::ObjectsFactory::CreateField();
 		System::ObjectsFactory::CreatePlayer();
+
+		//switch (mSelectEnemy)
+		//{
+		//case System::EnemyRank::Basic:
+		//	System::ObjectsFactory::CreateEnemy_Basic();
+		//	break;
+		//case System::EnemyRank::Advanced:
+		//	System::ObjectsFactory::CreateEnemy_Advanced();
+		//	break;
+		//case System::EnemyRank::Boss:
+		//	System::ObjectsFactory::CreateEnemy_Boss();
+		//	break;
+
+
+		//default:
+		//	break;
+		//}
+
 		System::ObjectsFactory::CreateEnemy();
 		System::ObjectsFactory::CreateTest();
 
