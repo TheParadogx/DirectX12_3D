@@ -19,7 +19,7 @@ namespace Engine::System
 
 		//	距離
 		//	キャラからカメラまでの基本距離
-		float Distance = 8.0f;
+		float Distance = 10.0f;
 		//	ズームイン限界
 		float MinDistance = 2.0f;
 		//	ズームアウト限界

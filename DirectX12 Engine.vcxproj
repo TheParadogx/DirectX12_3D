@@ -296,6 +296,7 @@
     <ClInclude Include="FrameWork\Graphics\UI\UISprite.hpp" />
     <ClInclude Include="FrameWork\Graphics\UI\Pipeline\UISpritePipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\Texture\Manager\TextureManager.hpp" />
+    <ClInclude Include="Source\Application\Scene\StageSelect\Component\InteractableRange.hpp" />
     <ClInclude Include="Source\Application\Scene\Title\Factory\CreateTitle.hpp" />
     <ClInclude Include="Source\Application\Scene\Title\TitleScene.hpp" />
     <ClInclude Include="FrameWork\Graphics\VFX\Pipeline\VFXPipeline.hpp" />
