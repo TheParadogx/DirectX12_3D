@@ -16,10 +16,11 @@ bool Engine::Input::InputManager::Initialize()
 	* 余裕ができたらファイルから前回の設定を引き継げるようにします
 	*/
 
+	AddAction("Sprint", { eKeyCode::LShift,ePadButton::L3 });
 	AddAction("Select", { eKeyCode::Space,ePadButton::A,eMouseButton::Left });
 	AddAction("Cancel", { eKeyCode::Escape,ePadButton::B });
 	AddAction("Attack", { eKeyCode::Count,ePadButton::R2,eMouseButton::Left });
-	AddAction("Sprint", { eKeyCode::LShift,ePadButton::L3});
+	AddAction("Interact", { eKeyCode::F,ePadButton::A});
 
 	return true;
 }

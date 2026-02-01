@@ -137,10 +137,14 @@ void Engine::System::MoveComponentSystem::MainUpdate(entt::registry& Reg, double
 
 void Engine::System::MoveComponentSystem::Render(entt::registry& Reg)
 {
+#if _DEBUG
+
+
 	auto view = Reg.view<Transform3D, StageComponent>();
 	view.each([&](Transform3D& trans, StageComponent& stage) 
 		{
 			Graphics::DebugRender::DrawDebugCircle(trans.Position, stage.PlayableRadius, Graphics::Color::Red());
 		});
 
+#endif // _DEBUG
 }

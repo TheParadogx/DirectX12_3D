@@ -60,10 +60,13 @@ namespace Engine::System
 		/// </summary>
 		/// <typeparam name="...Args">ˆø”</typeparam>
 		/// <typeparam name="T">IScene‚ğŒp³‚¢‚éŒ^</typeparam>
-		template<IsScene T>
-		void ChangeScene()
+		template<IsScene T, class... Args>
+		void ChangeScene(Args&&... args)
 		{
-			mReloader = []() { return std::make_unique<T>(); };
+			mReloader = [args...]() mutable
+				{
+					return std::make_unique<T>(std::forward<Args>(args)...);
+				};
 
 			if (mScene == nullptr)
 			{

@@ -1,0 +1,202 @@
+#include "pch.h"
+#include "StageSelectObjFactory.hpp"
+
+#include"System/Entity/Manager/EntityManager.hpp"
+#include"Graphics/FbxMesh/Resource/Manager/FbxResourceManager.hpp"
+#include"System/Conponent/Transform/TransformConponent.hpp"
+#include"System/Conponent/Fbx/FbxMeshConponent.hpp"
+#include"System/Conponent/Collider/ColliderComponent.hpp"
+#include"Application/Components/Socket/SocketComponent.hpp"
+#include "Application/Components/Enemy/State/EnemyStateComponent.hpp"
+
+#include"Application/Components/Tag/TagComponent.hpp"
+#include"Application/Scene/StageSelect/Component/Interact/InteractableRange.hpp"
+
+
+entt::entity Engine::System::StageSelectObjFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName, const Graphics::Color& Color)
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 1.0f;
+	auto sword = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(sword);
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::Identity;
+
+	//	fbxのリソース
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/Sword.fbx.bin");
+
+
+	//	fbxのモデル
+	auto& fbx = registry.emplace<FbxComponent>(sword, res, false);
+	fbx.CurrAnimation = "";
+	fbx.Mesh->SetColor(Color);
+
+	//	アタッチ
+	auto& socket = registry.emplace<SocketComponent>(sword);
+	socket.Parent = Parent;
+	socket.BoneName = BoneName;
+	socket.OffsetPos = { 1.82,0.51,-0.46 };
+	socket.OffsetRot = { -0.7,-0.685,0.192,0.007 };
+	socket.PivotOffset = { 0,1.98,0.0 };
+
+	registry.emplace<EnemyWeaponTag>(sword);
+
+
+	return sword;
+
+}
+
+/// <summary>
+/// 最弱の敵
+/// </summary>
+void Engine::System::StageSelectObjFactory::CreateEnemy_Basic()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 0.05f;
+
+	auto enemy = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(enemy);
+	transform.Position = { 20.0f,0.0f,20.0f };
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::Identity;
+
+
+	//	素材テスト
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
+	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
+
+	//	fbxのモデル
+	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
+	fbx.CurrAnimation = "Idle";
+	fbx.Mesh->SetColor(Graphics::Color::Cyan());
+
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
+	collider->SetVolume({ 2.0f,8.0f,2.0f });
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	registry.emplace<ColliderComponent>(enemy, std::move(col));
+
+	//　状態管理
+	auto& state = registry.emplace<EnemyStateComponent>(enemy);
+
+	//	武器
+	auto sword = CreateEnemyWeapon(enemy, "RightHand",Graphics::Color::Cyan());
+	state.Weapon = sword;
+
+	//	インタラクト
+	auto& interact = registry.emplace<InteractableComponent>(enemy);
+	interact.Rank = EnemyRank::Basic;
+
+
+	//	タグ
+	registry.emplace<EnemyTag>(enemy);
+
+}
+
+/// <summary>
+/// ちょっと強い敵
+/// </summary>
+void Engine::System::StageSelectObjFactory::CreateEnemy_Advanced()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 0.05f;
+
+	auto enemy = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(enemy);
+	transform.Position = { 0.0f,0.0f,20.0f };
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::Identity;
+
+
+	//	素材テスト
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
+	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
+
+	//	fbxのモデル
+	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
+	fbx.CurrAnimation = "Idle";
+	fbx.Mesh->SetColor(Graphics::Color::Yellow());
+
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
+	collider->SetVolume({ 2.0f,8.0f,2.0f });
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	registry.emplace<ColliderComponent>(enemy, std::move(col));
+
+	//　状態管理
+	auto& state = registry.emplace<EnemyStateComponent>(enemy);
+
+	//	武器
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", Graphics::Color::Yellow());
+	state.Weapon = sword;
+
+	//	インタラクト
+	auto& interact = registry.emplace<InteractableComponent>(enemy);
+	interact.Rank = EnemyRank::Advanced;
+
+
+	//	タグ
+	registry.emplace<EnemyTag>(enemy);
+
+}
+
+/// <summary>
+/// 最強
+/// </summary>
+void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 0.05f;
+
+	auto enemy = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(enemy);
+	transform.Position = { 10.0f,0.0f,20.0f };
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::Identity;
+
+
+	//	素材テスト
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
+	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
+
+	//	fbxのモデル
+	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
+	fbx.CurrAnimation = "Idle";
+	fbx.Mesh->SetColor(Graphics::Color::Red());
+
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
+	collider->SetVolume({ 2.0f,8.0f,2.0f });
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	registry.emplace<ColliderComponent>(enemy, std::move(col));
+
+	//　状態管理
+	auto& state = registry.emplace<EnemyStateComponent>(enemy);
+
+	//	武器
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", Graphics::Color::Red());
+	state.Weapon = sword;
+
+	auto& interact = registry.emplace<InteractableComponent>(enemy);
+	interact.Rank = EnemyRank::Boss;
+
+
+	//	タグ
+	registry.emplace<EnemyTag>(enemy);
+}

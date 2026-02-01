@@ -145,15 +145,6 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	res->LoadAnimation("Attack_1", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
 	res->LoadAnimation("Attack_2", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
 	res->LoadAnimation("Attack_3", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
-	
-	//	fbxのリソース
-	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
-	//res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
-	//res->LoadAnimation("Run", "Assets/Mannequin/Animation/MM_Run_Fwd.FBX.anm");
-	//res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
-	//res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
-	
-
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
@@ -190,6 +181,211 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	registry.emplace<EnemyTag>(enemy);
 
 }
+
+/// <summary>
+/// 最弱の青色の敵
+/// </summary>
+void Engine::System::ObjectsFactory::CreateEnemy_Basic()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 0.05f;
+
+	auto enemy = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(enemy);
+	transform.Position = { 20.0f,0.0f,20.0f };
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::Identity;
+
+	//	移動量（物理）
+	auto& rigidbody = registry.emplace<Rigidbody3D>(enemy);
+
+
+	//	素材テスト
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
+	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
+	res->LoadAnimation("Jog", "Assets/Fbx/Ganfaul/Animation/Jog.fbx.anm");
+	res->LoadAnimation("Dodge", "Assets/Fbx/Ganfaul/Animation/Dodge.fbx.anm");
+	res->LoadAnimation("Attack_0", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
+	res->LoadAnimation("Attack_1", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
+	res->LoadAnimation("Attack_2", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
+	res->LoadAnimation("Attack_3", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
+
+	//	fbxのモデル
+	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
+	fbx.CurrAnimation = "Idle";
+	fbx.Mesh->SetColor(Graphics::Color::Cyan());
+
+	//	ステータス
+	auto& status = registry.emplace<System::StatusComponet>(enemy);
+	status.MaxHp.Base = 1000;
+	status.Hp = 1000;
+
+	//	画像
+	auto baseRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/BarBase.png");
+	auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
+
+	//	体力バー
+	auto& hpBar = registry.emplace<System::HpRenderComponent>(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0));
+	hpBar.SetPosition({ 100,100 });
+
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
+	collider->SetVolume({ 2.0f,8.0f,2.0f });
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	registry.emplace<ColliderComponent>(enemy, std::move(col));
+
+	//　状態管理
+	auto& state = registry.emplace<EnemyStateComponent>(enemy);
+
+	//	武器
+	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	state.Weapon = sword;
+
+	//	タグ
+	registry.emplace<EnemyTag>(enemy);
+
+}
+
+/// <summary>
+/// ちょっと強い黄色の敵
+/// </summary>
+void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 0.05f;
+
+	auto enemy = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(enemy);
+	transform.Position = { 20.0f,0.0f,20.0f };
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::Identity;
+
+	//	移動量（物理）
+	auto& rigidbody = registry.emplace<Rigidbody3D>(enemy);
+
+
+	//	素材テスト
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
+	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
+	res->LoadAnimation("Jog", "Assets/Fbx/Ganfaul/Animation/Jog.fbx.anm");
+	res->LoadAnimation("Dodge", "Assets/Fbx/Ganfaul/Animation/Dodge.fbx.anm");
+	res->LoadAnimation("Attack_0", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
+	res->LoadAnimation("Attack_1", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
+	res->LoadAnimation("Attack_2", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
+	res->LoadAnimation("Attack_3", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
+
+	//	fbxのモデル
+	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
+	fbx.CurrAnimation = "Idle";
+	fbx.Mesh->SetColor(Graphics::Color::Yellow());
+
+	//	ステータス
+	auto& status = registry.emplace<System::StatusComponet>(enemy);
+	status.MaxHp.Base = 1000;
+	status.Hp = 1000;
+
+	//	画像
+	auto baseRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/BarBase.png");
+	auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
+
+	//	体力バー
+	auto& hpBar = registry.emplace<System::HpRenderComponent>(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0));
+	hpBar.SetPosition({ 100,100 });
+
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
+	collider->SetVolume({ 2.0f,8.0f,2.0f });
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	registry.emplace<ColliderComponent>(enemy, std::move(col));
+
+	//　状態管理
+	auto& state = registry.emplace<EnemyStateComponent>(enemy);
+
+	//	武器
+	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	state.Weapon = sword;
+
+	//	タグ
+	registry.emplace<EnemyTag>(enemy);
+
+}
+
+/// <summary>
+/// 最強のボス（赤）
+/// </summary>
+void Engine::System::ObjectsFactory::CreateEnemy_Boss()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 0.05f;
+
+	auto enemy = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(enemy);
+	transform.Position = { 20.0f,0.0f,20.0f };
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::Identity;
+
+	//	移動量（物理）
+	auto& rigidbody = registry.emplace<Rigidbody3D>(enemy);
+
+
+	//	素材テスト
+	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
+	res->LoadAnimation("Idle", "Assets/Fbx/Ganfaul/Animation/Idle.fbx.anm");
+	res->LoadAnimation("Jog", "Assets/Fbx/Ganfaul/Animation/Jog.fbx.anm");
+	res->LoadAnimation("Dodge", "Assets/Fbx/Ganfaul/Animation/Dodge.fbx.anm");
+	res->LoadAnimation("Attack_0", "Assets/Fbx/Ganfaul/Animation/Attack_A.fbx.anm");
+	res->LoadAnimation("Attack_1", "Assets/Fbx/Ganfaul/Animation/Attack_B.fbx.anm");
+	res->LoadAnimation("Attack_2", "Assets/Fbx/Ganfaul/Animation/Attack_C.fbx.anm");
+	res->LoadAnimation("Attack_3", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
+
+	//	fbxのモデル
+	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
+	fbx.CurrAnimation = "Idle";
+	fbx.Mesh->SetColor(Graphics::Color::Red());
+
+	//	ステータス
+	auto& status = registry.emplace<System::StatusComponet>(enemy);
+	status.MaxHp.Base = 1000;
+	status.Hp = 1000;
+
+	//	画像
+	auto baseRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/BarBase.png");
+	auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
+
+	//	体力バー
+	auto& hpBar = registry.emplace<System::HpRenderComponent>(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0));
+	hpBar.SetPosition({ 100,100 });
+
+	auto col = ColliderComponent::Create<AABBCollider>();
+	auto collider = col.GetPtr<AABBCollider>();
+	collider->SetVolume({ 2.0f,8.0f,2.0f });
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	registry.emplace<ColliderComponent>(enemy, std::move(col));
+
+	//　状態管理
+	auto& state = registry.emplace<EnemyStateComponent>(enemy);
+
+	//	武器
+	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	state.Weapon = sword;
+
+	//	タグ
+	registry.emplace<EnemyTag>(enemy);
+
+}
+
 
 void Engine::System::ObjectsFactory::CreateField()
 {

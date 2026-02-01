@@ -167,6 +167,7 @@
     <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResourceManager.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\SpriteComponent.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Vfx\VfxMeshComponent.hpp" />
+    <ClInclude Include="Source\Application\Scene\StageSelect\Component\Interact\System\InteractableSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Enemy\State\EnemyStateSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Invincible\InvincibleSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Invincible\InvincibleTag.hpp" />
@@ -174,6 +175,7 @@
     <ClInclude Include="Source\Application\Components\GameRule\GameRuleComponent.hpp" />
     <ClInclude Include="Source\Application\Components\Enemy\State\EnemyStateComponent.hpp" />
     <ClInclude Include="Source\Application\Components\StageComponent\StateComponent.hpp" />
+    <ClInclude Include="Source\Application\Objects\EnemyRank.hpp" />
     <ClInclude Include="Source\Application\Scene\GameClear\GameClear.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\GameOverScene.hpp" />
     <ClInclude Include="Source\Application\Debug\AppDebug\AppDebug.hpp" />
@@ -295,12 +297,15 @@
     <ClInclude Include="FrameWork\Graphics\UI\UISprite.hpp" />
     <ClInclude Include="FrameWork\Graphics\UI\Pipeline\UISpritePipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\Texture\Manager\TextureManager.hpp" />
+    <ClInclude Include="Source\Application\Scene\StageSelect\Component\Interact\InteractableRange.hpp" />
     <ClInclude Include="Source\Application\Scene\Title\Factory\CreateTitle.hpp" />
     <ClInclude Include="Source\Application\Scene\Title\TitleScene.hpp" />
     <ClInclude Include="FrameWork\Graphics\VFX\Pipeline\VFXPipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\VFX\VfxSprite.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\System\SpriteRenderSystem.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Vfx\System\VfxRenderSystem.hpp" />
+    <ClInclude Include="Source\Application\Scene\StageSelect\StageSelectScene.hpp" />
+    <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FrameWork\Graphics\DebugRender\DebugRender.cpp" />
@@ -308,6 +313,7 @@
     <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\SkyBox.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResourceManager.cpp" />
+    <ClCompile Include="Source\Application\Scene\StageSelect\Component\Interact\System\InteractableSystem.cpp" />
     <ClCompile Include="Source\Application\Components\Enemy\State\EnemyStateSystem.cpp" />
     <ClCompile Include="Source\Application\Components\Invincible\InvincibleSystem.cpp" />
     <ClCompile Include="Source\Application\Components\GameRule\GameRuleSystem.cpp" />
@@ -472,6 +478,8 @@
     <ClCompile Include="FrameWork\Graphics\VFX\VfxSprite.cpp" />
     <ClCompile Include="FrameWork\System\Conponent\Sprite\System\SpriteRenderSystem.cpp" />
     <ClCompile Include="FrameWork\System\Conponent\Vfx\System\VfxRenderSystem.cpp" />
+    <ClCompile Include="Source\Application\Scene\StageSelect\StageSelectScene.cpp" />
+    <ClCompile Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\VfxShader.hlsli">

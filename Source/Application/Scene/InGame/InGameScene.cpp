@@ -28,9 +28,12 @@
 #include"Graphics/VFX/VfxSprite.hpp"
 #include"Graphics/Texture/Manager/TextureManager.hpp"
 
-
 namespace Engine::Scene
 {
+	InGame::InGame(System::EnemyRank Rank)
+		:mSelectEnemy(Rank)
+	{
+	}
 
 	/// <summary>
 	///	èâä˙âª
@@ -59,9 +62,25 @@ namespace Engine::Scene
 		System::ColliderSystem::AddCollisionPair<System::PlayerWeaponTag, System::EnemyTag>({ false,false });
 		System::ColliderSystem::AddCollisionPair<System::EnemyWeaponTag, System::PlayerTag>({ false,false });
 
+		std::unordered_map<System::EnemyRank, std::function<void()>> factoryMap = {
+		{ System::EnemyRank::Basic,    System::ObjectsFactory::CreateEnemy_Basic },
+		{ System::EnemyRank::Advanced, System::ObjectsFactory::CreateEnemy_Advanced },
+		{ System::EnemyRank::Boss,     System::ObjectsFactory::CreateEnemy_Boss }
+		};
+
+		if (factoryMap.count(mSelectEnemy))
+		{
+			factoryMap[mSelectEnemy]();
+		}
+		else
+		{
+			LOG_ERROR("Failed CreateEnemy");
+		}
+
 		System::ObjectsFactory::CreateField();
 		System::ObjectsFactory::CreatePlayer();
-		System::ObjectsFactory::CreateEnemy();
+
+		//System::ObjectsFactory::CreateEnemy();
 		System::ObjectsFactory::CreateTest();
 
 		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");

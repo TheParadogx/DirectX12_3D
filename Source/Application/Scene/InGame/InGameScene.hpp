@@ -1,6 +1,7 @@
 #pragma once
 #include"System/Scene/IScene.hpp"
 #include"Graphics/SkyBox/SkyBox.hpp"
+#include"Application/Objects/EnemyRank.hpp"
 
 #include<memory>
 
@@ -9,6 +10,8 @@ namespace Engine::Scene
 	class InGame : public Engine::System::IScene
 	{
 	public:
+		InGame(System::EnemyRank Rank = System::EnemyRank::Basic);
+
 		/// <summary>
 		///	初期化
 		/// </summary>
@@ -40,6 +43,8 @@ namespace Engine::Scene
 		/// スカイボックス
 		/// </summary>
 		std::unique_ptr<Graphics::SkyBox> mSkyBox;
+		System::EnemyRank mSelectEnemy;
+
 	};
 }
 
