@@ -262,11 +262,12 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 						state.Dodge.RecoveryTimer = state.Dodge.DodgeInputWindow;
 					}
 				}
+				move.ForceVelocity = trans.GetForward();
+				return;
+
 			}
 			if (state.State == ePlayerState::Dodge)
 			{
-				move.ForceVelocity = trans.GetForward();
-				return;
 			}
 
 			// UŒ‚ƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚Ä‚¢‚é
