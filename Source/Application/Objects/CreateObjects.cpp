@@ -410,6 +410,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 
 	//	É^ÉO
 	registry.emplace<EnemyTag>(enemy);
+	registry.emplace<BossTag>(enemy);
 
 }
 

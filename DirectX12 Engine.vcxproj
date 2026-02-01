@@ -160,7 +160,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.hpp" />
     <ClInclude Include="FrameWork\System\Fade\FadeComponent.hpp" />
+    <ClInclude Include="Source\Application\Scene\GameClear\Factory\GameClearFactory.hpp" />
     <ClInclude Include="Source\Application\Components\Enemy\AI\System\EnemyAISystem.hpp" />
     <ClInclude Include="FrameWork\System\CSV\CsvLoader.hpp" />
     <ClInclude Include="FrameWork\Graphics\DebugRender\DebugRender.hpp" />
@@ -313,6 +315,8 @@
     <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.cpp" />
+    <ClCompile Include="Source\Application\Scene\GameClear\Factory\GameClearFactory.cpp" />
     <ClCompile Include="Source\Application\Components\Enemy\AI\System\EnemyAISystem.cpp" />
     <ClCompile Include="FrameWork\Graphics\DebugRender\DebugRender.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.cpp" />

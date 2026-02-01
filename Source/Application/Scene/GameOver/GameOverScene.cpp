@@ -1,5 +1,10 @@
 #include "pch.h"
 #include "GameOverScene.hpp"
+#include "Factory/CreateGameOver.hpp"
+#include"System/Input/Manager/InputManager.hpp"
+#include"System/Scene/Manager/SceneManager.hpp"
+#include"Application/Scene/Title/TitleScene.hpp"
+#include"Application/Scene/InGame/InGameScene.hpp"
 
 namespace Engine::Scene
 {
@@ -9,6 +14,7 @@ namespace Engine::Scene
 	/// <returns>true:成功</returns>
 	bool GameOver::Initialize()
 	{
+		GameOverFactory::CreateBG();
 		return true;
 	}
 
@@ -17,6 +23,12 @@ namespace Engine::Scene
 	/// </summary>
 	void GameOver::PostUpdate(double FixedDeltaTime)
 	{
+		//	後で再戦機能も実装します
+
+		if (GET_INPUT_MANAGER->IsActionPressed("Select"))
+		{
+			Engine::System::SceneManager::GetInstance()->ChangeSceneFade<Title>();
+		}
 	}
 
 	/// <summary>
@@ -24,5 +36,7 @@ namespace Engine::Scene
 	/// </summary>
 	void GameOver::Release()
 	{
+		//  ローカルオブジェクトの解放
+		Engine::System::EntityManager::GetInstance()->ClearLocalEntities();
 	}
 }
