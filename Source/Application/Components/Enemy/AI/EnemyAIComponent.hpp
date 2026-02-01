@@ -42,6 +42,10 @@ namespace Engine::System
 		//	プレイヤーの前の攻撃の段数
 		int PrevPlayerAttackCombo = 0;
 
+		//	アクションの終了した瞬間を見れるように
+		bool IsActionFinished = false;
+
+		bool IsIdle = false;
 
 	};
 }

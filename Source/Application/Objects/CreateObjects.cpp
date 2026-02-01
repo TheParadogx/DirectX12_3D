@@ -380,15 +380,15 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	//　状態管理
 	auto& state = registry.emplace<EnemyStateComponent>(enemy);
 
-	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand");
-	state.Weapon = sword;
-
 	//	AI
 	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
-
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
+
+	//	武器
+	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	param.Weapon = sword;
+
 
 
 	//	タグ

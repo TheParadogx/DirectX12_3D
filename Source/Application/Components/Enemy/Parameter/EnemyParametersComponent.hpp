@@ -1,4 +1,5 @@
 #pragma once
+#include"entt/entt.hpp"
 
 namespace Engine::System
 {
@@ -13,6 +14,8 @@ namespace Engine::System
 
 		float IdleEvadeProbability = 0.3f;	//	待機中に回避する確率
 		float CancelEvadeProbability = 0.3f; // キャンセル回避が発生する確率
+		int AttackComboMax = 4;
+		entt::entity Weapon = entt::null;	//	武器
 		bool  CanCancelEvade = false;		//	キャンセル回避を行えるかどうか
 	};
 }

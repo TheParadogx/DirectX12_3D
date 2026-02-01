@@ -3,20 +3,62 @@
 
 #include "Graphics/DebugRender/DebugRender.hpp"
 #include"Application/Components/Tag/TagComponent.hpp"
+#include"System/Conponent/Collider/ColliderComponent.hpp"
+#include"Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
 
-Engine::System::eEnemyState Engine::System::EnemyAISystem::DetermineNextRequest(EnemyAIComponent& AI, EnemyParameters& Param, float Distance)
+//	攻撃状態に遷移するかどうかの判定
+bool Engine::System::EnemyAISystem::CanAttackState(EnemyAIComponent& AI, EnemyParameters& param, float DistanceSQ)
+{
+	//	攻撃範囲外
+	if (param.AttackRange * param.AttackRange < DistanceSQ)
+	{
+		return false;
+	}
+
+	//	前の状態が追跡状態か攻撃状態
+	bool CanAttack = AI.CurrState == eEnemyState::Chasing || AI.CurrState == eEnemyState::Attacking;
+	if (CanAttack == false)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+Engine::System::eEnemyState Engine::System::EnemyAISystem::DetermineNextRequest(EnemyAIComponent& AI, EnemyParameters& Param, float DistanceSQ)
 {
 	//	赤のキャンセル回避
 	if (Param.CanCancelEvade == true)
 	{
-				
+		//	キャンセル回避判定
 	}
 
 	//	待機リクエストがあるかどうか
+	if (AI.IsIdle == true)
+	{
+		//	回避判定
+
+
+		//	回避しないときは待機状態にする
+
+	}
 
 	//	攻撃判定
+	if (CanAttackState(AI, Param, DistanceSQ))
+	{
+		//	攻撃終了フラグが立っていたら
+		if (AI.IsActionFinished == true)
+		{
+			//	攻撃の段数を増やす（連続攻撃用）
+			AI.CurrAttackCombo++;
+			if (AI.CurrAttackCombo >= Param.AttackComboMax)
+			{
+				AI.CurrAttackCombo = 0;
+			}
+		}
+		return eEnemyState::Attacking;
+	}
 
-	//	回避状態
 
 	//	デフォルト：追跡
 	return eEnemyState::Chasing;
@@ -49,25 +91,51 @@ void Engine::System::EnemyAISystem::UpdateChasing(EnemyAIComponent& AI, EnemyPar
 /// <param name="AI"></param>
 /// <param name="Param"></param>
 /// <param name="fbx"></param>
-void Engine::System::EnemyAISystem::ChangeState(EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx, eEnemyState Next)
+void Engine::System::EnemyAISystem::ChangeState(entt::registry& Reg, EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx, eEnemyState Next)
 {
+
 	//	前状態のリセット
 	ExitState(AI, Param, fbx);
 
 	AI.CurrState = Next;
 
 	//	今の状態の初期化
-	InitState(AI, Param, fbx);
+	InitState(Reg,AI, Param, fbx);
+
+	//	状態フラグを一旦戻す
+	AI.IsActionFinished = false;
+
 }
 
 void Engine::System::EnemyAISystem::ExitState(EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx)
 {
+	switch (AI.CurrState)
+	{
+	case Engine::System::eEnemyState::Idle:
+		break;
+
+	case Engine::System::eEnemyState::Chasing:
+
+
+		break;
+
+	case Engine::System::eEnemyState::Attacking:
+
+		break;
+
+	case Engine::System::eEnemyState::Evade:
+		break;
+
+	case Engine::System::eEnemyState::CancelEvade:
+		break;
+	}
+
 }
 
 /// <summary>
 /// 状態初期化
 /// </summary>
-void Engine::System::EnemyAISystem::InitState(EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx)
+void Engine::System::EnemyAISystem::InitState(entt::registry& Reg,EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx)
 {
 	switch (AI.CurrState)
 	{
@@ -80,6 +148,21 @@ void Engine::System::EnemyAISystem::InitState(EnemyAIComponent& AI, EnemyParamet
 		break;
 
 	case Engine::System::eEnemyState::Attacking:
+		fbx.CurrAnimation = "Attack_" + std::to_string(AI.CurrAttackCombo);
+		fbx.AnimationScale = 1.0f;
+		{
+			if (Param.Weapon != entt::null)
+			{
+				//	武器に必要なものをアタッチ
+				Reg.emplace_or_replace<HitHistoryComponent>(Param.Weapon);
+				//	武器に当たり判定をアタッチする
+				auto col = ColliderComponent::Create<OBBCollider>();
+				auto collider = col.GetPtr<OBBCollider>();
+				collider->SetVolume({ 1.0f,4.0f,1.0f });
+				col.Offset = { 0.0f, -4.0f, 0.0f };
+				Reg.emplace_or_replace<ColliderComponent>(Param.Weapon, std::move(col));
+			}
+		}
 		break;
 
 	case Engine::System::eEnemyState::Evade:
@@ -90,6 +173,11 @@ void Engine::System::EnemyAISystem::InitState(EnemyAIComponent& AI, EnemyParamet
 	}
 }
 
+/// <summary>
+/// 状態の終了判定
+/// </summary>
+/// <param name="Reg"></param>
+/// <param name="DeltaTime"></param>
 void Engine::System::EnemyAISystem::PreUpdate(entt::registry& Reg, double DeltaTime)
 {
 
@@ -106,15 +194,15 @@ void Engine::System::EnemyAISystem::MainUpdate(entt::registry& Reg, double Delta
 		{
 			//	移動ベクトル
 			Math::Vector3 Dir =  playerPos - trans.Position;
-			float distance = Dir.SqrLength();
+			float distanceSQ = Dir.SqrLength();
 
 			//	状態の遷移
-			auto nextState = DetermineNextRequest(AI, Param, distance);
+			auto nextState = DetermineNextRequest(AI, Param, distanceSQ);
 
 			//	状態の切り替え
-			if (AI.CurrState != nextState)
+			if (AI.CurrState != nextState || AI.IsActionFinished == true)
 			{
-				ChangeState(AI, Param, fbx, nextState);
+				ChangeState(Reg,AI, Param, fbx, nextState);
 			}
 
 			//	その状態での更新
@@ -123,9 +211,10 @@ void Engine::System::EnemyAISystem::MainUpdate(entt::registry& Reg, double Delta
 			case Engine::System::eEnemyState::Idle:
 				break;
 			case Engine::System::eEnemyState::Chasing:
-				UpdateChasing(AI, Param, trans, rigid, Dir, distance);
+				UpdateChasing(AI, Param, trans, rigid, Dir, distanceSQ);
 				break;
 			case Engine::System::eEnemyState::Attacking:
+
 				break;
 			case Engine::System::eEnemyState::Evade:
 				break;

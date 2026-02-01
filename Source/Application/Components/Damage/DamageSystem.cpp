@@ -39,7 +39,11 @@ void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaT
 				if (auto* status = Reg.try_get<StatusComponet>(victim))
 				{
 					status->ApplyDamage(attack.DamageValue);
-					history->HitList.insert(victim);
+
+					if (history != nullptr)
+					{
+						history->HitList.insert(victim);
+					}
 
 					if (status->IsDead())
 					{

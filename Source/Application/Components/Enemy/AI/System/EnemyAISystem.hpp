@@ -15,6 +15,7 @@ namespace Engine::System
 	class EnemyAISystem : public ISystem
 	{
 		//	UŒ‚ó‘Ô‚É‘JˆÚ‚·‚é‚©‚Ç‚¤‚©‚Ì”»’è
+		bool CanAttackState(EnemyAIComponent& AI, EnemyParameters& param,float Distance);
 
 		//	’ÇÕó‘Ô‚É‘JˆÚ‚·‚é‚©‚Ç‚¤‚©‚Ì”»’è
 
@@ -43,7 +44,7 @@ namespace Engine::System
 		/// <param name="AI"></param>
 		/// <param name="Param"></param>
 		/// <param name="fbx"></param>
-		void ChangeState(EnemyAIComponent& AI, EnemyParameters& Param,FbxComponent& fbx,eEnemyState Next);
+		void ChangeState(entt::registry& Reg,EnemyAIComponent& AI, EnemyParameters& Param,FbxComponent& fbx,eEnemyState Next);
 
 		/// <summary>
 		/// ¡‚Ìó‘Ô‚ÌI—¹iŒã•Ğ•t‚¯j
@@ -53,7 +54,7 @@ namespace Engine::System
 		/// <summary>
 		/// ó‘Ô‰Šú‰»
 		/// </summary>
-		void InitState(EnemyAIComponent& AI, EnemyParameters& Param,FbxComponent& fbx);
+		void InitState(entt::registry& Reg,EnemyAIComponent& AI, EnemyParameters& Param,FbxComponent& fbx);
 
 	public:
 		/// <summary>
