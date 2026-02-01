@@ -23,6 +23,6 @@ namespace Engine::System
 		eFadeState State = eFadeState::FadeOut;
 		// どのアルファから どのアルファへ行くかを保持しておくと計算が楽
 		float StartAlpha = 0.0f;
-		float TargetAlpha = 0.0f;
+		float TargetAlpha = 1.0f;
 	};
 }
