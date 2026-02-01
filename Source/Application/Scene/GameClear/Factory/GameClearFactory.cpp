@@ -1,13 +1,12 @@
 #include "pch.h"
-#include "CreateTitle.hpp"
-
+#include "GameClearFactory.hpp"
 #include"System/Entity/Manager/EntityManager.hpp"
 #include"System/Conponent/Transform/TransformConponent.hpp"
 #include"Graphics/Texture/Manager/TextureManager.hpp"
 #include"System/Conponent/Sprite/SpriteComponent.hpp"
 #include"System/Window/Window.hpp"
 
-void Engine::Scene::CreateTitleObject::TitleBG()
+void Engine::Scene::GameClearFactory::CreateBG()
 {
 	using namespace System;
 	auto manager = EntityManager::GetInstance();
@@ -21,8 +20,11 @@ void Engine::Scene::CreateTitleObject::TitleBG()
 	trans.Scale = { 1.0f,1.0f };
 
 	//	sprite
-	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Title/Texture/TitleBG.png");
+	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/GameClear/Texture/GameClearBG.png");
 	auto& sprite = registry.emplace<SpriteComponent>(entity, res);
+	float color = 5.0f;
+	sprite.Sprite.SetColor({ color,color,color,1 });
 	auto window = Window::GetInstance();
-	sprite.Sprite.SetSize({ (float)window->GetWidth(),(float)window->GetHeight()});
+	sprite.Sprite.SetSize({ (float)window->GetWidth(),(float)window->GetHeight() });
+
 }

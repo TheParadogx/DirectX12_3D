@@ -1,6 +1,5 @@
 #pragma once
 #include"Graphics/DirectX/TypeAlias/DirectX12TypeAlias.hpp"
-
 namespace Engine::Graphics
 {
 	class SpritePipeline
@@ -60,6 +59,7 @@ namespace Engine::Graphics
 		D3D_PRIMITIVE_TOPOLOGY GetTopology()const;
 
 	private:
+
 		/// <summary>
 		/// ルートシグネチャ
 		/// </summary>

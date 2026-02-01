@@ -104,7 +104,9 @@ D3D12_RASTERIZER_DESC Engine::Graphics::SpritePipeline::GetRasterizerDesc()
     Desc.AntialiasedLineEnable = FALSE;
     Desc.ForcedSampleCount = 0;
     Desc.ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF;
-
+    Desc.DepthBias = 0;
+    Desc.SlopeScaledDepthBias = 0.0f;
+    Desc.DepthBiasClamp = 0.0f;
     return Desc;
 }
 
@@ -121,19 +123,33 @@ bool Engine::Graphics::SpritePipeline::CreateRootSignature()
     Range.RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV;
     Range.OffsetInDescriptorsFromTableStart = D3D12_DESCRIPTOR_RANGE_OFFSET_APPEND;
 
+    // RootParamを2つに増やす
+    D3D12_ROOT_PARAMETER RootParam[2] = {};
+
+    // 0: 定数バッファ (b0)
+    RootParam[0].ParameterType = D3D12_ROOT_PARAMETER_TYPE_CBV;
+    RootParam[0].Descriptor.ShaderRegister = 0; // register(b0)
+    RootParam[0].ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL;
+
+    // 1: テクスチャ (t0) - 既存のDescriptorTableの設定
+    RootParam[1].ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    RootParam[1].DescriptorTable.pDescriptorRanges = &Range;
+    RootParam[1].DescriptorTable.NumDescriptorRanges = 1;
+    RootParam[1].ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+
     //	ルートパラメーター設定
-    D3D12_ROOT_PARAMETER RootParam = {};
-    RootParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
-    RootParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
-    RootParam.DescriptorTable.pDescriptorRanges = &Range;
-    RootParam.DescriptorTable.NumDescriptorRanges = 1;
+    //D3D12_ROOT_PARAMETER RootParam = {};
+    //RootParam.ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE;
+    //RootParam.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
+    //RootParam.DescriptorTable.pDescriptorRanges = &Range;
+    //RootParam.DescriptorTable.NumDescriptorRanges = 1;
 
     //	サンプラー設定
     D3D12_STATIC_SAMPLER_DESC SamplerDesc = {};
     SamplerDesc.Filter = D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT;
-    SamplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-    SamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
-    SamplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_WRAP;
+    SamplerDesc.AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+    SamplerDesc.AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
+    SamplerDesc.AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP;
     SamplerDesc.MipLODBias = 0;
     SamplerDesc.MaxAnisotropy = 16;
     SamplerDesc.ComparisonFunc = D3D12_COMPARISON_FUNC_NEVER;
@@ -144,12 +160,9 @@ bool Engine::Graphics::SpritePipeline::CreateRootSignature()
     SamplerDesc.RegisterSpace = 0;
     SamplerDesc.ShaderVisibility = D3D12_SHADER_VISIBILITY_PIXEL;
 
-    SamplerDesc.MinLOD = 0.0f;
-    SamplerDesc.MaxLOD = 0.0f;
-
     D3D12_ROOT_SIGNATURE_DESC RootSignatureDesc = {};
-    RootSignatureDesc.NumParameters = 1;
-    RootSignatureDesc.pParameters = &RootParam;
+    RootSignatureDesc.NumParameters = 2;
+    RootSignatureDesc.pParameters = RootParam;
     RootSignatureDesc.NumStaticSamplers = 1;
     RootSignatureDesc.pStaticSamplers = &SamplerDesc;
     RootSignatureDesc.Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT;
@@ -292,5 +305,5 @@ ID3D12PipelineState* Engine::Graphics::SpritePipeline::GetPipelineState() const
 
 D3D_PRIMITIVE_TOPOLOGY Engine::Graphics::SpritePipeline::GetTopology() const
 {
-    return D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
+    return D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST;
 }

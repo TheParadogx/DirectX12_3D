@@ -220,7 +220,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
 	fbx.CurrAnimation = "Idle";
-	fbx.Mesh->SetColor(Graphics::Color::Yellow());
+	fbx.Mesh->SetColor(Graphics::Color::Cyan());
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);
@@ -296,7 +296,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
 	fbx.CurrAnimation = "Idle";
-	fbx.Mesh->SetColor(Graphics::Color::Cyan());
+	fbx.Mesh->SetColor(Graphics::Color::Yellow());
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);
@@ -410,6 +410,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
+	registry.emplace<BossTag>(enemy);
 
 }
 

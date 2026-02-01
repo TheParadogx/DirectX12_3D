@@ -41,7 +41,7 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 			float sqrtDistance = Math::Vector3::SqrLength(diff);
 			if (sqrtDistance <= interract.InteractRange * interract.InteractRange)
 			{
-				System::SceneManager::GetInstance()->ChangeScene<Scene::InGame>(interract.Rank);
+				System::SceneManager::GetInstance()->ChangeSceneFade<Scene::InGame>(interract.Rank);
 			}
 		});
 
@@ -54,10 +54,14 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 /// <param name="Reg"></param>
 void Engine::System::InteractableSystem::Render(entt::registry& Reg)
 {
+#ifdef _DEBUG
+
+
 	auto view = Reg.view<Transform3D, InteractableComponent>();
 	view.each([&](Transform3D& trans, InteractableComponent& interract)
 		{
 			Graphics::DebugRender::DrawDebugCircle(
 				trans.Position, interract.InteractRange, Graphics::Color::Yellow());
 		});
+#endif // _DEBUG
 }

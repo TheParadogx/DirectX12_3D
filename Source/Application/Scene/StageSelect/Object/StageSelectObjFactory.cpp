@@ -66,7 +66,7 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Basic()
 	auto& transform = registry.emplace<Transform3D>(enemy);
 	transform.Position = { 20.0f,0.0f,20.0f };
 	transform.Scale = { Scale ,Scale ,Scale };
-	transform.Rotation = Math::Quaternion::Identity;
+	transform.Rotation = Math::Quaternion::AngleAxis(3.14159265f, Math::Vector3::Forward);
 
 
 	//	素材テスト
@@ -115,10 +115,9 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Advanced()
 
 	//	座標
 	auto& transform = registry.emplace<Transform3D>(enemy);
-	transform.Position = { 0.0f,0.0f,20.0f };
+	transform.Position = { -20.0f,0.0f,20.0f };
 	transform.Scale = { Scale ,Scale ,Scale };
-	transform.Rotation = Math::Quaternion::Identity;
-
+	transform.Rotation = Math::Quaternion::AngleAxis(3.14159265f, Math::Vector3::Forward);
 
 	//	素材テスト
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Fbx/Ganfaul/Faul.fbx.bin");
@@ -166,9 +165,9 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 
 	//	座標
 	auto& transform = registry.emplace<Transform3D>(enemy);
-	transform.Position = { 10.0f,0.0f,20.0f };
+	transform.Position = { 0.0f,0.0f,20.0f };
 	transform.Scale = { Scale ,Scale ,Scale };
-	transform.Rotation = Math::Quaternion::Identity;
+	transform.Rotation = Math::Quaternion::AngleAxis(3.14159265f, Math::Vector3::Forward);
 
 
 	//	素材テスト
