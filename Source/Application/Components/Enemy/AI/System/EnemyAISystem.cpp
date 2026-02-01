@@ -86,6 +86,24 @@ void Engine::System::EnemyAISystem::UpdateChasing(EnemyAIComponent& AI, EnemyPar
 }
 
 /// <summary>
+/// 攻撃状態でもプレイヤーの方を向く
+/// </summary>
+/// <param name="AI"></param>
+/// <param name="Param"></param>
+/// <param name="Transform"></param>
+/// <param name="ToPlayer"></param>
+/// <param name="Distance"></param>
+void Engine::System::EnemyAISystem::UpdateAttacking(EnemyAIComponent& AI, EnemyParameters& Param, Transform3D& Transform, const Math::Vector3& ToPlayer, float Distance)
+{
+	Math::Vector3 dir = ToPlayer;
+	dir.y = 0;
+
+	//	移動ベクトルに対してのクォータニオンを作成
+	Transform.Rotation = Math::Quaternion::LookRotation(dir, Math::Vector3::Forward);
+
+}
+
+/// <summary>
 ///	状態の変更
 /// </summary>
 /// <param name="AI"></param>
@@ -95,7 +113,7 @@ void Engine::System::EnemyAISystem::ChangeState(entt::registry& Reg, EnemyAIComp
 {
 
 	//	前状態のリセット
-	ExitState(AI, Param, fbx);
+	ExitState(Reg,AI, Param, fbx);
 
 	AI.CurrState = Next;
 
@@ -107,7 +125,7 @@ void Engine::System::EnemyAISystem::ChangeState(entt::registry& Reg, EnemyAIComp
 
 }
 
-void Engine::System::EnemyAISystem::ExitState(EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx)
+void Engine::System::EnemyAISystem::ExitState(entt::registry& Reg,EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx)
 {
 	switch (AI.CurrState)
 	{
@@ -120,6 +138,20 @@ void Engine::System::EnemyAISystem::ExitState(EnemyAIComponent& AI, EnemyParamet
 		break;
 
 	case Engine::System::eEnemyState::Attacking:
+		if (AI.IsActionFinished == false)
+		{
+			AI.CurrAttackCombo = 0;
+			//	当たり判定の削除
+			if (Reg.all_of<ColliderComponent>(Param.Weapon))
+			{
+				Reg.remove<ColliderComponent>(Param.Weapon);
+			}
+			if (Reg.all_of<HitHistoryComponent>(Param.Weapon))
+			{
+				Reg.remove<HitHistoryComponent>(Param.Weapon);
+			}
+
+		}
 
 		break;
 
@@ -145,11 +177,13 @@ void Engine::System::EnemyAISystem::InitState(entt::registry& Reg,EnemyAICompone
 	case Engine::System::eEnemyState::Chasing:
 		fbx.CurrAnimation = "Jog";
 		fbx.AnimationScale = 1.0f;
+		fbx.IsLoop = true;
 		break;
 
 	case Engine::System::eEnemyState::Attacking:
 		fbx.CurrAnimation = "Attack_" + std::to_string(AI.CurrAttackCombo);
-		fbx.AnimationScale = 1.0f;
+		fbx.AnimationScale = 0.7f;
+		fbx.IsLoop = false;
 		{
 			if (Param.Weapon != entt::null)
 			{
@@ -180,8 +214,37 @@ void Engine::System::EnemyAISystem::InitState(entt::registry& Reg,EnemyAICompone
 /// <param name="DeltaTime"></param>
 void Engine::System::EnemyAISystem::PreUpdate(entt::registry& Reg, double DeltaTime)
 {
+	auto view = Reg.view<EnemyAIComponent, EnemyParameters,FbxComponent>(entt::exclude<DeadTag>);
+	view.each([&](auto entity, EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx)
+		{
+			switch (AI.CurrState)
+			{
+			case Engine::System::eEnemyState::Idle:
+				break;
 
-	
+			case Engine::System::eEnemyState::Chasing:
+
+
+				break;
+
+			case Engine::System::eEnemyState::Attacking:
+				if (fbx.Mesh->GetAnimationFinish())
+				{
+					AI.IsActionFinished = true;
+				}
+				break;
+
+			case Engine::System::eEnemyState::Evade:
+				break;
+
+			case Engine::System::eEnemyState::CancelEvade:
+				break;
+			}
+
+
+		});
+
+
 }
 
 void Engine::System::EnemyAISystem::MainUpdate(entt::registry& Reg, double DeltaTime)
@@ -214,7 +277,7 @@ void Engine::System::EnemyAISystem::MainUpdate(entt::registry& Reg, double Delta
 				UpdateChasing(AI, Param, trans, rigid, Dir, distanceSQ);
 				break;
 			case Engine::System::eEnemyState::Attacking:
-
+				UpdateAttacking(AI, Param, trans, Dir, distanceSQ);
 				break;
 			case Engine::System::eEnemyState::Evade:
 				break;

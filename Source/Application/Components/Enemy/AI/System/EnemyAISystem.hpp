@@ -37,6 +37,11 @@ namespace Engine::System
 		/// <param name="ToPlayer">プレイヤーとの移動ベクトル</param>
 		void UpdateChasing(EnemyAIComponent& AI, EnemyParameters& Param, Transform3D& Transform, Rigidbody3D& Rigidbody, const Math::Vector3& ToPlayer,float Distance);
 
+		/// <summary>
+		/// 攻撃状態での状態更新
+		/// </summary>
+		void UpdateAttacking(EnemyAIComponent& AI, EnemyParameters& Param, Transform3D& Transform, const Math::Vector3& ToPlayer, float Distance);
+
 	private:
 		/// <summary>
 		///	状態の変更
@@ -49,7 +54,7 @@ namespace Engine::System
 		/// <summary>
 		/// 今の状態の終了（後片付け）
 		/// </summary>
-		void ExitState(EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx);
+		void ExitState(entt::registry& Reg,EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& fbx);
 
 		/// <summary>
 		/// 状態初期化
