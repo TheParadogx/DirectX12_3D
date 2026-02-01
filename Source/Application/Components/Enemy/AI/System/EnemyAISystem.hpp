@@ -42,6 +42,11 @@ namespace Engine::System
 		/// </summary>
 		void UpdateAttacking(EnemyAIComponent& AI, EnemyParameters& Param, Transform3D& Transform, const Math::Vector3& ToPlayer, float Distance);
 
+		/// <summary>
+		/// 待機状態での状態更新
+		/// </summary>
+		void UpdateIdle(EnemyAIComponent& AI, EnemyParameters& Param,float DeltaTime);
+
 	private:
 		/// <summary>
 		///	状態の変更

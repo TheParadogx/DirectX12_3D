@@ -29,7 +29,7 @@ namespace Engine::System
 	{
 		//	敵の状態
 		//	行動ルーチン変更用状態
-		eEnemyState CurrState = eEnemyState::Idle;
+		eEnemyState CurrState = eEnemyState::Chasing;
 		eEnemyPhase CurrPhase = eEnemyPhase::Healthy;
 
 		//	状態待機などの時間を計る用
@@ -43,7 +43,7 @@ namespace Engine::System
 		int PrevPlayerAttackCombo = 0;
 
 		//	アクションの終了した瞬間を見れるように
-		bool IsActionFinished = false;
+		bool IsActionFinished = true;
 
 		bool IsIdle = false;
 

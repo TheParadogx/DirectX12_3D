@@ -9,8 +9,8 @@ namespace Engine::System
 	struct EnemyParameters
 	{
 		float MoveSpeed = 10.0f;	//	‘–‚é‘¬“x
-		float AttackRange = 10.0f;	//	UŒ‚‚É“ü‚é‹——£
-		float AttackWaitTime = 1.0f;	//	UŒ‚Œã‚Ìd’¼ŠÔ
+		float AttackRange = 12.0f;	//	UŒ‚‚É“ü‚é‹——£
+		float IdleTime = 1.0f;	//	UŒ‚Œã‚Ìd’¼ŠÔ
 
 		float IdleEvadeProbability = 0.3f;	//	‘Ò‹@’†‚É‰ñ”ğ‚·‚éŠm—¦
 		float CancelEvadeProbability = 0.3f; // ƒLƒƒƒ“ƒZƒ‹‰ñ”ğ‚ª”­¶‚·‚éŠm—¦

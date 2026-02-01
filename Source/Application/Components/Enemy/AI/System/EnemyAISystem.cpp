@@ -41,20 +41,36 @@ Engine::System::eEnemyState Engine::System::EnemyAISystem::DetermineNextRequest(
 		//	キャンセル回避判定
 	}
 
+	//	待機状態の時
+	if (AI.CurrState == eEnemyState::Idle)
+	{
+		//	ここで回避判定をすると毎フレーム回避するからIdleに切り替えるタイミングで
+		//	ランダムを振って確率判定をする。
+
+		//	効力時間中ならこれより上位行動じゃないと待機状態にする。
+		if (AI.StateTimer < Param.IdleTime)
+		{
+			return eEnemyState::Idle;
+		}
+	}
+		
+	//	攻撃終了フラグが立っていたら
+	if (AI.IsActionFinished == true && AI.CurrState == eEnemyState::Attacking)
+	{
+		//	攻撃の段数を増やす（連続攻撃用）
+		AI.CurrAttackCombo++;
+		if (AI.CurrAttackCombo >= Param.AttackComboMax)
+		{
+			AI.CurrAttackCombo = 0;
+			AI.StateTimer = 0.0f;
+			return eEnemyState::Idle;
+		}
+	}
+
+
 	//	攻撃判定
 	if (CanAttackState(AI, Param, Fbx, DistanceSQ))
 	{
-		//	攻撃終了フラグが立っていたら
-		if (AI.IsActionFinished == true)
-		{
-			//	攻撃の段数を増やす（連続攻撃用）
-			AI.CurrAttackCombo++;
-			if (AI.CurrAttackCombo >= Param.AttackComboMax)
-			{
-				AI.CurrAttackCombo = 0;
-				return eEnemyState::Idle;
-			}
-		}
 		return eEnemyState::Attacking;
 	}
 
@@ -100,6 +116,14 @@ void Engine::System::EnemyAISystem::UpdateAttacking(EnemyAIComponent& AI, EnemyP
 	//	移動ベクトルに対してのクォータニオンを作成
 	Transform.Rotation = Math::Quaternion::LookRotation(dir, Math::Vector3::Forward);
 
+}
+
+/// <summary>
+/// 待機状態での状態更新
+/// </summary>
+void Engine::System::EnemyAISystem::UpdateIdle(EnemyAIComponent& AI, EnemyParameters& Param, float DeltaTime)
+{
+	AI.StateTimer += DeltaTime;
 }
 
 /// <summary>
@@ -170,6 +194,9 @@ void Engine::System::EnemyAISystem::InitState(entt::registry& Reg,EnemyAICompone
 	switch (AI.CurrState)
 	{
 	case Engine::System::eEnemyState::Idle:
+		fbx.CurrAnimation = "Idle";
+		fbx.AnimationScale = 1.0f;
+		fbx.IsLoop = true;
 		break;
 
 	case Engine::System::eEnemyState::Chasing:
@@ -272,12 +299,17 @@ void Engine::System::EnemyAISystem::MainUpdate(entt::registry& Reg, double Delta
 			switch (AI.CurrState)
 			{
 			case Engine::System::eEnemyState::Idle:
+				UpdateIdle(AI, Param, DeltaTime);
 				break;
 			case Engine::System::eEnemyState::Chasing:
 				UpdateChasing(AI, Param, trans, rigid, Dir, distanceSQ);
 				break;
 			case Engine::System::eEnemyState::Attacking:
-				UpdateAttacking(AI, Param, trans, Dir, distanceSQ);
+				//	少しの間だけ
+				if (fbx.Mesh->GetAnimationTime() < 0.2f)
+				{
+					UpdateAttacking(AI, Param, trans, Dir, distanceSQ);
+				}
 				break;
 			case Engine::System::eEnemyState::Evade:
 				break;
