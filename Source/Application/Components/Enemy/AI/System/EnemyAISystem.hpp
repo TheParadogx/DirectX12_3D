@@ -15,7 +15,7 @@ namespace Engine::System
 	class EnemyAISystem : public ISystem
 	{
 		//	UŒ‚ó‘Ô‚É‘JˆÚ‚·‚é‚©‚Ç‚¤‚©‚Ì”»’è
-		bool CanAttackState(EnemyAIComponent& AI, EnemyParameters& param,float Distance);
+		bool CanAttackState(EnemyAIComponent& AI, EnemyParameters& param, FbxComponent& Fbx,float Distance);
 
 		//	’ÇÕó‘Ô‚É‘JˆÚ‚·‚é‚©‚Ç‚¤‚©‚Ì”»’è
 
@@ -27,7 +27,7 @@ namespace Engine::System
 		/// Ÿ‚Ìó‘Ô‚ğŒˆ’è‚·‚éƒƒ\ƒbƒh
 		/// </summary>
 		/// <returns></returns>
-		eEnemyState DetermineNextRequest(EnemyAIComponent& AI, EnemyParameters& Param,float Distance);
+		eEnemyState DetermineNextRequest(EnemyAIComponent& AI, EnemyParameters& Param,FbxComponent& Fbx,float Distance);
 
 	private:
 

@@ -7,8 +7,16 @@
 #include"Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
 
 //	攻撃状態に遷移するかどうかの判定
-bool Engine::System::EnemyAISystem::CanAttackState(EnemyAIComponent& AI, EnemyParameters& param, float DistanceSQ)
+bool Engine::System::EnemyAISystem::CanAttackState(EnemyAIComponent& AI, EnemyParameters& param,FbxComponent& Fbx,float DistanceSQ)
 {
+	if (AI.CurrState == eEnemyState::Attacking)
+	{
+		if (Fbx.Mesh->GetAnimationFinish() == false)
+		{
+			return true;
+		}
+	}
+
 	//	攻撃範囲外
 	if (param.AttackRange * param.AttackRange < DistanceSQ)
 	{
@@ -25,7 +33,7 @@ bool Engine::System::EnemyAISystem::CanAttackState(EnemyAIComponent& AI, EnemyPa
 	return true;
 }
 
-Engine::System::eEnemyState Engine::System::EnemyAISystem::DetermineNextRequest(EnemyAIComponent& AI, EnemyParameters& Param, float DistanceSQ)
+Engine::System::eEnemyState Engine::System::EnemyAISystem::DetermineNextRequest(EnemyAIComponent& AI, EnemyParameters& Param, FbxComponent& Fbx, float DistanceSQ)
 {
 	//	赤のキャンセル回避
 	if (Param.CanCancelEvade == true)
@@ -33,18 +41,8 @@ Engine::System::eEnemyState Engine::System::EnemyAISystem::DetermineNextRequest(
 		//	キャンセル回避判定
 	}
 
-	//	待機リクエストがあるかどうか
-	if (AI.IsIdle == true)
-	{
-		//	回避判定
-
-
-		//	回避しないときは待機状態にする
-
-	}
-
 	//	攻撃判定
-	if (CanAttackState(AI, Param, DistanceSQ))
+	if (CanAttackState(AI, Param, Fbx, DistanceSQ))
 	{
 		//	攻撃終了フラグが立っていたら
 		if (AI.IsActionFinished == true)
@@ -54,6 +52,7 @@ Engine::System::eEnemyState Engine::System::EnemyAISystem::DetermineNextRequest(
 			if (AI.CurrAttackCombo >= Param.AttackComboMax)
 			{
 				AI.CurrAttackCombo = 0;
+				return eEnemyState::Idle;
 			}
 		}
 		return eEnemyState::Attacking;
@@ -141,15 +140,15 @@ void Engine::System::EnemyAISystem::ExitState(entt::registry& Reg,EnemyAICompone
 		if (AI.IsActionFinished == false)
 		{
 			AI.CurrAttackCombo = 0;
-			//	当たり判定の削除
-			if (Reg.all_of<ColliderComponent>(Param.Weapon))
-			{
-				Reg.remove<ColliderComponent>(Param.Weapon);
-			}
-			if (Reg.all_of<HitHistoryComponent>(Param.Weapon))
-			{
-				Reg.remove<HitHistoryComponent>(Param.Weapon);
-			}
+		}
+
+		if (Reg.all_of<ColliderComponent>(Param.Weapon))
+		{
+			Reg.remove<ColliderComponent>(Param.Weapon);
+		}
+		if (Reg.all_of<HitHistoryComponent>(Param.Weapon))
+		{
+			Reg.remove<HitHistoryComponent>(Param.Weapon);
 		}
 
 		break;
@@ -231,6 +230,8 @@ void Engine::System::EnemyAISystem::PreUpdate(entt::registry& Reg, double DeltaT
 				{
 					AI.IsActionFinished = true;
 				}
+
+
 				break;
 
 			case Engine::System::eEnemyState::Evade:
@@ -259,7 +260,7 @@ void Engine::System::EnemyAISystem::MainUpdate(entt::registry& Reg, double Delta
 			float distanceSQ = Dir.SqrLength();
 
 			//	状態の遷移
-			auto nextState = DetermineNextRequest(AI, Param, distanceSQ);
+			auto nextState = DetermineNextRequest(AI, Param, fbx,distanceSQ);
 
 			//	状態の切り替え
 			if (AI.CurrState != nextState || AI.IsActionFinished == true)
