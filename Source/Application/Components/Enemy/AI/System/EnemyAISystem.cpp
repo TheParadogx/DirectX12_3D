@@ -150,7 +150,6 @@ void Engine::System::EnemyAISystem::ExitState(entt::registry& Reg,EnemyAICompone
 			{
 				Reg.remove<HitHistoryComponent>(Param.Weapon);
 			}
-
 		}
 
 		break;

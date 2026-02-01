@@ -262,6 +262,9 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 						state.Dodge.RecoveryTimer = state.Dodge.DodgeInputWindow;
 					}
 				}
+			}
+			if (state.State == ePlayerState::Dodge)
+			{
 				move.ForceVelocity = trans.GetForward();
 				return;
 			}

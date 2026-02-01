@@ -98,9 +98,6 @@ namespace Engine::Scene
 		System::ObjectsFactory::CreateField();
 		System::ObjectsFactory::CreatePlayer();
 
-		//System::ObjectsFactory::CreateEnemy();
-		System::ObjectsFactory::CreateTest();
-
 		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");
 		mSkyBox = std::make_unique<Graphics::SkyBox>();
 		mSkyBox->Create(SkyBoxResource);
