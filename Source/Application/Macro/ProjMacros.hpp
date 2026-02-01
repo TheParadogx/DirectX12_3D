@@ -11,7 +11,10 @@
 #if _DEBUG
 
 //	0: Title 1:StageSelect 2:InGame 3:GameClear 4:GameOver
-#define START_SCENE 1
+#define START_SCENE 2
+
+// 0:Â 1:‰© 2:Ô
+#define SELECT_ENEMY 1
 
 /*
 * ƒŠƒŠ[ƒX

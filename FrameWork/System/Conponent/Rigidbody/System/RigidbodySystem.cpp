@@ -17,6 +17,7 @@ namespace Engine::System
 		for (auto [entity, trans, rigid] : view.each())
 		{
 			trans.Position += rigid.Velocity * FixedDeltaTime;
+			rigid.Velocity = Math::Vector3::Zero;
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Engine::System
 {
     //  Œ^•ÏŠ·
     template<typename T>
-    void convert(const std::string& s, T& val) {
+    inline void convert(const std::string& s, T& val) {
         if (s.empty()) return;
         if constexpr (std::is_same_v<T, int>) val = std::stoi(s);
         else if constexpr (std::is_same_v<T, double>) val = std::stod(s);
@@ -20,7 +20,7 @@ namespace Engine::System
     }
     //  s‚ğ•ª‰ğ
     template<typename T, typename... Args>
-    void parseLine(std::stringstream& ss, T& first, Args&... rest) {
+    inline void parseLine(std::stringstream& ss, T& first, Args&... rest) {
         std::string field;
         if (std::getline(ss, field, ',')) {
             convert(field, first);

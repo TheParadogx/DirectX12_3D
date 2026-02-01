@@ -264,6 +264,10 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				}
 				move.ForceVelocity = trans.GetForward();
 				return;
+
+			}
+			if (state.State == ePlayerState::Dodge)
+			{
 			}
 
 			// 攻撃ボタンが押されている
@@ -302,42 +306,22 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					state.Attack.AttackCount = 0;
 					fbx.IsLoop = false;
 					fbx.AnimationScale = 1.0f;
-
-					//	武器に必要なものをアタッチ
-					Reg.emplace_or_replace<HitHistoryComponent>(state.Weapon);
-					//	ここで当たり判定をアタッチする。
-					auto col = ColliderComponent::Create<OBBCollider>();
-					auto collider = col.GetPtr<OBBCollider>();
-					collider->SetVolume({ 1.0f,4.0f,1.0f });
-					col.Offset = { 0.0f, -4.0f, 0.0f };
-					Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
-
 				}
+
+				//	武器に必要なものをアタッチ
+				Reg.emplace_or_replace<HitHistoryComponent>(state.Weapon);
+				//	ここで当たり判定をアタッチする。
+				auto col = ColliderComponent::Create<OBBCollider>();
+				auto collider = col.GetPtr<OBBCollider>();
+				collider->SetVolume({ 1.0f,4.0f,1.0f });
+				col.Offset = { 0.0f, -4.0f, 0.0f };
+				Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
+
 				fbx.CurrAnimation = "Attack_" + std::to_string(state.Attack.AttackCount);
 
 
 				return;
 
-
-				//if (state.State != ePlayerState::Attack)
-				//{
-				//	//	状態変更
-				//	ChangeState(Reg, state, ePlayerState::Attack);
-				//	fbx.CurrAnimation = "Attack_A";
-				//	fbx.IsLoop = false;
-				//	//fbx.AnimationScale = 2.5f;
-				//	fbx.AnimationScale = 1.0f;
-
-				//	//	武器に必要なものをアタッチ
-				//	Reg.emplace_or_replace<HitHistoryComponent>(state.Weapon);
-				//	//	ここで当たり判定をアタッチする。
-				//	auto col = ColliderComponent::Create<OBBCollider>();
-				//	auto collider = col.GetPtr<OBBCollider>();
-				//	collider->SetVolume({ 1.0f,4.0f,1.0f });
-				//	col.Offset = { 0.0f, -4.0f, 0.0f };
-				//	Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
-				//}
-				//return;
 			}
 
 			//	走り

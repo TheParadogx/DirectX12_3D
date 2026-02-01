@@ -129,7 +129,7 @@ void Engine::System::MoveComponentSystem::MainUpdate(entt::registry& Reg, double
 
 			//	“ü—Í‚©‚ç‚ÌˆÚ“®—Ê‚ÌƒŠƒZƒbƒg
 			move.InputDir = Math::Vector3::Zero;
-			move.ForceVelocity *= 0.96f;
+			move.ForceVelocity *= 0.995f;
 		});
 
 

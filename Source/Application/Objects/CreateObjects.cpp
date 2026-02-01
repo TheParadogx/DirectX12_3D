@@ -21,6 +21,9 @@
 #include"Application/Components/Player/Input/InputRequestComponent.hpp"
 
 #include "Application/Components/Enemy/State/EnemyStateComponent.hpp"
+#include "Application/Components/Enemy/AI/EnemyAIComponent.hpp"
+#include "Application/Components/Enemy/Parameter/EnemyParametersComponent.hpp"
+
 
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Components/StageComponent/StateComponent.hpp"
@@ -217,7 +220,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
 	fbx.CurrAnimation = "Idle";
-	fbx.Mesh->SetColor(Graphics::Color::Cyan());
+	fbx.Mesh->SetColor(Graphics::Color::Yellow());
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);
@@ -241,12 +244,20 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	//　状態管理
 	auto& state = registry.emplace<EnemyStateComponent>(enemy);
 
+	//	AI
+	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
+	//	パラメーター
+	auto& param = registry.emplace<EnemyParameters>(enemy);
+
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
-	state.Weapon = sword;
+	param.Weapon = sword;
+
+
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
+
 
 }
 
@@ -285,7 +296,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
 	fbx.CurrAnimation = "Idle";
-	fbx.Mesh->SetColor(Graphics::Color::Yellow());
+	fbx.Mesh->SetColor(Graphics::Color::Cyan());
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);
@@ -309,12 +320,21 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	//　状態管理
 	auto& state = registry.emplace<EnemyStateComponent>(enemy);
 
+	//	AI
+	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
+	//	パラメーター
+	auto& param = registry.emplace<EnemyParameters>(enemy);
+
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
-	state.Weapon = sword;
+	param.Weapon = sword;
+
+
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
+
+
 
 }
 
@@ -377,9 +397,16 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	//　状態管理
 	auto& state = registry.emplace<EnemyStateComponent>(enemy);
 
+	//	AI
+	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
+	//	パラメーター
+	auto& param = registry.emplace<EnemyParameters>(enemy);
+
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
-	state.Weapon = sword;
+	param.Weapon = sword;
+
+
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);

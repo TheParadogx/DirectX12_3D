@@ -19,6 +19,7 @@
 #include"Application/Components/Invincible/InvincibleSystem.hpp"
 
 #include"Application/Components/Enemy/State/EnemyStateSystem.hpp"
+#include"Application/Components/Enemy/AI/System/EnemyAISystem.hpp"
 
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Objects/CreateObjects.hpp"
@@ -27,6 +28,8 @@
 
 #include"Graphics/VFX/VfxSprite.hpp"
 #include"Graphics/Texture/Manager/TextureManager.hpp"
+
+#include"Application/Macro/ProjMacros.hpp"
 
 namespace Engine::Scene
 {
@@ -49,7 +52,7 @@ namespace Engine::Scene
 		System::SystemManager::GetInstance()->AddSystem<System::HpRenderSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::InputRequestSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
-		System::SystemManager::GetInstance()->AddSystem<System::EnemyStateSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::EnemyAISystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::DamageSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::SocketComponentSystem>();
@@ -68,6 +71,19 @@ namespace Engine::Scene
 		{ System::EnemyRank::Boss,     System::ObjectsFactory::CreateEnemy_Boss }
 		};
 
+
+#if _DEBUG
+		System::EnemyRank rank = static_cast<System::EnemyRank>(SELECT_ENEMY);
+		if (factoryMap.count(rank))
+		{
+			factoryMap[rank]();
+		}
+		else
+		{
+			LOG_ERROR("Failed CreateEnemy");
+		}
+
+#else
 		if (factoryMap.count(mSelectEnemy))
 		{
 			factoryMap[mSelectEnemy]();
@@ -77,11 +93,10 @@ namespace Engine::Scene
 			LOG_ERROR("Failed CreateEnemy");
 		}
 
+
+#endif // _DEBUG
 		System::ObjectsFactory::CreateField();
 		System::ObjectsFactory::CreatePlayer();
-
-		//System::ObjectsFactory::CreateEnemy();
-		System::ObjectsFactory::CreateTest();
 
 		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");
 		mSkyBox = std::make_unique<Graphics::SkyBox>();
