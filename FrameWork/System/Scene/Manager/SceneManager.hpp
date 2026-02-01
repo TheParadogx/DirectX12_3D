@@ -2,7 +2,10 @@
 
 #include"System/Singleton/Singleton.hpp"
 #include"System/Scene/IScene.hpp"
+#include"System/Entity/Manager/EntityManager.hpp"
+#include"System/Fade/FadeComponent.hpp"
 
+#include<Plugin/entt/entt.hpp>
 #include<memory>
 #include<concepts>
 #include<string>
@@ -51,6 +54,11 @@ namespace Engine::System
 		void Render();
 
 		/// <summary>
+		/// フェード表示
+		/// </summary>
+		void FadeRender();
+
+		/// <summary>
 		/// 次のSceneがある場合に切り替える
 		/// </summary>
 		void PostPresentUpdate();
@@ -75,6 +83,28 @@ namespace Engine::System
 			}
 			mNextScene = mReloader();
 		}
+
+		template<IsScene T, class... Args>
+		void ChangeSceneFade(Args&&... args)
+		{
+			mReloader = [args...]() mutable
+				{
+					return std::make_unique<T>(std::forward<Args>(args)...);
+				};
+
+			if (mScene == nullptr)
+			{
+				mScene = mReloader();
+				return;
+			}
+			CreateFadeEntity();
+			mNextScene = mReloader();
+		}
+
+		/// <summary>
+		/// フェード用のエンティティ作成
+		/// </summary>
+		void CreateFadeEntity();
 
 		/// <summary>
 		/// 今のSceneを読み込み直す
@@ -108,6 +138,11 @@ namespace Engine::System
 		/// 今のSceneの名前
 		/// </summary>
 		std::string mCurrentSceneName;
+
+		/// <summary>
+		/// フェード用のレジストリ
+		/// </summary>
+		entt::registry mRegistry;
 	};
 }
 

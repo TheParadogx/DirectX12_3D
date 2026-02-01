@@ -329,6 +329,9 @@ void Engine::System::EnemyAISystem::MainUpdate(entt::registry& Reg, double Delta
 /// <param name="Reg"></param>
 void Engine::System::EnemyAISystem::Render(entt::registry& Reg)
 {
+#ifdef _DEBUG
+
+
 	auto view = Reg.view<EnemyParameters, EnemyAIComponent,Transform3D>();
 	view.each([&](EnemyParameters& param, EnemyAIComponent& ai, Transform3D& trans)
 		{
@@ -336,4 +339,5 @@ void Engine::System::EnemyAISystem::Render(entt::registry& Reg)
 			Graphics::DebugRender::DrawDebugCircle(trans.Position, param.AttackRange, Graphics::Color::Red());
 
 		});
+#endif // _DEBUG
 }

@@ -180,6 +180,7 @@ void Engine::App::Application::Render()
     mScene->Render();
     mSystems->Render(mEntitys->GetRegistry());
     GET_INPUT_MANAGER->Update();
+    mScene->FadeRender();
 }
 
 /// <summary>

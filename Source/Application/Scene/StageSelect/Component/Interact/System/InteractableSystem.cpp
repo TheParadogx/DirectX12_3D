@@ -54,10 +54,14 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 /// <param name="Reg"></param>
 void Engine::System::InteractableSystem::Render(entt::registry& Reg)
 {
+#ifdef _DEBUG
+
+
 	auto view = Reg.view<Transform3D, InteractableComponent>();
 	view.each([&](Transform3D& trans, InteractableComponent& interract)
 		{
 			Graphics::DebugRender::DrawDebugCircle(
 				trans.Position, interract.InteractRange, Graphics::Color::Yellow());
 		});
+#endif // _DEBUG
 }

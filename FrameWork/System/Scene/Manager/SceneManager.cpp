@@ -4,6 +4,11 @@
 #include"Graphics/DirectX/DirectX12.hpp"
 #include"System/Entity/System/Manager/SystemManager.hpp"
 
+#include"System/Window/Window.hpp"
+#include"System/Conponent/Sprite/SpriteComponent.hpp"
+#include"System/Fade/FadeComponent.hpp"
+#include"Graphics/Texture/Manager/TextureManager.hpp"
+
 /// <summary>
 ///	初期化
 /// </summary>
@@ -38,6 +43,30 @@ void Engine::System::SceneManager::PostUpdate(double  FixedDeltaTime)
 	{
 		mScene->PostUpdate(FixedDeltaTime);
 	}
+
+	auto view = mRegistry.view<FadeComponent, SpriteComponent>();
+	view.each([&](auto eitity,FadeComponent& fade, SpriteComponent& sprite)
+		{
+			//	時間を進めてアルファを計算するLerp
+			fade.CurrentTime += (float)FixedDeltaTime;
+
+			// 0.0 ～ 1.0 にクランプ
+			float t = std::clamp(fade.CurrentTime / fade.TotalTime, 0.0f, 1.0f);
+
+			// std::lerp(開始値, 終了値, 進行度)
+			float alpha = std::lerp(fade.StartAlpha, fade.TargetAlpha, t);
+
+			sprite.Sprite.SetColor({ 0.0f, 0.0f, 0.0f, alpha });
+
+			if (fade.State == eFadeState::FadeIn)
+			{
+				if (t >= 1.0f)
+				{
+					mRegistry.destroy(eitity);
+				}
+			}
+
+		});
 }
 
 /// <summary>
@@ -60,6 +89,17 @@ void Engine::System::SceneManager::Render()
 	{
 		mScene->Render();
 	}
+
+
+}
+
+void Engine::System::SceneManager::FadeRender()
+{
+	auto view = mRegistry.view<SpriteComponent>();
+	view.each([&](SpriteComponent& sprite)
+		{
+			sprite.Sprite.Render();
+		});
 }
 
 /// <summary>
@@ -72,19 +112,79 @@ void Engine::System::SceneManager::PostPresentUpdate()
 		return;
 	}
 
-	Graphics::DirectX::GetInstance()->WaitForGPU();
-	SystemManager::GetInstance()->AllClearSystem();
-
-	if (mScene != nullptr)
+	auto view = mRegistry.view<FadeComponent>();
+	if (view.empty() == false)
 	{
-		mScene->Release();
-		mScene.reset();
+		auto entity = view.front();
+		auto& fade = mRegistry.get<FadeComponent>(entity);
+
+		//	フェードアウトでなおかつ
+		if (fade.State == eFadeState::FadeOut)
+		{
+			//	フェードが終わっていないとまだ切り替えない
+			float t = fade.CurrentTime / fade.TotalTime;
+			if (t < 1.0f) return;
+
+			Graphics::DirectX::GetInstance()->WaitForGPU();
+			SystemManager::GetInstance()->AllClearSystem();
+
+
+			//	終わっていたら切り替える
+			if (mScene != nullptr)
+			{
+				mScene->Release();
+				mScene.reset();
+			}
+
+			mScene = std::move(mNextScene);
+			mNextScene = nullptr;
+
+			mScene->Initialize();
+
+			//	
+			fade.State = eFadeState::FadeIn;
+			fade.StartAlpha = 1.0f;
+			fade.TargetAlpha = 0.0f;
+			fade.CurrentTime = 0.0f;
+
+		}
+
+	}
+	else
+	{
+		Graphics::DirectX::GetInstance()->WaitForGPU();
+		SystemManager::GetInstance()->AllClearSystem();
+
+
+		//	終わっていたら切り替える
+		if (mScene != nullptr)
+		{
+			mScene->Release();
+			mScene.reset();
+		}
+
+		mScene = std::move(mNextScene);
+		mNextScene = nullptr;
+
+		mScene->Initialize();
+
 	}
 
-	mScene = std::move(mNextScene);
-	mNextScene = nullptr;
 
-	mScene->Initialize();
+}
+
+/// <summary>
+/// フェード用のエンティティ作成
+/// </summary>
+void Engine::System::SceneManager::CreateFadeEntity()
+{
+	auto entity = mRegistry.create();
+	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Fade/Fade.png");
+	auto& sprite = mRegistry.emplace<SpriteComponent>(entity,res);
+	auto window = Window::GetInstance();
+	sprite.Sprite.SetSize({ (float)window->GetWidth(), (float)window->GetHeight() });
+	sprite.Sprite.SetColor({ 0,0,0,0 });
+	auto& fade = mRegistry.emplace<FadeComponent>(entity);
 }
 
 /// <summary>
