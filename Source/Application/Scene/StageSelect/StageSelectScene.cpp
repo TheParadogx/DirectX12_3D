@@ -22,7 +22,7 @@
 #include"Application/Components/Player/Input/InputRequestSystem.hpp"
 #include"Application/Components/Player/PlayerState/PlayerStateSystem.hpp"
 #include"Application/Components/InputMove/MoveComponentSystem.hpp"
-
+#include"Application/Scene/StageSelect/Component/Interact/System/InteractableSystem.hpp"
 
 
 bool Engine::Scene::StageSelect::Initialize()
@@ -35,6 +35,7 @@ bool Engine::Scene::StageSelect::Initialize()
 	System::SystemManager::GetInstance()->AddSystem<System::PlayerStateSystem>();
 	System::SystemManager::GetInstance()->AddSystem<System::MoveComponentSystem>();
 	System::SystemManager::GetInstance()->AddSystem<System::SocketComponentSystem>();
+	System::SystemManager::GetInstance()->AddSystem<System::InteractableSystem>();
 	System::SystemManager::GetInstance()->AddSystem<System::CameraControlSystem>();
 
 	System::ColliderSystem::Initialize();

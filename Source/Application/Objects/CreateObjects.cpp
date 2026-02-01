@@ -217,7 +217,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(enemy, res);
 	fbx.CurrAnimation = "Idle";
-	fbx.Mesh->SetColor(Graphics::Color::Blue());
+	fbx.Mesh->SetColor(Graphics::Color::Cyan());
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);

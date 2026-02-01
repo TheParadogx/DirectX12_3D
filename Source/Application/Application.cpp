@@ -19,7 +19,9 @@
 #include"Application/Macro/ProjMacros.hpp"
 
 #include"Scene/Title/TitleScene.hpp"
+#include"Scene/StageSelect/StageSelectScene.hpp"
 #include"Scene/InGame/InGameScene.hpp"
+
 
 void Engine::App::Application::CreateStartScene()
 {
@@ -28,6 +30,10 @@ void Engine::App::Application::CreateStartScene()
     mScene->ChangeScene<Scene::Title>();
 
 #elif START_SCENE == 1
+    mScene->ChangeScene<Scene::StageSelect>();
+
+
+#elif START_SCENE == 2
     mScene->ChangeScene<Scene::InGame>();
 
 #endif // START_SCENE

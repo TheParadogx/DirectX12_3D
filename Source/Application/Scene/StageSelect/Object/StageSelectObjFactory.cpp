@@ -10,6 +10,7 @@
 #include "Application/Components/Enemy/State/EnemyStateComponent.hpp"
 
 #include"Application/Components/Tag/TagComponent.hpp"
+#include"Application/Scene/StageSelect/Component/Interact/InteractableRange.hpp"
 
 
 entt::entity Engine::System::StageSelectObjFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName, const Graphics::Color& Color)
@@ -90,6 +91,11 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Basic()
 	auto sword = CreateEnemyWeapon(enemy, "RightHand",Graphics::Color::Cyan());
 	state.Weapon = sword;
 
+	//	インタラクト
+	auto& interact = registry.emplace<InteractableComponent>(enemy);
+	interact.Rank = EnemyRank::Basic;
+
+
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
 
@@ -136,6 +142,11 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Advanced()
 	auto sword = CreateEnemyWeapon(enemy, "RightHand", Graphics::Color::Yellow());
 	state.Weapon = sword;
 
+	//	インタラクト
+	auto& interact = registry.emplace<InteractableComponent>(enemy);
+	interact.Rank = EnemyRank::Advanced;
+
+
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
 
@@ -181,6 +192,10 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand", Graphics::Color::Red());
 	state.Weapon = sword;
+
+	auto& interact = registry.emplace<InteractableComponent>(enemy);
+	interact.Rank = EnemyRank::Boss;
+
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
