@@ -25,7 +25,7 @@ namespace Engine::System
 	/// <summary>
 	/// 敵のAI用
 	/// </summary>
-	struct EnemyParameters
+	struct EnemyAIComponent
 	{
 		//	敵の状態
 		//	行動ルーチン変更用状態

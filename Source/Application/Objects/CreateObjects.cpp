@@ -21,6 +21,9 @@
 #include"Application/Components/Player/Input/InputRequestComponent.hpp"
 
 #include "Application/Components/Enemy/State/EnemyStateComponent.hpp"
+#include "Application/Components/Enemy/AI/EnemyAIComponent.hpp"
+#include "Application/Components/Enemy/Parameter/EnemyParametersComponent.hpp"
+
 
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Components/StageComponent/StateComponent.hpp"
@@ -380,6 +383,13 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
 	state.Weapon = sword;
+
+	//	AI
+	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
+
+	//	パラメーター
+	auto& param = registry.emplace<EnemyParameters>(enemy);
+
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
