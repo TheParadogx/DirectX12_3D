@@ -14,7 +14,7 @@
 #define START_SCENE 2
 
 // 0:Â 1:‰© 2:Ô
-#define SELECT_ENEMY 2
+#define SELECT_ENEMY 1
 
 /*
 * ƒŠƒŠ[ƒX
