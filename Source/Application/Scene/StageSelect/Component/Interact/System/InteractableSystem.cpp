@@ -49,15 +49,6 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 }
 
 /// <summary>
-/// ó‘Ô‘JˆÚ–½—ß
-/// </summary>
-/// <param name="Reg"></param>
-/// <param name="DeltaTime"></param>
-void Engine::System::InteractableSystem::PostUpdate(entt::registry& Reg, double DeltaTime)
-{
-}
-
-/// <summary>
 /// ”»’è—p‚Ì‰~‚Ì•`‰æ
 /// </summary>
 /// <param name="Reg"></param>
