@@ -4,12 +4,12 @@
 namespace Engine::System
 {
 	//	敵の状態
-	enum class eEnemyState
-	{
-		Idle,	//	待機
-		Chase,	//	追跡
-		Attack,	//	攻撃
-		Dead,	//	死亡
+	enum class eEnemyState {
+		Idle,
+		Chasing,
+		Attacking,
+		Evade,
+		CancelEvade,	//	全ての行動をキャンセルして回避する。
 	};
 	
 	/// <summary>

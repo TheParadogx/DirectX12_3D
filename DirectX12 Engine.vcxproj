@@ -168,6 +168,8 @@
     <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResourceManager.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\SpriteComponent.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Vfx\VfxMeshComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Enemy\AI\EnemyAIComponent.hpp" />
+    <ClInclude Include="Source\Application\Components\Enemy\Parameter\EnemyParametersComponent.hpp" />
     <ClInclude Include="Source\Application\Scene\StageSelect\Component\Interact\System\InteractableSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Enemy\State\EnemyStateSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Invincible\InvincibleSystem.hpp" />
@@ -309,7 +311,6 @@
     <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="FrameWork\System\CSV\CsvLoader.cpp" />
     <ClCompile Include="FrameWork\Graphics\DebugRender\DebugRender.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.cpp" />
