@@ -160,6 +160,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\System\CSV\CsvLoader.hpp" />
     <ClInclude Include="FrameWork\Graphics\DebugRender\DebugRender.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.hpp" />
     <ClInclude Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.hpp" />
@@ -308,6 +309,7 @@
     <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameWork\System\CSV\CsvLoader.cpp" />
     <ClCompile Include="FrameWork\Graphics\DebugRender\DebugRender.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Pipeline\SkyBoxPipeline.cpp" />
     <ClCompile Include="FrameWork\Graphics\SkyBox\Resource\SkyBoxResource.cpp" />
