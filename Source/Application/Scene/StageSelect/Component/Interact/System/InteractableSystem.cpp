@@ -41,7 +41,7 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 			float sqrtDistance = Math::Vector3::SqrLength(diff);
 			if (sqrtDistance <= interract.InteractRange * interract.InteractRange)
 			{
-				System::SceneManager::GetInstance()->ChangeScene<Scene::InGame>(interract.Rank);
+				System::SceneManager::GetInstance()->ChangeSceneFade<Scene::InGame>(interract.Rank);
 			}
 		});
 
