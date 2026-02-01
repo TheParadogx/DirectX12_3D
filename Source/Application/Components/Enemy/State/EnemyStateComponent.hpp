@@ -17,19 +17,8 @@ namespace Engine::System
 	/// </summary>
 	struct EnemyStateComponent
 	{
-		struct ChaseData
-		{
-			float DetectionRange = 20.0f;	// 索敵範囲
-			float AttackRange = 10.0f;		// 攻撃範囲
-			float MoveSpeed = 10.0f;			// 移動速度
-			float RotationSpeed = 5.0f;		// プレイヤーに向く回転速度
-		};
-
 		//	状態
 		eEnemyState State = eEnemyState::Idle;
-
-		//	追跡用のデータ
-		ChaseData Chase;
 
 		//	武器
 		entt::entity Weapon = entt::null;
