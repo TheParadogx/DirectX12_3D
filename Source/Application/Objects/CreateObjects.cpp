@@ -552,8 +552,6 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 
 	//	fbxのリソース
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/Sword.fbx.bin");
-	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/MM_Sword.fbx.bin");
-
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(sword, res, false);
