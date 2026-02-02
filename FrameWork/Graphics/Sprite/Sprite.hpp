@@ -47,6 +47,8 @@ namespace Engine::Graphics
 		struct SpriteConstantBuffer {
 			Math::Matrix WVP;      // 座標変換用
 			Graphics::Color Color;   // RGBA (Aが透明度)
+			float Intensity = 1.0f;		//　光度
+			float Padding[3];
 		};
 
 
