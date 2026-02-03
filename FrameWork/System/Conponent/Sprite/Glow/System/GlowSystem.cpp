@@ -17,6 +17,12 @@ void Engine::System::GlowSystem::Update(entt::registry& Reg, float DeltaTime)
 					glow.Timer += DeltaTime;
 					float t = std::clamp(glow.Timer / liner->Duration, 0.0f, 1.0f);
 					nextIntensity = std::lerp(liner->StartIntensity, liner->EndIntensity, t);
+
+					if (t >= 1.0f && liner->AutoDestroy == true)
+					{
+						Reg.remove<LinearShiftTag>(entity);
+						glow.Timer = 0.0f;
+					}
 				}
 				//	‚È‚¯‚ê‚ÎŒÛ“®
 				else if (PulseTag* pulse = Reg.try_get<PulseTag>(entity))

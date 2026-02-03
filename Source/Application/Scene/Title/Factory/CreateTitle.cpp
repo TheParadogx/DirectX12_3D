@@ -22,7 +22,7 @@ void Engine::Scene::CreateTitleObject::CreateBG()
 	trans.Scale = { 1.0f,1.0f };
 
 	//	sprite
-	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Title/Texture/TitleBG.png");
+	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Title/Texture/Title.png");
 	auto& sprite = registry.emplace<SpriteComponent>(entity, res);
 	auto window = Window::GetInstance();
 	sprite.Sprite.SetSize({ (float)window->GetWidth(),(float)window->GetHeight()});
@@ -31,11 +31,17 @@ void Engine::Scene::CreateTitleObject::CreateBG()
 
 	//	glow
 	auto& glow = registry.emplace<GlowComponent>(entity);
-	glow.BaseIntensity = 3.0f;
+	glow.BaseIntensity = 1.0f;
+
+	auto& liner = registry.emplace<LinearShiftTag>(entity);
+	liner.StartIntensity = 10.0f;
+	liner.EndIntensity = 1.0f;
+	liner.Duration = 5.0f;
+	liner.AutoDestroy = true;
 	
 	auto& pulse = registry.emplace<PulseTag>(entity);
 	pulse.Duration = 7.0f;
-	pulse.Range = 5.0f;
+	pulse.Range = 1.0f;
 
 	//auto& spark = registry.emplace<SparkTag>(entity);
 	//spark.Chance = 0.01f;
@@ -60,9 +66,10 @@ void Engine::Scene::CreateTitleObject::CreateLogo()
 	trans.Scale = { 1.0f,1.0f };
 
 	////	sprite
-	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Title/Texture/TitleLogo.png");
+	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Title/Texture/Logo.png");
 	auto& sprite = registry.emplace<SpriteComponent>(entity, res);
 	sprite.Sprite.SetColor({ 1,1,1,1 });
+	sprite.Sprite.SetSize({ 700,200 });
 	sprite.Sprite.SetPivot({ 0.5,0.5 });
 
 	auto& glow = registry.emplace<GlowComponent>(entity);
@@ -71,5 +78,39 @@ void Engine::Scene::CreateTitleObject::CreateLogo()
 	auto& spark = registry.emplace<SparkTag>(entity);
 	spark.Chance = 0.02f;
 	spark.BoostMultiplier = 2.5f;
+
+}
+
+void Engine::Scene::CreateTitleObject::CreateEffect()
+{
+	using namespace System;
+	auto manager = EntityManager::GetInstance();
+	auto& registry = manager->GetRegistry();
+	auto window = Window::GetInstance();
+
+	auto entity = manager->CreateEntity();
+
+	//	ç¿ïW
+	auto& trans = registry.emplace<Transform2D>(entity);
+	trans.Position = { window->GetWidth() / 2.0f ,(float)window->GetHeight() / 3 };	//	Ç∆ÇËÇ‹100
+	trans.Scale = { 1.0f,1.0f };
+
+	//	sprite
+	//auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Title/Texture/Effect.png");
+	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Title/Texture/light.png");
+	auto& sprite = registry.emplace<SpriteComponent>(entity, res);
+	sprite.Sprite.SetColor({ 1,1,1,0.5 });
+	sprite.Sprite.SetPivot({ 0.5,0.5 });
+
+	auto& glow = registry.emplace<GlowComponent>(entity);
+	glow.BaseIntensity = 1.0f;
+
+	auto& pulse = registry.emplace<PulseTag>(entity);
+	pulse.Duration = 3.0f;
+	pulse.Range = 5.0f;
+
+	auto& spark = registry.emplace<SparkTag>(entity);
+	spark.Chance = 0.02f;
+	spark.BoostMultiplier = 3.0f;
 
 }

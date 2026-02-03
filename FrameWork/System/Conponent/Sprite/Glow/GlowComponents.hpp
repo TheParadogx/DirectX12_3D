@@ -36,6 +36,7 @@ namespace Engine::System
 		float EndIntensity = 1.0f;
 		float Duration = 1.0f;     // •Ï‰»‚É‚©‚¯‚éŠÔ
 		bool Loop = false;         // ƒ‹[ƒv‚·‚é‚©‚Ç‚¤‚©
+		bool AutoDestroy = false;
 	};
 
 }
