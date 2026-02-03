@@ -15,8 +15,14 @@
 /// <returns></returns>
 bool Engine::Scene::Title::Initialize()
 {
+
+
+    ////  ÉçÉS
+    //CreateTitleObject::CreateLogo();
+    ////  ÉGÉtÉFÉNÉg
+    //CreateTitleObject::CreateEffect();
     //  îwåi
-    CreateTitleObject::TitleBG();
+    CreateTitleObject::CreateBG();
 
     return true;
 }

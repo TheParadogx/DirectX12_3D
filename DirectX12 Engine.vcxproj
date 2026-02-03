@@ -160,6 +160,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\System\Conponent\Sprite\Glow\GlowComponents.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Sprite\Glow\System\GlowSystem.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.hpp" />
     <ClInclude Include="FrameWork\System\Fade\FadeComponent.hpp" />
     <ClInclude Include="Source\Application\Scene\GameClear\Factory\GameClearFactory.hpp" />
@@ -315,6 +317,7 @@
     <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameWork\System\Conponent\Sprite\Glow\System\GlowSystem.cpp" />
     <ClCompile Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.cpp" />
     <ClCompile Include="Source\Application\Scene\GameClear\Factory\GameClearFactory.cpp" />
     <ClCompile Include="Source\Application\Components\Enemy\AI\System\EnemyAISystem.cpp" />

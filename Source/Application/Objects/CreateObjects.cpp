@@ -401,6 +401,8 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
+	param.AttackComboMax = 4;
+	param.IdleTime = 0.7f;
 
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
@@ -550,8 +552,6 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 
 	//	fbxのリソース
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/Sword.fbx.bin");
-	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/MM_Sword.fbx.bin");
-
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(sword, res, false);

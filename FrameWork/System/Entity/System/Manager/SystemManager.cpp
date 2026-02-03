@@ -7,6 +7,7 @@
 
 #include"System/Conponent/Sprite/System/SpriteRenderSystem.hpp"
 #include"System/Conponent/Vfx/System/VfxRenderSystem.hpp"
+#include"System/Conponent/Sprite/Glow/System/GlowSystem.hpp"
 
 namespace Engine::System
 {
@@ -50,6 +51,10 @@ namespace Engine::System
 
 		//	Fbxアニメーション
 		System::FbxRenderSystem::Update(Reg, DeltaTime);
+
+		//	Glow
+		System::GlowSystem::Update(Reg, DeltaTime);
+
 		//	sprite
 		System::SpriteRenderSystem::Update(Reg);
 	}

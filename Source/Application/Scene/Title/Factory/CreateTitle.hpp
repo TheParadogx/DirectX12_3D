@@ -6,7 +6,9 @@ namespace Engine::Scene
 	{
 	public:
 		//	ƒ^ƒCƒgƒ‹‚Ì”wŒi
-		static void TitleBG();
+		static void CreateBG();
+		static void CreateLogo();
+		static void CreateEffect();
 
 	private:
 

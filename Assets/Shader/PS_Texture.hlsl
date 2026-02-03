@@ -5,6 +5,8 @@ cbuffer SpriteData : register(b0)
 {
     float4x4 WVP;
     float4 MaterialColor; // ここにアルファが入る
+    float Intensity = 1.0f;		//　光度
+    float3 Padding[3];
 };
 
 Texture2D MainTexture : register(t0);
@@ -21,5 +23,9 @@ float4 main(VStoPS input) : SV_Target0
     {
         discard;
     }
+    
+    //  光度の適応
+    finalColor.rgb *= Intensity;
+    
     return finalColor;
 }
