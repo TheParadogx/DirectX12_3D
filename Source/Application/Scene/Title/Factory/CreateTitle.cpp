@@ -37,9 +37,9 @@ void Engine::Scene::CreateTitleObject::CreateBG()
 	pulse.Duration = 7.0f;
 	pulse.Range = 5.0f;
 
-	auto& spark = registry.emplace<SparkTag>(entity);
-	spark.Chance = 0.01f;
-	spark.BoostMultiplier = 1.5f;
+	//auto& spark = registry.emplace<SparkTag>(entity);
+	//spark.Chance = 0.01f;
+	//spark.BoostMultiplier = 1.5f;
 }
 
 /// <summary>
@@ -64,5 +64,12 @@ void Engine::Scene::CreateTitleObject::CreateLogo()
 	auto& sprite = registry.emplace<SpriteComponent>(entity, res);
 	sprite.Sprite.SetColor({ 1,1,1,1 });
 	sprite.Sprite.SetPivot({ 0.5,0.5 });
+
+	auto& glow = registry.emplace<GlowComponent>(entity);
+	glow.BaseIntensity = 1.0f;
+
+	auto& spark = registry.emplace<SparkTag>(entity);
+	spark.Chance = 0.02f;
+	spark.BoostMultiplier = 2.5f;
 
 }
