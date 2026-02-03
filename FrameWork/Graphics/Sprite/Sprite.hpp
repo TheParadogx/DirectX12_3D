@@ -37,6 +37,8 @@ namespace Engine::Graphics
 		DEFINE_PROPERTY(Math::Vector2, Size, mSize);
 		DEFINE_PROPERTY(float, Angle, mAngle);
 		DEFINE_PROPERTY(Graphics::Color, Color, mColor);
+		DEFINE_PROPERTY(float, Intensity, mIntensity);
+
 	protected:
 		/// <summary>
 		/// 頂点座標変換
@@ -82,6 +84,11 @@ namespace Engine::Graphics
 		/// 回転の角度
 		/// </summary>
 		float mAngle;
+
+		/// <summary>
+		/// 光度
+		/// </summary>
+		float mIntensity = 1.0f;
 
 		/// <summary>
 		/// 色

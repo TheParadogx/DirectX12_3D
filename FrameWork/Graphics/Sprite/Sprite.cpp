@@ -13,6 +13,7 @@ Engine::Graphics::Sprite::Sprite()
 	, mScale(1,1)
 	, mSize(200, 200)
 	, mAngle(0)
+	, mIntensity(1)
 	, mColor({10,10,10,1})
 	, mConstantBuffer(nullptr)
 {
@@ -53,6 +54,7 @@ void Engine::Graphics::Sprite::Render()
 	SpriteConstantBuffer cb;
 	cb.WVP = Math::Matrix::identity;
 	cb.Color = mColor;
+	cb.Intensity = mIntensity;
 	mConstantBuffer->Update(&cb);
 
 	mConstantBuffer->Set(0);

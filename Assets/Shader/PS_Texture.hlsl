@@ -23,5 +23,9 @@ float4 main(VStoPS input) : SV_Target0
     {
         discard;
     }
+    
+    //  光度の適応
+    finalColor.rgb *= Intensity;
+    
     return finalColor;
 }

@@ -6,6 +6,7 @@
 #include"Graphics/Texture/Manager/TextureManager.hpp"
 #include"System/Conponent/Sprite/SpriteComponent.hpp"
 #include"System/Window/Window.hpp"
+#include"System/Conponent/Sprite/Glow/GlowComponents.hpp"
 
 void Engine::Scene::CreateTitleObject::CreateBG()
 {
@@ -25,6 +26,20 @@ void Engine::Scene::CreateTitleObject::CreateBG()
 	auto& sprite = registry.emplace<SpriteComponent>(entity, res);
 	auto window = Window::GetInstance();
 	sprite.Sprite.SetSize({ (float)window->GetWidth(),(float)window->GetHeight()});
+	sprite.Sprite.SetColor(Graphics::Color::White());
+	//sprite.Sprite.SetIntensity(10.0f);
+
+	//	glow
+	auto& glow = registry.emplace<GlowComponent>(entity);
+	glow.BaseIntensity = 3.0f;
+	
+	auto& pulse = registry.emplace<PulseTag>(entity);
+	pulse.Duration = 7.0f;
+	pulse.Range = 5.0f;
+
+	auto& spark = registry.emplace<SparkTag>(entity);
+	spark.Chance = 0.01f;
+	spark.BoostMultiplier = 1.5f;
 }
 
 /// <summary>
