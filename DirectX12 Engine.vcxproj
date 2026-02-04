@@ -122,14 +122,14 @@
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>Source;External\pch;FrameWork;External;External\Plugin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;External\pch;FrameWork;External;External\Plugin;External\Plugin\Effekseer\src\Effekseer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;Effekseer.lib;EffekseerRendererDX12.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Debug\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib;Effekseer.lib;EffekseerRendererDX12.lib;Effekseer.lib</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;Effekseer.lib;EffekseerRendererDX12.lib;LLGI.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Debug\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib;Effekseer.lib;EffekseerRendererDX12.lib;Effekseer.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;External\Plugin\Effekseer\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -145,14 +145,14 @@
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>Source;External\pch;FrameWork;External;External\Plugin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>Source;External\pch;FrameWork;External;External\Plugin;External\Plugin\Effekseer\src\Effekseer;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <PrecompiledHeader>Use</PrecompiledHeader>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;Effekseer.lib;EffekseerRendererDX12.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Release\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib;Effekseer.lib;EffekseerRendererDX12.lib;Effekseer.lib</AdditionalDependencies>
+      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;Effekseer.lib;EffekseerRendererDX12.lib;LLGI.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Release\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib;Effekseer.lib;EffekseerRendererDX12.lib;Effekseer.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;External\Plugin\Effekseer\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -160,6 +160,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\Graphics\Effect\EffectObject.hpp" />
+    <ClInclude Include="FrameWork\Graphics\Effect\Manager\EffectManager.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\Glow\GlowComponents.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\Glow\System\GlowSystem.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.hpp" />
@@ -317,6 +319,8 @@
     <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameWork\Graphics\Effect\EffectObject.cpp" />
+    <ClCompile Include="FrameWork\Graphics\Effect\Manager\EffectManager.cpp" />
     <ClCompile Include="FrameWork\System\Conponent\Sprite\Glow\System\GlowSystem.cpp" />
     <ClCompile Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.cpp" />
     <ClCompile Include="Source\Application\Scene\GameClear\Factory\GameClearFactory.cpp" />

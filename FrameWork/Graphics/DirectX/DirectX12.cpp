@@ -375,7 +375,7 @@ bool Engine::Graphics::DirectX::InitializeSwapChain(HWND WindowHandle, UINT Widt
 	DXGI_SWAP_CHAIN_DESC1 scDesc = {};
 	scDesc.Width = Width;
 	scDesc.Height = Height;
-	scDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	scDesc.Format = mFormat;
 	scDesc.Stereo = false;
 	scDesc.SampleDesc.Count = 1;
 	scDesc.SampleDesc.Quality = 0;

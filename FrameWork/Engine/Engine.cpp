@@ -10,6 +10,7 @@
 //	graphics
 #include"Graphics/GraphicsDescriptorHeap/GraphicsDescriptorHeapManager.hpp"
 #include"Graphics/Renderer/Renderer.hpp"
+#include"Graphics/Effect/Manager/EffectManager.hpp"
 
 // debug
 #include"Debug/ImGui/ImGuiManager.hpp"
@@ -79,6 +80,11 @@ bool Engine::Core::Engine::Initialize()
 	//	表示
 	Graphics::Renderer::Create();
 	mRenderer = Graphics::Renderer::GetInstance();
+
+	//	エフェクト
+	Graphics::EffectManager::Create();
+	mEffect = Graphics::EffectManager::GetInstance();
+	mEffect->Initialize();
 
 	//	ImGui
 	Debug::ImGuiManager::Create();
