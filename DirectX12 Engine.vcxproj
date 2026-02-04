@@ -129,8 +129,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Debug\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;Effekseer.lib;EffekseerRendererDX12.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Debug\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib;Effekseer.lib;EffekseerRendererDX12.lib;Effekseer.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;External\Plugin\Effekseer\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y /D "$(ProjectDir)mimalloc*.dll" "$(OutDir)"</Command>
@@ -152,8 +152,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Release\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib</AdditionalDependencies>
-      <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>dxgi.lib;d3d12.lib;d3dcompiler.lib;Effekseer.lib;EffekseerRendererDX12.lib;$(ProjectDir)External\Plugin\DirectXTex\x64\Release\DirectXTex.lib;%(AdditionalDependencies);mimalloc.dll.lib;Effekseer.lib;EffekseerRendererDX12.lib;Effekseer.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>External\Plugin\mimalloc\lib;External\Plugin\Effekseer\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy /Y /D "$(ProjectDir)mimalloc*.dll" "$(OutDir)"</Command>
