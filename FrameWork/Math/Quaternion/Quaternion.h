@@ -41,6 +41,9 @@ namespace Math
 		//	行列に変換
 		Matrix3x3 ToMatrix3x3()const;
 
+		// オイラー角を取り出す
+		Vector3 ToEuler() const;
+
 	public:
 		//	行列から回転の抽出
 		static Quaternion FromMatrix(const Matrix& m);

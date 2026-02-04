@@ -5,6 +5,8 @@
 #include "../Matrix3x3/Matrix3x3.h"
 #include "../Vector3/Vector3.h"
 
+#include<cmath>
+
 namespace Math
 {
 	const Quaternion Quaternion::Identity = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -51,6 +53,31 @@ namespace Math
 		m._33 = -Qx - Qy + Qz + Qw;
 
 		return m;
+	}
+
+	Vector3 Quaternion::ToEuler() const
+	{
+		Vector3 euler;
+
+		// Pitch (x-axis rotation)
+		float sinp = 2.0f * (w * y - z * x);
+		if (std::abs(sinp) >= 1.0f)
+			euler.x = std::copysign(3.14159265f / 2.0f, sinp); // ジンバルロック対策
+		else
+			euler.x = std::asinf(sinp);
+
+		// Yaw (y-axis rotation)
+		float siny_cosp = 2.0f * (w * z + x * y);
+		float cosy_cosp = 1.0f - 2.0f * (y * y + z * z);
+		euler.y = std::atan2f(siny_cosp, cosy_cosp);
+
+		// Roll (z-axis rotation)
+		float sinr_cosp = 2.0f * (w * x + y * z);
+		float cosr_cosp = 1.0f - 2.0f * (x * x + y * y);
+		euler.z = std::atan2f(sinr_cosp, cosr_cosp);
+
+		return euler;
+
 	}
 
 	Quaternion Quaternion::FromMatrix(const Matrix& m)
