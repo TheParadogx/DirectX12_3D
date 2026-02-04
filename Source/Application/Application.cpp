@@ -162,7 +162,7 @@ void Engine::App::Application::MainUpdate(double dt)
 {
     mSystems->MainUpdate(mEntitys->GetRegistry(), dt);
     mScene->Update(dt);
-    mEffect->Update();
+    mEffect->Update(dt);
 }
 
 /// <summary>
