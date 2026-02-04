@@ -105,6 +105,11 @@ namespace Engine::Graphics
 		/// <param name="BackColor"></param>
 		void SetBackColor(const Color& BackColor);
 
+		DXGI_FORMAT GetFormat()
+		{
+			return mFormat;
+		}
+
 	private:
 		/// <summary>
 		/// デバッグレイヤーの起動
@@ -239,5 +244,10 @@ namespace Engine::Graphics
 		/// 背景色
 		/// </summary>
 		Color mBackColor;
+
+		/// <summary>
+		/// フォーマット
+		/// </summary>
+		DXGI_FORMAT mFormat = DXGI_FORMAT_R8G8B8A8_UNORM;
 	};
 }

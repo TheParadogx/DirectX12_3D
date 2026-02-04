@@ -8,6 +8,7 @@ namespace Engine::Graphics
 	class DirectX;
 	class GraphicsDescriptorHeapManager;
 	class Renderer;
+	class EffectManager;
 }
 
 namespace Engine::Debug
@@ -60,5 +61,6 @@ namespace Engine::Core
 		Graphics::GraphicsDescriptorHeapManager* mGDHManager;
 		Debug::ImGuiManager* mImgui;
 		Graphics::Renderer* mRenderer;
+		Graphics::EffectManager* mEffect;
 	};
 }
