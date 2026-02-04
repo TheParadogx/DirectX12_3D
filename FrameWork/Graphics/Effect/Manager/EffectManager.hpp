@@ -32,7 +32,7 @@ namespace Engine::Graphics
 		/// <summary>
 		/// 更新
 		/// </summary>
-		void Update();
+		void Update(float DeltaTime);
 
 		/// <summary>
 		/// 描画
@@ -45,6 +45,12 @@ namespace Engine::Graphics
 		/// <param name="CustomMat"></param>
 		/// <returns></returns>
 		Effekseer::Matrix44 ToEfkMatrix(const Math::Matrix& CustomMat);
+
+		/// <summary>
+		/// マネージャーの取得
+		/// </summary>
+		/// <returns></returns>
+		Effekseer::ManagerRef GetManager();
 
 	private:
 		/// <summary>

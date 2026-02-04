@@ -10,23 +10,53 @@ namespace Engine::Graphics
 		EffectObject() = default;
 		virtual ~EffectObject() { Stop(); }
 
-		void Play(Effekseer::EffectRef effect, const Math::Vector3& position);
+		/// <summary>
+		/// エフェクトの再生
+		/// </summary>
+		/// <param name="effect"></param>
+		void Play(Effekseer::EffectRef Effect, const Math::Vector3& Position,bool AutoDelete = false);
 
-		// 更新系（内部でマネージャーを自動取得）
-		void SetLocation(const Math::Vector3& position);
-		void SetRotation(const Math::Vector3& rotation);
-		void SetScale(const Math::Vector3& scale);
+		//	情報更新
+		void SetLocation(const Math::Vector3& Position);
+		void SetRotation(const Math::Vector3& Rotation);
+		void SetScale(const Math::Vector3& Scale);
+		void SetSpeed(float Speed);
 
+		/// <summary>
+		/// ハンドルの解放
+		/// </summary>
 		void Stop();
+		/// <summary>
+		/// 再生中かどうかの判定
+		/// </summary>
+		/// <returns>true:存在している</returns>
 		bool IsPlaying() const;
+		/// <summary>
+		/// 自動削除の条件判定
+		/// </summary>
+		/// <returns></returns>
+		bool ShouldDestroy() const;
 
+		/// <summary>
+		/// ハンドルの取得
+		/// </summary>
+		/// <returns></returns>
+		Effekseer::Handle GetHandle()const;
 	protected:
+
 		/// <summary>
 		/// 再生したインスタンスのハンドル
 		/// </summary>
 		Effekseer::Handle mHandle = -1;
 
+		/// <summary>
+		/// エフェクトの再生速度
+		/// </summary>
+		float mSpeed = 1.0f;
 
-
+		/// <summary>
+		/// エフェクト終了時に自動削除をするかどうか
+		/// </summary>
+		bool mIsAutoDelete = false;
 	};
 }

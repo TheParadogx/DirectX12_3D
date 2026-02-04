@@ -319,6 +319,7 @@
     <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameWork\Graphics\Effect\EffectObject.cpp" />
     <ClCompile Include="FrameWork\Graphics\Effect\Manager\EffectManager.cpp" />
     <ClCompile Include="FrameWork\System\Conponent\Sprite\Glow\System\GlowSystem.cpp" />
     <ClCompile Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.cpp" />

@@ -3,6 +3,8 @@
 #include"Graphics/DirectX/DirectX12.hpp"
 #include"System/Camera/Camera.hpp"
 
+#include"System/Window/Window.hpp"
+
 /// <summary>
 /// 初期化
 /// </summary>
@@ -93,11 +95,16 @@ Effekseer::EffectRef Engine::Graphics::EffectManager::GetEffect(const std::files
 /// <summary>
 /// 更新
 /// </summary>
-void Engine::Graphics::EffectManager::Update()
+void Engine::Graphics::EffectManager::Update(float DeltaTime)
 {
     if (mEfkManager != nullptr)
     {
-        mEfkManager->Update();
+        mEfkManager->Update(DeltaTime * 60.0f);
+    }
+
+    if (mEfkMemoryPool != nullptr)
+    {
+        mEfkMemoryPool->NewFrame();
     }
 }
 
@@ -108,14 +115,38 @@ void Engine::Graphics::EffectManager::Draw()
 {
 
     auto cmdList = DirectX::GetInstance()->GetCommandList();
+    auto mainCamera = System::Camera::Main;
     if (mEfkRenderer == nullptr || mEfkManager == nullptr || cmdList == nullptr) return;
+    //  カメラある時
+    if (mainCamera != nullptr)
+    {
+        const auto& view = mainCamera->GetView();
+        const auto& proj = mainCamera->GetProjection();
 
-    const auto& view = Engine::System::Camera::Main->GetView();
-    const auto& proj = Engine::System::Camera::Main->GetProjection();
+        //  変換
+        mEfkRenderer->SetCameraMatrix(ToEfkMatrix(view));
+        mEfkRenderer->SetProjectionMatrix(ToEfkMatrix(proj));
 
-    //  変換
-    mEfkRenderer->SetCameraMatrix(ToEfkMatrix(view));
-    mEfkRenderer->SetProjectionMatrix(ToEfkMatrix(proj));
+    }
+    //  カメラないとき
+    else
+    {
+        // カメラがない場合：2D用プロジェクションを設定
+        Effekseer::Matrix44 viewMat;
+        Effekseer::Matrix44 projMat;
+        viewMat.Indentity();
+
+        // 画面サイズを取得
+        float screenW = static_cast<float>(System::Window::GetInstance()->GetWidth());
+        float screenH = static_cast<float>(System::Window::GetInstance()->GetHeight());
+
+        // 平行投影行列を作成（左上(0,0), 右下(W, H)）
+        projMat.OrthographicLH(screenW, screenH, 0.0f, 100.0f);
+
+        mEfkRenderer->SetCameraMatrix(viewMat);
+        mEfkRenderer->SetProjectionMatrix(projMat);
+    }
+
 
     EffekseerRendererDX12::BeginCommandList(mEfkCmdList, cmdList);
     mEfkRenderer->SetCommandList(mEfkCmdList);
@@ -139,4 +170,13 @@ Effekseer::Matrix44 Engine::Graphics::EffectManager::ToEfkMatrix(const Math::Mat
     }
 
     return result;
+}
+
+/// <summary>
+/// マネージャーの取得
+/// </summary>
+/// <returns></returns>
+Effekseer::ManagerRef Engine::Graphics::EffectManager::GetManager()
+{
+    return mEfkManager;
 }

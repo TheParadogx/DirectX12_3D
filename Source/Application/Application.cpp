@@ -22,6 +22,7 @@
 #include"Scene/StageSelect/StageSelectScene.hpp"
 #include"Scene/InGame/InGameScene.hpp"
 
+#include"Graphics/Effect/Manager/EffectManager.hpp"
 
 void Engine::App::Application::CreateStartScene()
 {
@@ -75,6 +76,8 @@ bool Engine::App::Application::Initialize()
         LOG_CRITICAL("エンジンの初期化に失敗");
         return false;
     }
+
+    mEffect = Graphics::EffectManager::GetInstance();
 
     //  システム管理
     System::SystemManager::Create();
@@ -150,7 +153,6 @@ void Engine::App::Application::Tick()
 void Engine::App::Application::PreUpdate(double dt)
 {
     mSystems->PreUpdate(mEntitys->GetRegistry(), dt);
-
 }
 
 /// <summary>
@@ -160,6 +162,7 @@ void Engine::App::Application::MainUpdate(double dt)
 {
     mSystems->MainUpdate(mEntitys->GetRegistry(), dt);
     mScene->Update(dt);
+    mEffect->Update();
 }
 
 /// <summary>
@@ -179,6 +182,9 @@ void Engine::App::Application::Render()
 {
     mScene->Render();
     mSystems->Render(mEntitys->GetRegistry());
+
+    mEffect->Draw();
+
     GET_INPUT_MANAGER->Update();
     mScene->FadeRender();
 }

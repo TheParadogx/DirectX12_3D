@@ -15,6 +15,11 @@ namespace Engine::System
 	class EntityManager;
 }
 
+namespace Engine::Graphics
+{
+	class EffectManager;
+}
+
 namespace Engine::App
 {
 	class Application : public Singleton<Application>
@@ -75,6 +80,7 @@ namespace Engine::App
 		System::SceneManager* mScene;
 		System::SystemManager* mSystems;
 		System::EntityManager* mEntitys;
+		Graphics::EffectManager* mEffect;
 
 		/// <summary>
 		/// ŽžŠÔŒo‰ßŽæ“¾—p
