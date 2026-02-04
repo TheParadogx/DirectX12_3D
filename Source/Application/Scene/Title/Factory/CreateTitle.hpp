@@ -7,8 +7,8 @@ namespace Engine::Scene
 	public:
 		//	ƒ^ƒCƒgƒ‹‚Ì”wŒi
 		static void CreateBG();
-		static void CreateLogo();
-		static void CreateEffect();
+		static void CreateGuide();
+
 
 	private:
 
