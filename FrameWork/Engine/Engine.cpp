@@ -35,7 +35,7 @@
 /// <returns>true:成功</returns>
 bool Engine::Core::Engine::Initialize()
 {
-	bool ret = false;
+	bool ret = false;d
 
 #if _DEBUG
 	//	メモリ解放漏れチェック用
