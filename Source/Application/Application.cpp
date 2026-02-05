@@ -24,6 +24,9 @@
 
 #include"Graphics/Effect/Manager/EffectManager.hpp"
 
+#include"System/CSV/CSVManager.hpp"
+#include"Application/Data/SaveData.hpp"
+
 void Engine::App::Application::CreateStartScene()
 {
 
@@ -38,6 +41,19 @@ void Engine::App::Application::CreateStartScene()
     mScene->ChangeScene<Scene::InGame>();
 
 #endif // START_SCENE
+}
+
+/// <summary>
+/// ƒf[ƒ^‚Ì“Ç‚İ‚İ
+/// </summary>
+bool Engine::App::Application::DataLoad()
+{
+    bool ret = System::CSV::Get<System::SaveData>().Load("Assets/Data/SaveData.csv");
+    if (ret == false)
+    {
+        return false;
+    }
+    return true;
 }
 
 /// <summary>
@@ -56,6 +72,11 @@ void Engine::App::Application::Run()
         this->Tick();
         mEngine->EndFrame();
         mScene->PostPresentUpdate();
+
+        if (Input::InputManager::GetInstance()->GetKeyboard()->IsHeld(Input::eKeyCode::Escape))
+        {
+            break;
+        }
     }
 }
 
@@ -90,11 +111,17 @@ bool Engine::App::Application::Initialize()
     System::SceneManager::Create();
     mScene = System::SceneManager::GetInstance();
     CreateStartScene();
-    //mScene->ChangeScene<System::DefaultScene>();
     ret = mScene->Initialize();
     if (ret == false)
     {
         LOG_CRITICAL("Failed Initilize SceneManager");
+        return false;
+    }
+
+    ret = DataLoad();
+    if (ret == false)
+    {
+        LOG_ERROR("Failed Loading GameData");
         return false;
     }
 
@@ -140,6 +167,7 @@ void Engine::App::Application::Tick()
 
         //  •`‰æ
         this->Render();
+
 
     }
 

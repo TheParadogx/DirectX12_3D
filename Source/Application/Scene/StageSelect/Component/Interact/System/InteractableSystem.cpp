@@ -11,6 +11,7 @@
 #include "Application/Scene/StageSelect/Component/Interact/InteractableRange.hpp"
 #include "Application/Scene/InGame/InGameScene.hpp"
 
+#include "System/Conponent/Vfx/VfxMeshComponent.hpp"
 
 /// <summary>
 /// 遷移判定
@@ -19,11 +20,6 @@
 /// <param name="DeltaTime"></param>
 void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double DeltaTime)
 {
-	//	入力判定
-	if (Input::InputManager::GetInstance()->IsActionPressed("Interact") == false)
-	{
-		return;
-	}
 
 	//	プレイヤー座標
 	auto playerView = Reg.view<Transform3D, PlayerTag>(entt::exclude<DeadTag>);
@@ -31,17 +27,33 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 	playerPos = Reg.get<Transform3D>(playerView.front()).Position;
 
 	auto view = Reg.view<Transform3D,InteractableComponent>();
-	view.each([&](Transform3D& trans, InteractableComponent&interract) 
+	view.each([&](auto entity,Transform3D& trans, InteractableComponent&interract) 
 		{
-			//	状態判定
-			if (interract.Talkable == false) return;
+
+			// 範囲内なら表示フラグをON
+			if (VfxMeshComponent* vfx = Reg.try_get<VfxMeshComponent>(entity)) {
+				vfx->IsShow = true;
+			}
 
 			//	距離判定
 			Math::Vector3 diff = trans.Position - playerPos;
 			float sqrtDistance = Math::Vector3::SqrLength(diff);
 			if (sqrtDistance <= interract.InteractRange * interract.InteractRange)
 			{
-				System::SceneManager::GetInstance()->ChangeSceneFade<Scene::InGame>(interract.Rank);
+				bool IsInput = Input::InputManager::GetInstance()->IsActionPressed("Interact");
+				if (IsInput == true && interract.Talkable == true)
+				{
+					System::SceneManager::GetInstance()->ChangeSceneFade<Scene::InGame>(interract.Rank);
+				}
+
+			}
+			else
+			{
+				//	文字コンポーネントがあるときは削除する
+				if (VfxMeshComponent* vfx = Reg.try_get<VfxMeshComponent>(entity)) {
+					vfx->IsShow = false;
+				}
+
 			}
 		});
 
@@ -60,6 +72,8 @@ void Engine::System::InteractableSystem::Render(entt::registry& Reg)
 	auto view = Reg.view<Transform3D, InteractableComponent>();
 	view.each([&](Transform3D& trans, InteractableComponent& interract)
 		{
+			if (interract.Talkable == false) return;
+			
 			Graphics::DebugRender::DrawDebugCircle(
 				trans.Position, interract.InteractRange, Graphics::Color::Yellow());
 		});

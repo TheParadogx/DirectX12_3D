@@ -1,4 +1,5 @@
 #pragma once
+#include"entt/entt.hpp"
 namespace Engine::System
 {
 	class VfxRenderSystem
@@ -9,7 +10,7 @@ namespace Engine::System
 		/// </summary>
 		/// <param name="Reg"></param>
 		/// <param name="DeltaTime"></param>
-		static void Update(entt::registry& Reg);
+		static void Update(entt::registry& Reg, float DeltaTime);
 
 		/// <summary>
 		/// •`‰æ

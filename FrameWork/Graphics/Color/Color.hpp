@@ -28,7 +28,11 @@ namespace Engine::Graphics
 		//	灰
 		static const Color Gray();
 
+		static const Color CoralRed();
 
+		static const Color Apricot();
+
+		static const Color Lime();
 
 		//	GPU や SIMD 用データなどで使用するのでunion
 		union

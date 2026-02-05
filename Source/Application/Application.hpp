@@ -30,6 +30,12 @@ namespace Engine::App
 		/// 最初の画面の作成
 		/// </summary>
 		void CreateStartScene();
+
+		/// <summary>
+		/// データの読み込み
+		/// </summary>
+		bool DataLoad();
+
 	public:
 		/// <summary>
 		/// メインループ

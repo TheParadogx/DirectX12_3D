@@ -45,7 +45,7 @@ bool Engine::Core::Engine::Initialize()
 	//	ウィンドウ
 	System::Window::Create();
 	mWindow = System::Window::GetInstance();
-	ret = mWindow->Initialize("DirectX12 Engine", 0, 0,{1280,720,false});
+	ret = mWindow->Initialize("DirectX12 Engine", 0, 0,{1280,720,true});
 	if (ret == false)
 	{
 		return false;
