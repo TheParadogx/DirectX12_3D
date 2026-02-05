@@ -21,6 +21,8 @@
 #include"Scene/Title/TitleScene.hpp"
 #include"Scene/StageSelect/StageSelectScene.hpp"
 #include"Scene/InGame/InGameScene.hpp"
+#include"Scene/GameOver/GameOverScene.hpp"
+#include"Scene/GameClear/GameClear.hpp"
 
 #include"Graphics/Effect/Manager/EffectManager.hpp"
 
@@ -39,6 +41,10 @@ void Engine::App::Application::CreateStartScene()
 
 #elif START_SCENE == 2
     mScene->ChangeScene<Scene::InGame>();
+#elif START_SCENE == 3
+    mScene->ChangeScene<Scene::GameClear>();
+#elif START_SCENE == 4
+    mScene->ChangeScene<Scene::GameOver>();
 
 #endif // START_SCENE
 }

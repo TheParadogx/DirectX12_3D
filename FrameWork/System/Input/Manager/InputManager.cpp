@@ -21,6 +21,8 @@ bool Engine::Input::InputManager::Initialize()
 	AddAction("Cancel", { eKeyCode::Escape,ePadButton::B });
 	AddAction("Attack", { eKeyCode::Count,ePadButton::R2,eMouseButton::Left });
 	AddAction("Interact", { eKeyCode::F,ePadButton::A});
+	AddAction("Right", { eKeyCode::D,ePadButton::DPadRight });
+	AddAction("Left", { eKeyCode::A,ePadButton::DPadLeft });
 
 	return true;
 }

@@ -1,5 +1,6 @@
 #pragma once
 #include"entt/entt.hpp"
+#include"Application/Objects/EnemyRank.hpp"
 
 namespace Engine::System
 {
@@ -16,6 +17,7 @@ namespace Engine::System
 		float CancelEvadeProbability = 0.3f; // キャンセル回避が発生する確率
 		int AttackComboMax = 1;
 		entt::entity Weapon = entt::null;	//	武器
+		EnemyRank Rank = EnemyRank::Basic;	//	敵のランク
 		bool  CanCancelEvade = false;		//	キャンセル回避を行えるかどうか
 	};
 }

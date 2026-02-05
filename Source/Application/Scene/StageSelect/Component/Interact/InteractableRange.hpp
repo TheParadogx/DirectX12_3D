@@ -9,7 +9,7 @@ namespace Engine::System
 	{
 		float InteractRange = 10.0f;	//	インタラクトできる距離
 		EnemyRank Rank = EnemyRank::Basic;	//	どの状態に遷移するか
-		entt::entity GuideEntity = entt::null;	//	ガイド文字のエンティティ
+		int UnlockLevel = 0;
 		bool Talkable = true;			//	離せる状態かどうか
 	};
 

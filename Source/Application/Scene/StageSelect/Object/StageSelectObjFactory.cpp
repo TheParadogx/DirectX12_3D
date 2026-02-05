@@ -14,6 +14,9 @@
 #include"System/Conponent/Vfx/VfxMeshComponent.hpp"
 #include "Graphics/Texture/Manager/TextureManager.hpp"
 
+#include"System/CSV/CSVManager.hpp"
+#include"Application/Data/SaveData.hpp"
+
 
 entt::entity Engine::System::StageSelectObjFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName, const Graphics::Color& Color)
 {
@@ -162,6 +165,14 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Advanced()
 	auto& interact = registry.emplace<InteractableComponent>(enemy);
 	interact.Rank = EnemyRank::Advanced;
 	interact.Talkable = false;
+	interact.UnlockLevel = 1;
+
+	auto data = System::CSV::Get<SaveData>().Find(1);
+
+	if (data->ClearLevel >= interact.UnlockLevel)
+	{
+		interact.Talkable = true;
+	}
 
 	//	話しかける用の画像
 	std::string FilePath;
@@ -228,6 +239,14 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 	auto& interact = registry.emplace<InteractableComponent>(enemy);
 	interact.Rank = EnemyRank::Boss;
 	interact.Talkable = false;
+	interact.UnlockLevel = 2;
+
+	auto data = System::CSV::Get<SaveData>().Find(1);
+
+	if (data->ClearLevel >= interact.UnlockLevel)
+	{
+		interact.Talkable = true;
+	}
 
 	//	話しかける用の画像
 	std::string FilePath;
