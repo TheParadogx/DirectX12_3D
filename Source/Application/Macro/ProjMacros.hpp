@@ -14,7 +14,9 @@
 #define START_SCENE 0
 
 // 0:Â 1:‰© 2:Ô
-#define SELECT_ENEMY 1
+//#define SELECT_ENEMY 2
+
+//#define NO_DAMAGE
 
 /*
 * ƒŠƒŠ[ƒX

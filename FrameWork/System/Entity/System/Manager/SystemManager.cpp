@@ -52,6 +52,9 @@ namespace Engine::System
 		//	Fbxアニメーション
 		System::FbxRenderSystem::Update(Reg, DeltaTime);
 
+		//	vfx
+		System::VfxRenderSystem::Update(Reg, DeltaTime);
+
 		//	Glow
 		System::GlowSystem::Update(Reg, DeltaTime);
 

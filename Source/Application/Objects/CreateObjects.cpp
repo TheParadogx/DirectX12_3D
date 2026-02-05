@@ -55,23 +55,9 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	res->LoadAnimation("Attack_3", "Assets/Fbx/Ganfaul/Animation/Attack_D.fbx.anm");
 
 
-	////	fbxのリソース
-	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Mannequin/SKM_Manny_Simple.FBX.bin");
-	//res->LoadAnimation("Idle", "Assets/Mannequin/Animation/MM_Idle.FBX.anm");
-	//res->LoadAnimation("Run", "Assets/Mannequin/Animation/MM_Run_Fwd.FBX.anm");
-	//res->LoadAnimation("Jump", "Assets/Mannequin/Animation/MM_Jump.FBX.anm");
-	//res->LoadAnimation("Attack", "Assets/Mannequin/Animation/SwordSlash.fbx.anm");
-	//res->LoadAnimation("Sprint", "Assets/Mannequin/Animation/Sprint.fbx.anm");
-
-
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(player, res);
 	fbx.CurrAnimation = "Idle";
-
-	//	当たり判定
-	//auto& collider = registry.emplace<AABBColliderComponent>(player);
-	//collider.Collider.SetVolume({ 2.0f,8.0f,2.0f });
-	//collider.Offset = { 0.0f, collider.Collider.GetVolume().y * 0.5f, 0.0f };
 
 	//	当たり判定
 	auto col = ColliderComponent::Create<AABBCollider>();
@@ -98,8 +84,10 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
 
 	//	体力バー
-	auto& hpBar = registry.emplace<System::HpRenderComponent>(player, baseRes, barRes, Math::Vector2(0.0,0.0));
-	hpBar.SetPosition({100,10});
+	auto& hpBar = registry.emplace<System::HpRenderComponent>
+		(player, baseRes, barRes, Math::Vector2(0.0,0.0), Graphics::Color::Lime());
+	hpBar.SetPosition({730,978});
+	hpBar.SetSize({ 480,12 });
 
 	//	入力
 	registry.emplace<System::InputRequestComponent>(player);
@@ -232,8 +220,10 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
 
 	//	体力バー
-	auto& hpBar = registry.emplace<System::HpRenderComponent>(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0));
-	hpBar.SetPosition({ 100,100 });
+	auto& hpBar = registry.emplace<System::HpRenderComponent>
+		(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0), Graphics::Color::CoralRed());
+	hpBar.SetPosition({ 622,126});
+	hpBar.SetSize({ 629,12 });
 
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();
@@ -308,8 +298,10 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
 
 	//	体力バー
-	auto& hpBar = registry.emplace<System::HpRenderComponent>(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0));
-	hpBar.SetPosition({ 100,100 });
+	auto& hpBar = registry.emplace<System::HpRenderComponent>
+		(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0),Graphics::Color::CoralRed());
+	hpBar.SetPosition({ 622,126 });
+	hpBar.SetSize({ 629,12 });
 
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();
@@ -385,8 +377,11 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
 
 	//	体力バー
-	auto& hpBar = registry.emplace<System::HpRenderComponent>(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0));
-	hpBar.SetPosition({ 100,100 });
+	auto& hpBar = registry.emplace<System::HpRenderComponent>
+		(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0), Graphics::Color::CoralRed());
+	hpBar.SetPosition({ 622,126 });
+	hpBar.SetSize({ 629,12 });
+	hpBar.isColorOverridden = true;
 
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();

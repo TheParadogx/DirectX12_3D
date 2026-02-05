@@ -1,6 +1,6 @@
 #pragma once
 #include"Graphics/VFX/VfxSprite.hpp"
-
+#include"Math/Vector3/Vector3.h"
 #include<memory>
 #include<string>
 namespace Engine::System
@@ -11,13 +11,15 @@ namespace Engine::System
 		//	Vfx本体
 		std::unique_ptr<Graphics::VfxMesh> Mesh;
 
-		//	今表示中かどうか
+		Math::Vector3 Offset;
+
+		//	表示するかどうか
 		bool IsShow = true;
 
 		//	明示的に
 		explicit VfxMeshComponent(Graphics::Texture* Texture)
 		{
-			Mesh = std::unique_ptr<Graphics::VfxMesh>();
+			Mesh = std::make_unique<Graphics::VfxMesh>();
 
 			if (Texture != nullptr)
 			{

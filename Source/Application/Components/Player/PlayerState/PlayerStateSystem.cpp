@@ -305,7 +305,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					ChangeState(Reg, state, ePlayerState::Attack);
 					state.Attack.AttackCount = 0;
 					fbx.IsLoop = false;
-					fbx.AnimationScale = 1.0f;
+					fbx.AnimationScale = 2.5f;
 				}
 
 				//	武器に必要なものをアタッチ

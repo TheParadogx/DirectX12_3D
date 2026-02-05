@@ -6,6 +6,7 @@
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
 #include"Application/Components/Invincible/InvincibleTag.hpp"
+#include"Application/Macro/ProjMacros.hpp"
 
 /// <summary>
 /// ダメージ処理
@@ -14,10 +15,13 @@
 /// <param name="DeltaTime"></param>
 void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaTime)
 {
+#ifndef NO_DAMAGE
 	//	自分が攻撃力を持っていて誰かと当たった時
 	auto view = Reg.view<AttackPowerComponent, CollisionEvent>();
 	view.each([&](entt::entity entity, AttackPowerComponent& attack, CollisionEvent& collision)
 		{
+
+
 			HitHistoryComponent* history = Reg.try_get<HitHistoryComponent>(entity);
 
 			//	被害者
@@ -53,5 +57,6 @@ void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaT
 			}
 		});
 
+#endif // !NO_DAMAGE
 
 }

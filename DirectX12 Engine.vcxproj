@@ -164,6 +164,8 @@
     <ClInclude Include="FrameWork\Graphics\Effect\Manager\EffectManager.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\Glow\GlowComponents.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\Glow\System\GlowSystem.hpp" />
+    <ClInclude Include="FrameWork\System\CSV\CSVManager.hpp" />
+    <ClInclude Include="Source\Application\Data\SaveData.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.hpp" />
     <ClInclude Include="FrameWork\System\Fade\FadeComponent.hpp" />
     <ClInclude Include="Source\Application\Scene\GameClear\Factory\GameClearFactory.hpp" />
