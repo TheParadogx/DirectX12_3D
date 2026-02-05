@@ -9,6 +9,7 @@
 #include"System/Conponent/Vfx/System/VfxRenderSystem.hpp"
 #include"System/Conponent/Sprite/Glow/System/GlowSystem.hpp"
 #include"System/Conponent/Sprite/Scale/System/ScaleSystem.hpp"
+#include"System/Conponent/Effect/System/EffectSystem.hpp"
 
 namespace Engine::System
 {
@@ -64,6 +65,8 @@ namespace Engine::System
 
 		//	sprite
 		System::SpriteRenderSystem::Update(Reg);
+
+		System::EffectSystem::PostUpdate(Reg);
 	}
 
 	/// <summary>
