@@ -61,6 +61,7 @@ namespace Engine::System
     private:
         std::vector<T> mDataList;
         std::unordered_map<int, size_t> mIdToIndex;
+        std::string mCachedHeader;
         bool mIsLoaded = false;
 
     public:
@@ -72,7 +73,11 @@ namespace Engine::System
             std::ofstream file(filename);
             if (!file.is_open()) return false;
 
-            if (!header.empty()) file << header << "\n";
+            std::string finalHeader = header.empty() ? mCachedHeader : header;
+
+            if (!finalHeader.empty()) {
+                file << finalHeader << "\n";
+            }
 
             for (const auto& item : mDataList) {
                 file << item << "\n"; // マクロで定義した operator<< が呼ばれる
@@ -88,8 +93,10 @@ namespace Engine::System
             mDataList.clear();
             mIdToIndex.clear();
 
-            std::string headerLine;
-            std::getline(file, headerLine);
+            // 1行目をキャッシュに保存
+            if (!std::getline(file, mCachedHeader)) {
+                mCachedHeader = "";
+            }
 
             T item;
             while (file >> item) {

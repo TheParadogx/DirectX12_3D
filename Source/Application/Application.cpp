@@ -24,6 +24,9 @@
 
 #include"Graphics/Effect/Manager/EffectManager.hpp"
 
+#include"System/CSV/CSVManager.hpp"
+#include"Application/Data/SaveData.hpp"
+
 void Engine::App::Application::CreateStartScene()
 {
 
@@ -38,6 +41,25 @@ void Engine::App::Application::CreateStartScene()
     mScene->ChangeScene<Scene::InGame>();
 
 #endif // START_SCENE
+}
+
+/// <summary>
+/// データの読み込み
+/// </summary>
+bool Engine::App::Application::DataLoad()
+{
+    bool ret = System::CSV::Get<System::SaveData>().Load("Assets/Data/SaveData.csv");
+    if (ret == false)
+    {
+        return false;
+    }
+
+    //  確認
+    auto* data = System::CSV::Get<System::SaveData>().FindMutable(1);
+    data->ClearLevel = 3;
+    System::CSV::Get<System::SaveData>().Save("Assets/Data/SaveData.csv","ID,ClearLevel");
+
+    return true;
 }
 
 /// <summary>
@@ -95,11 +117,17 @@ bool Engine::App::Application::Initialize()
     System::SceneManager::Create();
     mScene = System::SceneManager::GetInstance();
     CreateStartScene();
-    //mScene->ChangeScene<System::DefaultScene>();
     ret = mScene->Initialize();
     if (ret == false)
     {
         LOG_CRITICAL("Failed Initilize SceneManager");
+        return false;
+    }
+
+    ret = DataLoad();
+    if (ret == false)
+    {
+        LOG_ERROR("Failed Loading GameData");
         return false;
     }
 
