@@ -46,6 +46,9 @@ bool Engine::Scene::StageSelect::Initialize()
 	System::StageSelectObjFactory::CreateEnemy_Basic();
 	System::StageSelectObjFactory::CreateEnemy_Advanced();
 	System::StageSelectObjFactory::CreateEnemy_Boss();
+#ifndef _DENUG
+	System::StageSelectObjFactory::TestEffect();
+#endif // _DENUG
 
 	//	‹ó
 	auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");

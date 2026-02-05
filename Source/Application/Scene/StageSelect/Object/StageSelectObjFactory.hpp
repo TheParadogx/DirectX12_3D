@@ -12,6 +12,8 @@ namespace Engine::System
 		static void CreateEnemy_Basic();     // 青（最初）
 		static void CreateEnemy_Advanced();  // 黄（中盤）
 		static void CreateEnemy_Boss();      // 赤（最強）
+
+		static void TestEffect();	//	エフェクト
 	};
 }
 

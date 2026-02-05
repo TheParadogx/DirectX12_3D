@@ -113,6 +113,14 @@ bool Engine::App::Application::Initialize()
     //  Entityä«óù
     mEntitys = System::EntityManager::GetInstance();
 
+    ret = DataLoad();
+    if (ret == false)
+    {
+        LOG_ERROR("Failed Loading GameData");
+        return false;
+    }
+
+
     //  Sceneä«óù
     System::SceneManager::Create();
     mScene = System::SceneManager::GetInstance();
@@ -124,12 +132,6 @@ bool Engine::App::Application::Initialize()
         return false;
     }
 
-    ret = DataLoad();
-    if (ret == false)
-    {
-        LOG_ERROR("Failed Loading GameData");
-        return false;
-    }
 
     return true;
 }

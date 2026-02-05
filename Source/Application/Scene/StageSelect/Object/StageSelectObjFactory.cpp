@@ -14,6 +14,9 @@
 #include"System/Conponent/Vfx/VfxMeshComponent.hpp"
 #include "Graphics/Texture/Manager/TextureManager.hpp"
 
+#include"System/Conponent/Effect/EffectComponent.hpp"
+#include"Graphics/Effect/Manager/EffectManager.hpp"
+
 #include"System/CSV/CSVManager.hpp"
 #include"Application/Data/SaveData.hpp"
 
@@ -267,4 +270,27 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
+}
+
+void Engine::System::StageSelectObjFactory::TestEffect()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 1.0f;
+
+	auto entity = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(entity);
+	transform.Position = { 0.0f,0.0f,20.0f };
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::AngleAxis(-3.14159265f / 2, Math::Vector3::Up);
+
+	//	リソース
+	auto res = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/AttackHit.efk");
+	auto& effect = registry.emplace<EffectComponent>(entity);
+	effect.Asset = res;
+	effect.IsLoop = true;
+	effect.Effect.Play(effect.Asset, transform.Position);
 }
