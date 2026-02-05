@@ -288,7 +288,7 @@ void Engine::System::StageSelectObjFactory::TestEffect()
 	transform.Rotation = Math::Quaternion::AngleAxis(-3.14159265f / 2, Math::Vector3::Up);
 
 	//	ƒŠƒ\[ƒX
-	auto res = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Test/Laser01.efkefc");
+	auto res = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/AttackHit.efk");
 	auto& effect = registry.emplace<EffectComponent>(entity);
 	effect.Asset = res;
 	effect.IsLoop = true;

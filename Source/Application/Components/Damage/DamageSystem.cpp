@@ -7,6 +7,10 @@
 #include"Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
 #include"Application/Components/Invincible/InvincibleTag.hpp"
 #include"Application/Macro/ProjMacros.hpp"
+#include"System/Conponent/Effect/EffectComponent.hpp"
+#include"System/Conponent/Transform/TransformConponent.hpp"
+
+#include"System/Conponent/Effect/Factory/EffectFactory.hpp"
 
 /// <summary>
 /// ダメージ処理
@@ -43,6 +47,23 @@ void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaT
 				if (auto* status = Reg.try_get<StatusComponet>(victim))
 				{
 					status->ApplyDamage(attack.DamageValue);
+
+					// 攻撃側がエフェクトアセットを持っていれば生成
+					if (attack.HitEffectAsset.empty() == false)
+					{
+						if (auto* victimTrans = Reg.try_get<Transform3D>(victim))
+						{
+
+							for (auto& effectAsset : attack.HitEffectAsset)
+							{
+								EffectFactory::CreateAtLocation(
+									effectAsset,
+									victimTrans->Position + attack.Offset,
+									attack.Scale);
+
+							}
+						}
+					}
 
 					if (history != nullptr)
 					{

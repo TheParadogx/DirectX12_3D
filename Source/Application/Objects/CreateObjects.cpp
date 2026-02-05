@@ -28,6 +28,8 @@
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Components/StageComponent/StateComponent.hpp"
 
+#include"System/Conponent/Effect/EffectComponent.hpp"
+#include"Graphics/Effect/Manager/EffectManager.hpp"
 
 entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 {
@@ -530,8 +532,17 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 	socket.OffsetRot = { -0.7,-0.685,0.192,0.007 };
 	socket.PivotOffset = { 0,1.98,0.0 };
 
+	auto effectRes = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/AttackHit.efk");
+	auto windEffect = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sword1.efk");
+	auto windEffect2 = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sword6.efk");
+
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
 	damage.DamageValue = 250.0f;
+	damage.HitEffectAsset.push_back(effectRes);
+	damage.HitEffectAsset.push_back(windEffect);
+	damage.HitEffectAsset.push_back(windEffect2);
+	damage.Offset = { 0,5,0 };
+	damage.Scale = { 2,2,2 };
 
 	registry.emplace<PlayerWeaponTag>(sword);
 

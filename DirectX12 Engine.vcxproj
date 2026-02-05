@@ -160,6 +160,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\System\Conponent\Effect\Factory\EffectFactory.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Effect\System\EffectSystem.hpp" />
     <ClInclude Include="FrameWork\Graphics\Effect\EffectObject.hpp" />
     <ClInclude Include="FrameWork\Graphics\Effect\Manager\EffectManager.hpp" />
@@ -326,6 +327,7 @@
     <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameWork\System\Conponent\Effect\Factory\EffectFactory.cpp" />
     <ClCompile Include="FrameWork\System\Conponent\Effect\System\EffectSystem.cpp" />
     <ClCompile Include="FrameWork\Graphics\Effect\EffectObject.cpp" />
     <ClCompile Include="FrameWork\Graphics\Effect\Manager\EffectManager.cpp" />
