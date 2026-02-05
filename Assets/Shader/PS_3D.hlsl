@@ -18,20 +18,21 @@ float ToonShadow(float DotValue)
 
 float4 main(VStoPS input) : SV_Target0
 {
-// 1. テクスチャの色を取得
     float4 texColor = MainTexture.SampleLevel(Sampler, input.UV, 0);
+    float4 baseColor = texColor * input.Color;
+
+    float3 LightDir = normalize(float3(1.0f, 1.0f, 1.0f));
     
-    // 2. テクスチャの色に定数バッファの色(MeshColor)を掛ける
-    // これで SetColor の色が反映されるようになります！
-    float4 OutputColor = texColor * input.Color;
+    float3 N = normalize(input.Normal);
+    float d = dot(N, LightDir) * 0.5f + 0.5f;
+
+    float delta = fwidth(d);
+    float shadow = smoothstep(0.5f - delta, 0.5f + delta, d) * 0.7f + 0.3f;
     
-    // --- ライティング計算 ---
-    float3 LightVector = normalize(float3(1.0f, 1.0f, 1.0f)); // 逆転計算済みとする
-    float d = dot(LightVector, input.Normal);
-    d = d * 0.5f + 0.5f;
-    float shadow = saturate(d + 0.2f);
+    float3 ambient = float3(0.05f, 0.05f, 0.1f) + (N.y * 0.05f);
+
+    // 最終色の合成
+    float3 finalRGB = baseColor.rgb * (shadow + ambient);
     
-    OutputColor.rgb *= shadow;
-    
-    return OutputColor;
+    return float4(finalRGB, baseColor.a);
 }
