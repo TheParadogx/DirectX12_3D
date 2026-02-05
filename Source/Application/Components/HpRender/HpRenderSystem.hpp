@@ -16,6 +16,11 @@ namespace Engine::System
 		/// </summary>
 		void UpdateColor(HpRenderComponent& Component,float Ratio);
 
+		/// <summary>
+		/// GUIÇ≈í≤êÆÇ≈Ç´ÇÈÇÊÇ§Ç…
+		/// </summary>
+		/// <param name="Reg"></param>
+		void OnGui(entt::registry& Reg);
 	};
 }
 

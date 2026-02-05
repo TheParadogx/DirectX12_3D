@@ -73,6 +73,9 @@ namespace Engine::Scene
 
 
 #if _DEBUG
+#ifdef SELECT_ENEMY
+
+
 		System::EnemyRank rank = static_cast<System::EnemyRank>(SELECT_ENEMY);
 		if (factoryMap.count(rank))
 		{
@@ -82,7 +85,17 @@ namespace Engine::Scene
 		{
 			LOG_ERROR("Failed CreateEnemy");
 		}
+#else
+		if (factoryMap.count(mSelectEnemy))
+		{
+			factoryMap[mSelectEnemy]();
+		}
+		else
+		{
+			LOG_ERROR("Failed CreateEnemy");
+		}
 
+#endif // SELECT_ENEMY
 #else
 		if (factoryMap.count(mSelectEnemy))
 		{

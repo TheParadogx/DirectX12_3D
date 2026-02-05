@@ -56,6 +56,11 @@ void Engine::App::Application::Run()
         this->Tick();
         mEngine->EndFrame();
         mScene->PostPresentUpdate();
+
+        if (Input::InputManager::GetInstance()->GetKeyboard()->IsHeld(Input::eKeyCode::Escape))
+        {
+            break;
+        }
     }
 }
 
@@ -140,6 +145,7 @@ void Engine::App::Application::Tick()
 
         //  •`‰æ
         this->Render();
+
 
     }
 
