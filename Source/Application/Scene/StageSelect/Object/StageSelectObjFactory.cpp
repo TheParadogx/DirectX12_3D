@@ -11,6 +11,8 @@
 
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Scene/StageSelect/Component/Interact/InteractableRange.hpp"
+#include"System/Conponent/Vfx/VfxMeshComponent.hpp"
+#include "Graphics/Texture/Manager/TextureManager.hpp"
 
 
 entt::entity Engine::System::StageSelectObjFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName, const Graphics::Color& Color)
@@ -47,6 +49,13 @@ entt::entity Engine::System::StageSelectObjFactory::CreateEnemyWeapon(entt::enti
 
 
 	return sword;
+
+}
+
+void Engine::System::StageSelectObjFactory::CreateTalkTexture(entt::registry& Reg, entt::entity entity, bool IsTalkable,const std::string& FilePath)
+{
+
+
 
 }
 
@@ -94,7 +103,15 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Basic()
 	//	インタラクト
 	auto& interact = registry.emplace<InteractableComponent>(enemy);
 	interact.Rank = EnemyRank::Basic;
+	interact.Talkable = true;
 
+	//	話しかける用の画像
+	std::string FilePath = "Assets/StageSelect/Texture/Blue_Challenge.png";
+
+	auto vfxRes = Graphics::TextureManager::GetInstance()->Load(FilePath);
+	auto& vfx = registry.emplace<VfxMeshComponent>(enemy, vfxRes);
+	vfx.IsShow = true;
+	vfx.Offset = { 0,11,0 };
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
@@ -144,7 +161,23 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Advanced()
 	//	インタラクト
 	auto& interact = registry.emplace<InteractableComponent>(enemy);
 	interact.Rank = EnemyRank::Advanced;
+	interact.Talkable = false;
 
+	//	話しかける用の画像
+	std::string FilePath;
+	if (interact.Talkable == true)
+	{
+		FilePath = "Assets/StageSelect/Texture/Yellow_Challenge.png";
+	}
+	else
+	{
+		FilePath = "Assets/StageSelect/Texture/Yellow_Require.png";
+	}
+
+	auto vfxRes = Graphics::TextureManager::GetInstance()->Load(FilePath);
+	auto& vfx = registry.emplace<VfxMeshComponent>(enemy, vfxRes);
+	vfx.IsShow = true;
+	vfx.Offset = { 0,11,0 };
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
@@ -195,6 +228,23 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 	auto& interact = registry.emplace<InteractableComponent>(enemy);
 	interact.Rank = EnemyRank::Boss;
 	interact.Talkable = false;
+
+	//	話しかける用の画像
+	std::string FilePath;
+	if (interact.Talkable == true)
+	{
+		FilePath = "Assets/StageSelect/Texture/Red_Challenge.png";
+	}
+	else
+	{
+		FilePath = "Assets/StageSelect/Texture/Red_Require.png";
+	}
+
+
+	auto vfxRes = Graphics::TextureManager::GetInstance()->Load(FilePath);
+	auto& vfx = registry.emplace<VfxMeshComponent>(enemy, vfxRes);
+	vfx.IsShow = true;
+	vfx.Offset = { 0,11,0 };
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);

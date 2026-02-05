@@ -6,6 +6,7 @@ namespace Engine::System
 	class StageSelectObjFactory
 	{
 		static entt::entity CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName,const Graphics::Color& Color);
+		static void CreateTalkTexture(entt::registry& Reg, entt::entity entity,bool IsTalkable, const std::string& FilePath);
 	public:
 
 		static void CreateEnemy_Basic();     // ÂiÅ‰j

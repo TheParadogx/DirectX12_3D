@@ -1,6 +1,6 @@
 #pragma once
 #include"Graphics/VFX/VfxSprite.hpp"
-
+#include"Math/Vector3/Vector3.h"
 #include<memory>
 #include<string>
 namespace Engine::System
@@ -11,13 +11,15 @@ namespace Engine::System
 		//	Vfx–{‘Ì
 		std::unique_ptr<Graphics::VfxMesh> Mesh;
 
+		Math::Vector3 Offset;
+
 		//	•\Ž¦‚·‚é‚©‚Ç‚¤‚©
 		bool IsShow = true;
 
 		//	–¾Ž¦“I‚É
 		explicit VfxMeshComponent(Graphics::Texture* Texture)
 		{
-			Mesh = std::unique_ptr<Graphics::VfxMesh>();
+			Mesh = std::make_unique<Graphics::VfxMesh>();
 
 			if (Texture != nullptr)
 			{

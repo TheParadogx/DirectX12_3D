@@ -12,7 +12,6 @@
 #include "Application/Scene/InGame/InGameScene.hpp"
 
 #include "System/Conponent/Vfx/VfxMeshComponent.hpp"
-#include "Graphics/Texture/Manager/TextureManager.hpp"
 
 /// <summary>
 /// 遷移判定
@@ -31,6 +30,11 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 	view.each([&](auto entity,Transform3D& trans, InteractableComponent&interract) 
 		{
 
+			// 範囲内なら表示フラグをON
+			if (VfxMeshComponent* vfx = Reg.try_get<VfxMeshComponent>(entity)) {
+				vfx->IsShow = true;
+			}
+
 			//	距離判定
 			Math::Vector3 diff = trans.Position - playerPos;
 			float sqrtDistance = Math::Vector3::SqrLength(diff);
@@ -41,23 +45,14 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 				{
 					System::SceneManager::GetInstance()->ChangeSceneFade<Scene::InGame>(interract.Rank);
 				}
-				//	離せるとき
-				else if (interract.Talkable == true)
-				{
-					auto entity = Reg.create();
-					auto res = Graphics::TextureManager::GetInstance()->Load("");
-				}
-				//	離せない時
-				else if(interract.Talkable == false)
-				{
-
-				}
-				//	文字の表示
 
 			}
 			else
 			{
 				//	文字コンポーネントがあるときは削除する
+				if (VfxMeshComponent* vfx = Reg.try_get<VfxMeshComponent>(entity)) {
+					vfx->IsShow = false;
+				}
 
 			}
 		});

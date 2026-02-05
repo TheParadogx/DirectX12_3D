@@ -1,6 +1,7 @@
 #pragma once
 #include "Application/Objects/EnemyRank.hpp"
 #include"entt/entt.hpp"
+#include "Graphics/Texture/Texture.hpp"
 
 namespace Engine::System
 {

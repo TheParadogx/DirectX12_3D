@@ -9,16 +9,16 @@
 /// </summary>
 /// <param name="Reg"></param>
 /// <param name="DeltaTime"></param>
-void Engine::System::VfxRenderSystem::Update(entt::registry& Reg)
+void Engine::System::VfxRenderSystem::Update(entt::registry& Reg, float DeltaTime)
 {
 	auto view = Reg.view<VfxMeshComponent, Transform3D>();
 	view.each([&](VfxMeshComponent& fbx, Transform3D& trans)
 		{
-			if (fbx.IsShow == false) return;
+			//	座標をトランス＋オフセット分ずらす
+			fbx.Mesh->SetPosition(trans.Position + fbx.Offset);
 
-			fbx.Mesh->SetPosition(trans.Position);
-			fbx.Mesh->SetRotation(trans.Rotation);
-			fbx.Mesh->SetScale(trans.Scale);
+			//	カメラに合わせる
+			fbx.Mesh->Update(DeltaTime);
 		});
 
 }
