@@ -13,11 +13,12 @@ namespace Engine::System
 		//	エフェクト
 		Graphics::EffectObject Effect;
 
+		Effekseer::EffectRef Asset;
+
 		//	親（追従用）
 		entt::entity Parent = entt::null;
 
-		//	アセット名等を保持しているとデバックが楽になる。
-		// リリース時にはコメント化
-		//std::string EffectName;
+		//	ループするかどうか
+		bool IsLoop = false;
 	};
 }

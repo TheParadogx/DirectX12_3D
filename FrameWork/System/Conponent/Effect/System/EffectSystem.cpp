@@ -16,12 +16,20 @@ namespace Engine::System
 				//	自動削除判定
 				if (effect.Effect.IsPlaying() == false)
 				{
-					if (effect.Effect.ShouldDestroy())
+					//	ループ設定かつアセットが有効なら再生
+					if (effect.IsLoop == true && effect.Asset != nullptr)
 					{
-						//	エンティティの削除
-						Reg.destroy(entity);
+						effect.Effect.Play(effect.Asset, { 0,0,0 }, effect.Effect.ShouldDestroy());
 					}
-					return;
+					else
+					{
+						// ループしないで終了したなら、自動削除設定を確認して削除
+						if (effect.Effect.ShouldDestroy())
+						{
+							Reg.destroy(entity);
+						}
+						return;
+					}
 				}
 
 				//	座標の同期
@@ -38,18 +46,18 @@ namespace Engine::System
 
 				if (targetTrans)
 				{
-					// --- 位置の同期 ---
+					// ^位置の同期^
 					// 親がいる場合はOffsetを加算（親の回転を考慮しない簡易版）
 					Math::Vector3 finalPos = targetTrans->Position + effect.Offset;
 					effect.Effect.SetLocation(finalPos);
 
-					// --- 回転の同期 ---
+					// ^回転の同期^
 					// Effekseer::SetRotation はオイラー角 (ラジアン) を期待する
 					// Quaternion から Euler への変換 (エンジンの仕様に合わせてください)
 					Math::Vector3 euler = targetTrans->Rotation.ToEuler(); // 仮のメソッド名
 					effect.Effect.SetRotation(euler);
 
-					// --- スケールの同期 ---
+					// ^スケールの同期^
 					effect.Effect.SetScale(targetTrans->Scale);
 				}
 
