@@ -11,7 +11,7 @@ namespace Engine::System
 		//	Vfx本体
 		std::unique_ptr<Graphics::VfxMesh> Mesh;
 
-		//	今表示中かどうか
+		//	表示するかどうか
 		bool IsShow = true;
 
 		//	明示的に

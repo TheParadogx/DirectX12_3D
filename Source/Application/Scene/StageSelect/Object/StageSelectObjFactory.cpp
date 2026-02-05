@@ -194,7 +194,7 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 
 	auto& interact = registry.emplace<InteractableComponent>(enemy);
 	interact.Rank = EnemyRank::Boss;
-
+	interact.Talkable = false;
 
 	//	É^ÉO
 	registry.emplace<EnemyTag>(enemy);

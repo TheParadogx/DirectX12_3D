@@ -14,7 +14,7 @@ void Engine::System::VfxRenderSystem::Update(entt::registry& Reg)
 	auto view = Reg.view<VfxMeshComponent, Transform3D>();
 	view.each([&](VfxMeshComponent& fbx, Transform3D& trans)
 		{
-			if (fbx.IsShow == true) return;
+			if (fbx.IsShow == false) return;
 
 			fbx.Mesh->SetPosition(trans.Position);
 			fbx.Mesh->SetRotation(trans.Rotation);
@@ -33,6 +33,8 @@ void Engine::System::VfxRenderSystem::Render(entt::registry& Reg)
 	auto view = Reg.view<VfxMeshComponent>();
 	view.each([&](VfxMeshComponent& vfx)
 		{
+			if (vfx.IsShow == false) return;
+
 			vfx.Mesh->Render();
 		});
 }
