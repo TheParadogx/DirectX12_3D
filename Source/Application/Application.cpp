@@ -53,12 +53,6 @@ bool Engine::App::Application::DataLoad()
     {
         return false;
     }
-
-    //  Šm”F
-    auto* data = System::CSV::Get<System::SaveData>().FindMutable(1);
-    data->ClearLevel = 3;
-    System::CSV::Get<System::SaveData>().Save("Assets/Data/SaveData.csv","ID,ClearLevel");
-
     return true;
 }
 
