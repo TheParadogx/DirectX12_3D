@@ -26,7 +26,7 @@ namespace Engine::Input
 		/// ‰Šú‰»
 		/// </summary>
 		/// <param name="Gamepad"></param>
-		Pad(const Gamepad& Gamepad,const float RightStickDeadZone = 0.2f, const float LeftStickDeadZone = 0.2f, const float TriggerDeadZone = 0.1f);
+		Pad(const Gamepad& Gamepad,const float RightStickDeadZone = 0.1f, const float LeftStickDeadZone = 0.2f, const float TriggerDeadZone = 0.1f);
 
 		virtual ~Pad() = default;
 

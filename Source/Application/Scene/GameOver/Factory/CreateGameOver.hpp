@@ -1,5 +1,5 @@
 #pragma once
-
+#include"entt/entt.hpp"
 
 namespace Engine::Scene
 {
@@ -8,6 +8,13 @@ namespace Engine::Scene
 	public:
 		//	”wŒi
 		static void CreateBG();
+
+		//	Titleƒ{ƒ^ƒ“
+		static entt::entity CreateTitle();
+
+		//	Retryƒ{ƒ^ƒ“
+		static entt::entity CreateRetry();
+
 	};
 
 }

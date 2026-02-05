@@ -238,6 +238,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
+	param.Rank = EnemyRank::Basic;
 
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
@@ -247,6 +248,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
+	registry.emplace<BasicTag>(enemy);
 
 
 }
@@ -316,6 +318,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
+	param.Rank = EnemyRank::Advanced;
 
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
@@ -325,6 +328,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
+	registry.emplace<AdvancedTag>(enemy);
 
 
 
@@ -398,6 +402,8 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	auto& param = registry.emplace<EnemyParameters>(enemy);
 	param.AttackComboMax = 4;
 	param.IdleTime = 0.7f;
+	param.Rank = EnemyRank::Boss;
+
 
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");

@@ -26,6 +26,8 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 	Math::Vector3 playerPos = {};
 	playerPos = Reg.get<Transform3D>(playerView.front()).Position;
 
+
+
 	auto view = Reg.view<Transform3D,InteractableComponent>();
 	view.each([&](auto entity,Transform3D& trans, InteractableComponent&interract) 
 		{
@@ -35,9 +37,12 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 				vfx->IsShow = true;
 			}
 
+
+
 			//	距離判定
 			Math::Vector3 diff = trans.Position - playerPos;
 			float sqrtDistance = Math::Vector3::SqrLength(diff);
+			//	範囲内なら表示をする。事前に読み込む
 			if (sqrtDistance <= interract.InteractRange * interract.InteractRange)
 			{
 				bool IsInput = Input::InputManager::GetInstance()->IsActionPressed("Interact");
@@ -49,7 +54,7 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 			}
 			else
 			{
-				//	文字コンポーネントがあるときは削除する
+				//	範囲外なら非表示にする
 				if (VfxMeshComponent* vfx = Reg.try_get<VfxMeshComponent>(entity)) {
 					vfx->IsShow = false;
 				}
