@@ -69,6 +69,30 @@ void Engine::Graphics::EffectObject::Stop()
 	manager->StopEffect(mHandle);
 	mHandle = -1;
 }
+
+/// <summary>
+/// 表示の切り替え　
+/// </summary>
+/// <param name="IsShow">true:表示する</param>
+void Engine::Graphics::EffectObject::SetShown(bool IsShow)
+{
+	auto manager = EffectManager::GetInstance()->GetManager();
+	if (manager == nullptr || mHandle == -1) return;
+	manager->SetShown(mHandle, IsShow);
+}
+
+/// <summary>
+/// エフェクトの再生を止める
+/// </summary>
+/// <param name="Visible">true:表示する</param>
+void Engine::Graphics::EffectObject::SetVisible(bool Visible)
+{
+	auto manager = EffectManager::GetInstance()->GetManager();
+	if (manager == nullptr || mHandle == -1) return;
+	manager->SetShown(mHandle, Visible);
+	manager->SetPaused(mHandle, !Visible);
+}
+
 /// <summary>
 /// 再生中かどうかの判定
 /// </summary>

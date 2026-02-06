@@ -30,6 +30,8 @@
 
 #include"System/Conponent/Effect/EffectComponent.hpp"
 #include"Graphics/Effect/Manager/EffectManager.hpp"
+#include"Application/Components/Skill/SkillComponent.hpp"
+
 
 entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 {
@@ -106,6 +108,10 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 
 	//	タグ
 	registry.emplace<PlayerTag>(player);
+
+	//	スキル保持
+	auto& skillHolder = registry.emplace<SkillSlotComponent>(player);
+	skillHolder.SkillSlots[0] = CreateSkill1();
 
 	return player;
 }
@@ -585,4 +591,37 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 	
 
 	return sword;
+}
+
+/// <summary>
+/// スキル１
+/// </summary>
+/// <returns></returns>
+entt::entity Engine::System::ObjectsFactory::CreateSkill1()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	auto entity = manager->CreateEntity();
+
+	//	スキル
+	auto& skill = registry.emplace<SkillComponent>(entity);
+	int Count = 0;
+	int CountMax = 10;
+	while (Count < CountMax)
+	{
+		Count++;
+		auto path = "Assets/Effect/Sylph/" + std::to_string(Count) + ".efk";
+		auto res = Graphics::EffectManager::GetInstance()->GetEffect(path);
+		skill.Effects.push_back(res);
+	}
+
+	auto& trans = registry.emplace<Transform3D>(entity);
+
+	auto& damage = registry.emplace<AttackPowerComponent>(entity);
+	damage.DamageValue = 250.0f;
+
+	registry.emplace<PlayerWeaponTag>(entity);
+
+	return entity;
 }
