@@ -413,6 +413,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	param.AttackComboMax = 4;
 	param.IdleTime = 0.7f;
 	param.Rank = EnemyRank::Boss;
+	param.CanCancelEvade = true;
 
 
 	//	•Ší

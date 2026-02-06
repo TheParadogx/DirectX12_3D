@@ -66,7 +66,7 @@ Engine::System::eEnemyState Engine::System::EnemyAISystem::DetermineNextRequest(
 			float rand = Random::Range(0.0f, 1.0f);
 			if (Param.CancelEvadeProbability >= rand)
 			{
-				return eEnemyState::CancelEvade;
+				return eEnemyState::Evade;
 			}
 		}
 	}
