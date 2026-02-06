@@ -288,11 +288,11 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 							//	ここで当たり判定をアタッチする。
 							auto col = ColliderComponent::Create<OBBCollider>();
 							auto collider = col.GetPtr<OBBCollider>();
-							collider->SetVolume({ 1.0f,4.0f,1.0f });
+							collider->SetVolume({ 20.0f,0.4f,20.0f });
 							Reg.emplace_or_replace<ColliderComponent>(skillEntity, std::move(col));
 							skillTrans.Position = trans.Position;
 
-							float scale = 4.0f;
+							float scale = 10.0f;
 							//	エフェクト生成
 							for (auto& asset : skill.Effects)
 							{
