@@ -17,6 +17,7 @@
 #include"Application/Components/InputMove/MoveComponentSystem.hpp"
 #include"Application/Components/GameRule/GameRuleSystem.hpp"
 #include"Application/Components/Invincible/InvincibleSystem.hpp"
+#include"Application/Components/Skill/System/SkillSystem.hpp"
 
 #include"Application/Components/Enemy/State/EnemyStateSystem.hpp"
 #include"Application/Components/Enemy/AI/System/EnemyAISystem.hpp"
@@ -59,6 +60,7 @@ namespace Engine::Scene
 		System::SystemManager::GetInstance()->AddSystem<System::CameraControlSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::GameRuleSystem>();
 		System::SystemManager::GetInstance()->AddSystem<System::InvincibleSystem>();
+		System::SystemManager::GetInstance()->AddSystem<System::SkillSystem>();
 
 		System::ColliderSystem::Initialize();
 		System::ColliderSystem::AddCollisionPair<System::PlayerTag, System::EnemyTag>({true,false,false,false});

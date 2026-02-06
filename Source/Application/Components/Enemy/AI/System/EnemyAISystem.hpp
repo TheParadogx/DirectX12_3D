@@ -27,7 +27,7 @@ namespace Engine::System
 		/// 次の状態を決定するメソッド
 		/// </summary>
 		/// <returns></returns>
-		eEnemyState DetermineNextRequest(EnemyAIComponent& AI, EnemyParameters& Param,FbxComponent& Fbx,float Distance);
+		eEnemyState DetermineNextRequest(entt::registry& Reg,EnemyAIComponent& AI, EnemyParameters& Param,FbxComponent& Fbx,float Distance);
 
 	private:
 
@@ -46,6 +46,12 @@ namespace Engine::System
 		/// 待機状態での状態更新
 		/// </summary>
 		void UpdateIdle(EnemyAIComponent& AI, EnemyParameters& Param,float DeltaTime);
+
+		/// <summary>
+		/// 追跡状態での状態更新
+		/// </summary>
+		/// <param name="ToPlayer">プレイヤーとの移動ベクトル</param>
+		void UpdateDodge(EnemyAIComponent& AI, EnemyParameters& Param, Transform3D& Transform, Rigidbody3D& Rigidbody, const Math::Vector3& ToPlayer, float Distance);
 
 	private:
 		/// <summary>

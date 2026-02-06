@@ -14,6 +14,13 @@
 #include"System/Conponent/Vfx/VfxMeshComponent.hpp"
 #include "Graphics/Texture/Manager/TextureManager.hpp"
 
+#include"System/Conponent/Effect/EffectComponent.hpp"
+#include"Graphics/Effect/Manager/EffectManager.hpp"
+#include"System/Conponent/Effect/Factory/EffectFactory.hpp"
+
+#include"System/CSV/CSVManager.hpp"
+#include"Application/Data/SaveData.hpp"
+
 
 entt::entity Engine::System::StageSelectObjFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName, const Graphics::Color& Color)
 {
@@ -162,6 +169,14 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Advanced()
 	auto& interact = registry.emplace<InteractableComponent>(enemy);
 	interact.Rank = EnemyRank::Advanced;
 	interact.Talkable = false;
+	interact.UnlockLevel = 1;
+
+	auto data = System::CSV::Get<SaveData>().Find(1);
+
+	if (data->ClearLevel >= interact.UnlockLevel)
+	{
+		interact.Talkable = true;
+	}
 
 	//	話しかける用の画像
 	std::string FilePath;
@@ -228,6 +243,14 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 	auto& interact = registry.emplace<InteractableComponent>(enemy);
 	interact.Rank = EnemyRank::Boss;
 	interact.Talkable = false;
+	interact.UnlockLevel = 2;
+
+	auto data = System::CSV::Get<SaveData>().Find(1);
+
+	if (data->ClearLevel >= interact.UnlockLevel)
+	{
+		interact.Talkable = true;
+	}
 
 	//	話しかける用の画像
 	std::string FilePath;
@@ -248,4 +271,44 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
+}
+
+void Engine::System::StageSelectObjFactory::TestEffect()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	const float Scale = 1.0f;
+
+	auto entity = manager->CreateEntity();
+
+	//	座標
+	auto& transform = registry.emplace<Transform3D>(entity);
+	transform.Position = { 0.0f,0.0f,20.0f };
+	transform.Scale = { Scale ,Scale ,Scale };
+	transform.Rotation = Math::Quaternion::AngleAxis(-3.14159265f / 2, Math::Vector3::Up);
+
+	//	リソース
+	//auto res = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/AttackHit.efk");
+	//auto& effect = registry.emplace<EffectComponent>(entity);
+	//effect.Asset = res;
+	//effect.IsLoop = true;
+	//effect.Effect.Play(effect.Asset, transform.Position);
+
+	std::vector<Effekseer::EffectRef> Res;
+	int Count = 0;
+	int CountMax = 10;
+	while (Count < CountMax)
+	{
+		Count++;
+		auto path = "Assets/Effect/Sylph/" + std::to_string(Count) + ".efk";
+		auto res = Graphics::EffectManager::GetInstance()->GetEffect(path);
+		Res.push_back(res);
+	}
+	float scale = 5.0f;
+
+	for (auto& r : Res)
+	{
+		EffectFactory::CreateAtLocation(r,{0,1,0},{ scale ,scale ,scale },false);
+	}
 }

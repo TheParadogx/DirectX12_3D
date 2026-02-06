@@ -8,6 +8,10 @@
 #include"System/Conponent/Collider/ColliderComponent.hpp"
 #include"System/Conponent/Transform/TransformConponent.hpp"
 
+#include"System/Conponent/Effect/EffectComponent.hpp"
+#include"Application/Components/Skill/SkillComponent.hpp"
+#include"System/Conponent/Effect/Factory/EffectFactory.hpp"
+
 /// <summary>
 /// 走り状態に移行できるかどうかの判定
 /// </summary>
@@ -131,11 +135,6 @@ bool Engine::System::PlayerStateSystem::IsFinishAttack(PlayerStateComponent& Sta
 		return false;
 	}
 
-	////	攻撃のリクエスト
-	//if (HasFlag(Req.Flags, eActionInputFlags::AttackRequested)) {
-	//	return false;
-	//}
-
 	return true;
 }
 
@@ -206,17 +205,12 @@ void Engine::System::PlayerStateSystem::PreUpdate(entt::registry& Reg, double De
 			{
 				state.Dodge.IsCoolDown = false;
 				state.Dodge.DodgeCount = 0;
-				//state.Sprint.RecoveryTimer = 0;
 			}
 			//	1回以上で最大数以下の状態で連続判定の時間を過ぎたらカウントをリセットする
 			else if (!state.Dodge.IsCoolDown && state.Dodge.RecoveryTimer <= 0.0f)
 			{
 				state.Dodge.DodgeCount = 0;
-				//state.Sprint.RecoveryTimer = 0;
 			}
-
-
-
 		});
 
 }
@@ -266,9 +260,61 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				return;
 
 			}
-			if (state.State == ePlayerState::Dodge)
+
+			//	スキル（今は１つだけ）
+			bool skillRequested = HasFlag(req.Flags, eActionInputFlags::SkillRequested);
+			if (skillRequested == true && state.State != ePlayerState::Skill)
 			{
+				//	プレイヤーが持っているスキルのエンティティの取得
+				SkillSlotComponent* slots = Reg.try_get<SkillSlotComponent>(entity);
+				if (slots != nullptr)
+				{
+					//	今はスキル番号０を指定します
+					entt::entity skillEntity = slots->SkillSlots[0];
+					if (Reg.valid(skillEntity) && Reg.all_of<SkillComponent>(skillEntity))
+					{
+						SkillComponent& skill = Reg.get<SkillComponent>(skillEntity);
+						Transform3D& skillTrans = Reg.get<Transform3D>(skillEntity);
+						//	クールダウンチェック
+						if (skill.CooldownTimer <= 0.0f)
+						{
+							//	アニメーションあるなら変更する
+
+							//	アクティブのアタッチ
+							Reg.emplace_or_replace<ActiveSkillTag>(skillEntity);
+
+							//	当たり判定とヒット履歴のアタッチ
+							Reg.emplace_or_replace<HitHistoryComponent>(skillEntity);
+							//	ここで当たり判定をアタッチする。
+							auto col = ColliderComponent::Create<OBBCollider>();
+							auto collider = col.GetPtr<OBBCollider>();
+							collider->SetVolume({ 20.0f,0.4f,20.0f });
+							Reg.emplace_or_replace<ColliderComponent>(skillEntity, std::move(col));
+							skillTrans.Position = trans.Position;
+
+							float scale = 10.0f;
+							//	エフェクト生成
+							for (auto& asset : skill.Effects)
+							{
+								auto EffEnt = EffectFactory::CreateAtLocation(asset, skillTrans.Position, { scale,scale,scale }, false);
+							}
+							//	クールタイムを設定
+							skill.CooldownTimer = skill.MaxCooldown;
+
+						}
+
+					}
+					else
+					{
+						//	何もセットされてないときときとかの処理があるなら入れてもいい
+					}
+
+				}
+				return;
+
 			}
+
+
 
 			// 攻撃ボタンが押されている
 			bool isRequested = HasFlag(req.Flags, eActionInputFlags::AttackRequested);

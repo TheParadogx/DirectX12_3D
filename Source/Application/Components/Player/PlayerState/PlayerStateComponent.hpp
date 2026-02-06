@@ -15,6 +15,7 @@ namespace Engine::System
 		Run,		//	走り
 		Dodge,		//	ダッシュ（ダッシュキー長押し）
 		Attack,		//	攻撃
+		Skill,		//	スキル
 		Dead,		//	死亡
 	};
 

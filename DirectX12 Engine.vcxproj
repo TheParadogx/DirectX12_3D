@@ -160,12 +160,20 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="FrameWork\System\Conponent\Effect\Factory\EffectFactory.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Effect\System\EffectSystem.hpp" />
     <ClInclude Include="FrameWork\Graphics\Effect\EffectObject.hpp" />
     <ClInclude Include="FrameWork\Graphics\Effect\Manager\EffectManager.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Effect\EffectComponent.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\Glow\GlowComponents.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\Glow\System\GlowSystem.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Sprite\Scale\ScaleComponent.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Sprite\Scale\System\ScaleSystem.hpp" />
     <ClInclude Include="FrameWork\System\CSV\CSVManager.hpp" />
+    <ClInclude Include="Source\Application\Components\Skill\System\SkillSystem.hpp" />
+    <ClInclude Include="Source\Application\Components\Skill\SkillComponent.hpp" />
     <ClInclude Include="Source\Application\Data\SaveData.hpp" />
+    <ClInclude Include="Source\Application\Scene\GameOver\Component\UISelectionDecorator.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.hpp" />
     <ClInclude Include="FrameWork\System\Fade\FadeComponent.hpp" />
     <ClInclude Include="Source\Application\Scene\GameClear\Factory\GameClearFactory.hpp" />
@@ -321,9 +329,13 @@
     <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="FrameWork\System\Conponent\Effect\Factory\EffectFactory.cpp" />
+    <ClCompile Include="FrameWork\System\Conponent\Effect\System\EffectSystem.cpp" />
     <ClCompile Include="FrameWork\Graphics\Effect\EffectObject.cpp" />
     <ClCompile Include="FrameWork\Graphics\Effect\Manager\EffectManager.cpp" />
     <ClCompile Include="FrameWork\System\Conponent\Sprite\Glow\System\GlowSystem.cpp" />
+    <ClCompile Include="FrameWork\System\Conponent\Sprite\Scale\System\ScaleSystem.cpp" />
+    <ClCompile Include="Source\Application\Components\Skill\System\SkillSystem.cpp" />
     <ClCompile Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.cpp" />
     <ClCompile Include="Source\Application\Scene\GameClear\Factory\GameClearFactory.cpp" />
     <ClCompile Include="Source\Application\Components\Enemy\AI\System\EnemyAISystem.cpp" />

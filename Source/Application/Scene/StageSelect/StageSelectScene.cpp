@@ -23,6 +23,7 @@
 #include"Application/Components/Player/PlayerState/PlayerStateSystem.hpp"
 #include"Application/Components/InputMove/MoveComponentSystem.hpp"
 #include"Application/Scene/StageSelect/Component/Interact/System/InteractableSystem.hpp"
+#include"Application/Components/Skill/System/SkillSystem.hpp"
 
 
 bool Engine::Scene::StageSelect::Initialize()
@@ -37,6 +38,7 @@ bool Engine::Scene::StageSelect::Initialize()
 	System::SystemManager::GetInstance()->AddSystem<System::SocketComponentSystem>();
 	System::SystemManager::GetInstance()->AddSystem<System::InteractableSystem>();
 	System::SystemManager::GetInstance()->AddSystem<System::CameraControlSystem>();
+	System::SystemManager::GetInstance()->AddSystem<System::SkillSystem>();
 
 	System::ColliderSystem::Initialize();
 	System::ColliderSystem::AddCollisionPair<System::PlayerTag, System::EnemyTag>({ true,false,false,false });
@@ -46,6 +48,9 @@ bool Engine::Scene::StageSelect::Initialize()
 	System::StageSelectObjFactory::CreateEnemy_Basic();
 	System::StageSelectObjFactory::CreateEnemy_Advanced();
 	System::StageSelectObjFactory::CreateEnemy_Boss();
+#ifndef _DENUG
+	//System::StageSelectObjFactory::TestEffect();
+#endif // _DENUG
 
 	//	‹ó
 	auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");

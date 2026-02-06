@@ -28,6 +28,10 @@
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Components/StageComponent/StateComponent.hpp"
 
+#include"System/Conponent/Effect/EffectComponent.hpp"
+#include"Graphics/Effect/Manager/EffectManager.hpp"
+#include"Application/Components/Skill/SkillComponent.hpp"
+
 
 entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 {
@@ -104,6 +108,10 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 
 	//	タグ
 	registry.emplace<PlayerTag>(player);
+
+	//	スキル保持
+	auto& skillHolder = registry.emplace<SkillSlotComponent>(player);
+	skillHolder.SkillSlots[0] = CreateSkill1();
 
 	return player;
 }
@@ -222,8 +230,9 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	//	体力バー
 	auto& hpBar = registry.emplace<System::HpRenderComponent>
 		(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0), Graphics::Color::CoralRed());
-	hpBar.SetPosition({ 622,126});
+	hpBar.SetPosition({ 622,126 });
 	hpBar.SetSize({ 629,12 });
+	hpBar.isColorOverridden = true;
 
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();
@@ -238,6 +247,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
+	param.Rank = EnemyRank::Basic;
 
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
@@ -247,6 +257,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
+	registry.emplace<BasicTag>(enemy);
 
 
 }
@@ -299,9 +310,10 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 
 	//	体力バー
 	auto& hpBar = registry.emplace<System::HpRenderComponent>
-		(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0),Graphics::Color::CoralRed());
+		(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0), Graphics::Color::CoralRed());
 	hpBar.SetPosition({ 622,126 });
 	hpBar.SetSize({ 629,12 });
+	hpBar.isColorOverridden = true;
 
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();
@@ -316,6 +328,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
+	param.Rank = EnemyRank::Advanced;
 
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
@@ -325,6 +338,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
+	registry.emplace<AdvancedTag>(enemy);
 
 
 
@@ -398,6 +412,9 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	auto& param = registry.emplace<EnemyParameters>(enemy);
 	param.AttackComboMax = 4;
 	param.IdleTime = 0.7f;
+	param.Rank = EnemyRank::Boss;
+	param.CanCancelEvade = true;
+
 
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand");
@@ -524,8 +541,17 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 	socket.OffsetRot = { -0.7,-0.685,0.192,0.007 };
 	socket.PivotOffset = { 0,1.98,0.0 };
 
+	auto effectRes = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/AttackHit.efk");
+	auto windEffect = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sword1.efk");
+	auto windEffect2 = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sword6.efk");
+
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
 	damage.DamageValue = 250.0f;
+	damage.HitEffectAsset.push_back(effectRes);
+	damage.HitEffectAsset.push_back(windEffect);
+	damage.HitEffectAsset.push_back(windEffect2);
+	damage.Offset = { 0,5,0 };
+	damage.Scale = { 2,2,2 };
 
 	registry.emplace<PlayerWeaponTag>(sword);
 
@@ -568,4 +594,42 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 	
 
 	return sword;
+}
+
+/// <summary>
+/// スキル１
+/// </summary>
+/// <returns></returns>
+entt::entity Engine::System::ObjectsFactory::CreateSkill1()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	auto entity = manager->CreateEntity();
+
+	//	スキル
+	auto& skill = registry.emplace<SkillComponent>(entity);
+
+	//	エフェクトの読み込み
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/1.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/2.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/3.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/4.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/6.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/7.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/8.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/9.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/10.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Tornade.efk"));
+
+
+	auto& trans = registry.emplace<Transform3D>(entity);
+
+	auto& damage = registry.emplace<AttackPowerComponent>(entity);
+	damage.DamageValue = 250.0f;
+	damage.HitEffectAsset.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Skill1Hit.efk"));
+
+	registry.emplace<PlayerWeaponTag>(entity);
+
+	return entity;
 }

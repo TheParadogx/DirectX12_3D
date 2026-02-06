@@ -26,6 +26,19 @@ namespace Engine::Graphics
 		/// ハンドルの解放
 		/// </summary>
 		void Stop();
+
+		/// <summary>
+		/// 表示の切り替え　
+		/// </summary>
+		/// <param name="IsShow">true:表示する</param>
+		void SetShown(bool IsShow);
+
+		/// <summary>
+		/// エフェクトの再生を止める
+		/// </summary>
+		/// <param name="Visible">true:表示する</param>
+		void SetVisible(bool Visible);
+
 		/// <summary>
 		/// 再生中かどうかの判定
 		/// </summary>
