@@ -19,7 +19,15 @@
 #include"Application/Macro/ProjMacros.hpp"
 
 #include"Scene/Title/TitleScene.hpp"
+#include"Scene/StageSelect/StageSelectScene.hpp"
 #include"Scene/InGame/InGameScene.hpp"
+#include"Scene/GameOver/GameOverScene.hpp"
+#include"Scene/GameClear/GameClear.hpp"
+
+#include"Graphics/Effect/Manager/EffectManager.hpp"
+
+#include"System/CSV/CSVManager.hpp"
+#include"Application/Data/SaveData.hpp"
 
 void Engine::App::Application::CreateStartScene()
 {
@@ -28,9 +36,30 @@ void Engine::App::Application::CreateStartScene()
     mScene->ChangeScene<Scene::Title>();
 
 #elif START_SCENE == 1
+    mScene->ChangeScene<Scene::StageSelect>();
+
+
+#elif START_SCENE == 2
     mScene->ChangeScene<Scene::InGame>();
+#elif START_SCENE == 3
+    mScene->ChangeScene<Scene::GameClear>();
+#elif START_SCENE == 4
+    mScene->ChangeScene<Scene::GameOver>();
 
 #endif // START_SCENE
+}
+
+/// <summary>
+/// データの読み込み
+/// </summary>
+bool Engine::App::Application::DataLoad()
+{
+    bool ret = System::CSV::Get<System::SaveData>().Load("Assets/Data/SaveData.csv");
+    if (ret == false)
+    {
+        return false;
+    }
+    return true;
 }
 
 /// <summary>
@@ -49,6 +78,11 @@ void Engine::App::Application::Run()
         this->Tick();
         mEngine->EndFrame();
         mScene->PostPresentUpdate();
+
+        if (Input::InputManager::GetInstance()->GetKeyboard()->IsHeld(Input::eKeyCode::Escape))
+        {
+            break;
+        }
     }
 }
 
@@ -70,6 +104,8 @@ bool Engine::App::Application::Initialize()
         return false;
     }
 
+    mEffect = Graphics::EffectManager::GetInstance();
+
     //  システム管理
     System::SystemManager::Create();
     mSystems = System::SystemManager::GetInstance();
@@ -77,17 +113,25 @@ bool Engine::App::Application::Initialize()
     //  Entity管理
     mEntitys = System::EntityManager::GetInstance();
 
+    ret = DataLoad();
+    if (ret == false)
+    {
+        LOG_ERROR("Failed Loading GameData");
+        return false;
+    }
+
+
     //  Scene管理
     System::SceneManager::Create();
     mScene = System::SceneManager::GetInstance();
     CreateStartScene();
-    //mScene->ChangeScene<System::DefaultScene>();
     ret = mScene->Initialize();
     if (ret == false)
     {
         LOG_CRITICAL("Failed Initilize SceneManager");
         return false;
     }
+
 
     return true;
 }
@@ -132,6 +176,7 @@ void Engine::App::Application::Tick()
         //  描画
         this->Render();
 
+
     }
 
 }
@@ -144,7 +189,6 @@ void Engine::App::Application::Tick()
 void Engine::App::Application::PreUpdate(double dt)
 {
     mSystems->PreUpdate(mEntitys->GetRegistry(), dt);
-
 }
 
 /// <summary>
@@ -154,6 +198,7 @@ void Engine::App::Application::MainUpdate(double dt)
 {
     mSystems->MainUpdate(mEntitys->GetRegistry(), dt);
     mScene->Update(dt);
+    mEffect->Update(dt);
 }
 
 /// <summary>
@@ -173,7 +218,11 @@ void Engine::App::Application::Render()
 {
     mScene->Render();
     mSystems->Render(mEntitys->GetRegistry());
+
+    mEffect->Draw();
+
     GET_INPUT_MANAGER->Update();
+    mScene->FadeRender();
 }
 
 /// <summary>

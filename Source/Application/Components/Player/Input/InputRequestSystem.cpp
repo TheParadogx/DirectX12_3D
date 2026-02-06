@@ -44,6 +44,17 @@ void Engine::System::InputRequestSystem::PreUpdate(entt::registry& Reg, double D
 				req.Flags &= ~eActionInputFlags::AttackRequested;
 			}
 
+			//	スキル
+			if (Input::InputManager::GetInstance()->IsActionPressed("Skill1"))
+			{
+				req.Flags |= eActionInputFlags::SkillRequested;
+			}
+			else
+			{
+				req.Flags &= ~eActionInputFlags::SkillRequested;
+			}
+
+
 			//	ジャンプ
 
 		});

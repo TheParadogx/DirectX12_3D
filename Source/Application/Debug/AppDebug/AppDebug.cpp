@@ -7,6 +7,7 @@
 #include"Application/Scene/InGame/InGameScene.hpp"
 #include"Application/Scene/GameOver/GameOverScene.hpp"
 #include"Application/Scene/GameClear/GameClear.hpp"
+#include"Application/Scene/StageSelect/StageSelectScene.hpp"
 
 /// <summary>
 /// Scene関係のデバック
@@ -28,6 +29,13 @@ void Engine::Debug::AppDebugUI::SceneDebug()
 	{
 		scene->ChangeScene<Scene::Title>();
 	}
+
+	ImGui::SameLine();
+	if (ImGui::Button("StageSelect"))
+	{
+		scene->ChangeScene<Scene::StageSelect>();
+	}
+
 
 	ImGui::SameLine();
 	if (ImGui::Button("InGame"))

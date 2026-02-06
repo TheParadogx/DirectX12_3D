@@ -14,7 +14,7 @@ namespace Engine::System
 		/// ˆÚ“®—Ê‚ÌŒvZˆ—‚ğ‚µ‚ÄRigid‚ÌˆÚ“®—Ê‚É‰ÁZ‚·‚é
 		/// </summary>
 		virtual void MainUpdate(entt::registry& Reg, double DeltaTime) override;
-
+		virtual void Render(entt::registry& Reg) override;
 	private:
 
 	};

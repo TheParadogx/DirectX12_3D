@@ -13,6 +13,9 @@ Engine::Graphics::Sprite::Sprite()
 	, mScale(1,1)
 	, mSize(200, 200)
 	, mAngle(0)
+	, mIntensity(1)
+	, mColor({10,10,10,1})
+	, mConstantBuffer(nullptr)
 {
 }
 
@@ -32,6 +35,9 @@ bool Engine::Graphics::Sprite::Create(Graphics::Texture* Texture)
 	mSize.x = Texture->GetWidth();
 	mSize.y = Texture->GetHeight();
 
+	mConstantBuffer = std::make_unique<ConstantBuffer>();
+	mConstantBuffer->Create(sizeof(SpriteConstantBuffer));
+
 	return true;
 }
 
@@ -44,8 +50,17 @@ void Engine::Graphics::Sprite::Render()
 
 	//	パイプラインのセット
 	rederer->SetSpritePipeline();
+
+	SpriteConstantBuffer cb;
+	cb.WVP = Math::Matrix::identity;
+	cb.Color = mColor;
+	cb.Intensity = mIntensity;
+	mConstantBuffer->Update(&cb);
+
+	mConstantBuffer->Set(0);
+
 	//	ヒープをパイプラインへセット
-	mTexture->Set(0);
+	mTexture->Set(1);
 
 	Graphics::SpriteVertex Vertices[4] = {};
 	UpdateVertices(Vertices);
@@ -108,12 +123,18 @@ void Engine::Graphics::Sprite::UpdateVertices(Graphics::SpriteVertex* Vertices)
 		Vertices[i].Position.x = x * cos + y * sin;
 		Vertices[i].Position.y = x * -sin + y * cos;
 
-		// 座標の平行移動	
-		x = Vertices[i].Position.x + mPosition.x;
-		y = Vertices[i].Position.y + mPosition.y;
+		//// 座標の平行移動	
+		//x = Vertices[i].Position.x + mPosition.x;
+		//y = Vertices[i].Position.y + mPosition.y;
 
-		Vertices[i].Position.x = x * (2.0f / System::Window::GetInstance()->GetWidth()) - 1.0f;
-		Vertices[i].Position.y = y * (-2.0f / System::Window::GetInstance()->GetHeight()) + 1.0f;
+		float finalX = round(Vertices[i].Position.x + mPosition.x);
+		float finalY = round(Vertices[i].Position.y + mPosition.y);
+
+		finalX -= 0.5f;
+		finalY -= 0.5f;
+
+		Vertices[i].Position.x = finalX * (2.0f / System::Window::GetInstance()->GetWidth()) - 1.0f;
+		Vertices[i].Position.y = finalY * (-2.0f / System::Window::GetInstance()->GetHeight()) + 1.0f;
 	}
 
 }

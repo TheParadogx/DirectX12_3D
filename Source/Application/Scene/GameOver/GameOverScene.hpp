@@ -1,11 +1,19 @@
 #pragma once
 #include"System/Scene/IScene.hpp"
+#include"Application/Objects/EnemyRank.hpp"
 
 namespace Engine::Scene
 {
+
 	class GameOver : public System::IScene
 	{
 	public:
+
+		GameOver(System::EnemyRank EnemyRank = System::EnemyRank::Boss)
+			:mEnemyRank(EnemyRank)
+		{
+
+		}
 
 		/// <summary>
 		/// ‰Šú‰»
@@ -27,6 +35,25 @@ namespace Engine::Scene
 		{
 			return "GameOver";
 		}
+
+	private:
+		//	Ÿ‚Ç‚Ì‰æ–Ê‚É‘JˆÚ‚·‚é‚©‚Ç‚¤‚©‚Ì”»’è—p
+		enum class SelectMode : int
+		{
+			None,
+			Title,
+			Retry,
+		};
+
+		SelectMode mSelectMode = SelectMode::Retry;
+
+		/// <summary>
+		/// ÅŒã‚Éí‚Á‚½“G‚Ìƒ‰ƒ“ƒN
+		/// </summary>
+		System::EnemyRank mEnemyRank = System::EnemyRank::Basic;
+
+		entt::entity mRetryEntity = entt::null;
+		entt::entity mTitleEntity = entt::null;
 
 	};
 }

@@ -1,6 +1,11 @@
 #pragma once
 #include"Math/Vector2/Vector2.h"
 #include"Utility/MacroHelpers.hpp"
+#include"Math/Matrix/Matrix.h"
+#include"Graphics/Color/Color.hpp"
+#include"Graphics/ConstantBuffer/ConstantBuffer.hpp"
+
+#include<memory>
 
 namespace Engine::Graphics
 {
@@ -31,6 +36,8 @@ namespace Engine::Graphics
 		DEFINE_PROPERTY(Math::Vector2, Scale, mScale);
 		DEFINE_PROPERTY(Math::Vector2, Size, mSize);
 		DEFINE_PROPERTY(float, Angle, mAngle);
+		DEFINE_PROPERTY(Graphics::Color, Color, mColor);
+		DEFINE_PROPERTY(float, Intensity, mIntensity);
 
 	protected:
 		/// <summary>
@@ -39,6 +46,15 @@ namespace Engine::Graphics
 		virtual void UpdateVertices(Graphics::SpriteVertex* Vertices);
 
 	protected:
+		struct SpriteConstantBuffer {
+			Math::Matrix WVP;      // 座標変換用
+			Graphics::Color Color;   // RGBA (Aが透明度)
+			float Intensity = 1.0f;		//　光度
+			float Padding[3];
+		};
+
+
+
 		/// <summary>
 		/// テクスチャ
 		/// </summary>
@@ -69,6 +85,20 @@ namespace Engine::Graphics
 		/// </summary>
 		float mAngle;
 
+		/// <summary>
+		/// 光度
+		/// </summary>
+		float mIntensity = 1.0f;
+
+		/// <summary>
+		/// 色
+		/// </summary>
+		Graphics::Color mColor;
+
+		/// <summary>
+		/// 定数バッファ
+		/// </summary>
+		std::unique_ptr<Graphics::ConstantBuffer> mConstantBuffer;
 	};
 }
 

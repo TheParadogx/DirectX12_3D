@@ -14,7 +14,7 @@ namespace Engine::System
 		void PostUpdate(entt::registry& Reg, double DeltaTime)override;
 
 	private:
-
+		bool mIsStateChange = false;
 	};
 }
 

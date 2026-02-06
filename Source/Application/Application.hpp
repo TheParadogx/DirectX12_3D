@@ -15,6 +15,11 @@ namespace Engine::System
 	class EntityManager;
 }
 
+namespace Engine::Graphics
+{
+	class EffectManager;
+}
+
 namespace Engine::App
 {
 	class Application : public Singleton<Application>
@@ -25,6 +30,12 @@ namespace Engine::App
 		/// 最初の画面の作成
 		/// </summary>
 		void CreateStartScene();
+
+		/// <summary>
+		/// データの読み込み
+		/// </summary>
+		bool DataLoad();
+
 	public:
 		/// <summary>
 		/// メインループ
@@ -75,6 +86,7 @@ namespace Engine::App
 		System::SceneManager* mScene;
 		System::SystemManager* mSystems;
 		System::EntityManager* mEntitys;
+		Graphics::EffectManager* mEffect;
 
 		/// <summary>
 		/// 時間経過取得用

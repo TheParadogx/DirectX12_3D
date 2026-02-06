@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "GameClear.hpp"
-
+#include "Factory/GameClearFactory.hpp"
+#include"System/Input/Manager/InputManager.hpp"
+#include"System/Scene/Manager/SceneManager.hpp"
+#include"Application/Scene/Title/TitleScene.hpp"
 namespace Engine::Scene
 {
 
@@ -10,6 +13,7 @@ namespace Engine::Scene
 	/// <returns>true:成功</returns>
 	bool GameClear::Initialize()
 	{
+		GameClearFactory::CreateBG();
 		return true;
 	}
 
@@ -18,7 +22,11 @@ namespace Engine::Scene
 	/// </summary>
 	void GameClear::PostUpdate(double FixedDeltaTime)
 	{
-
+		//	画面遷移
+		if (GET_INPUT_MANAGER->IsActionPressed("Select"))
+		{
+			Engine::System::SceneManager::GetInstance()->ChangeSceneFade<Title>();
+		}
 	}
 
 	/// <summary>
@@ -26,5 +34,8 @@ namespace Engine::Scene
 	/// </summary>
 	void GameClear::Release()
 	{
+		//  ローカルオブジェクトの解放
+		Engine::System::EntityManager::GetInstance()->ClearLocalEntities();
+
 	}
 }

@@ -6,6 +6,11 @@
 #include"Application/Components/Tag/TagComponent.hpp"
 #include"Application/Components/WeaponAttack/WeaponAttackComponent.hpp"
 #include"Application/Components/Invincible/InvincibleTag.hpp"
+#include"Application/Macro/ProjMacros.hpp"
+#include"System/Conponent/Effect/EffectComponent.hpp"
+#include"System/Conponent/Transform/TransformConponent.hpp"
+
+#include"System/Conponent/Effect/Factory/EffectFactory.hpp"
 
 /// <summary>
 /// ダメージ処理
@@ -14,10 +19,13 @@
 /// <param name="DeltaTime"></param>
 void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaTime)
 {
+#ifndef NO_DAMAGE
 	//	自分が攻撃力を持っていて誰かと当たった時
 	auto view = Reg.view<AttackPowerComponent, CollisionEvent>();
 	view.each([&](entt::entity entity, AttackPowerComponent& attack, CollisionEvent& collision)
 		{
+
+
 			HitHistoryComponent* history = Reg.try_get<HitHistoryComponent>(entity);
 
 			//	被害者
@@ -39,7 +47,28 @@ void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaT
 				if (auto* status = Reg.try_get<StatusComponet>(victim))
 				{
 					status->ApplyDamage(attack.DamageValue);
-					history->HitList.insert(victim);
+
+					// 攻撃側がエフェクトアセットを持っていれば生成
+					if (attack.HitEffectAsset.empty() == false)
+					{
+						if (auto* victimTrans = Reg.try_get<Transform3D>(victim))
+						{
+
+							for (auto& effectAsset : attack.HitEffectAsset)
+							{
+								EffectFactory::CreateAtLocation(
+									effectAsset,
+									victimTrans->Position + attack.Offset,
+									attack.Scale);
+
+							}
+						}
+					}
+
+					if (history != nullptr)
+					{
+						history->HitList.insert(victim);
+					}
 
 					if (status->IsDead())
 					{
@@ -49,5 +78,6 @@ void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaT
 			}
 		});
 
+#endif // !NO_DAMAGE
 
 }

@@ -85,14 +85,22 @@ bool Engine::System::Window::Initialize(const char* WindowName, int x, int y, co
 	RegisterClassEx(&mWindowClass);
 
 	//	フルスクリーンの場合のサイズ
-	if (setting.isFullscreen == true)
-	{
+	DWORD tWindowStyle = WS_OVERLAPPEDWINDOW; // デフォルト
+
+	if (setting.isFullscreen) {
+		// 枠なし、タイトルバーなしのスタイル
+		tWindowStyle = WS_POPUP;
+
+		// 画面サイズをモニターに合わせる
 		mWidth = GetSystemMetrics(SM_CXSCREEN);
 		mHeight = GetSystemMetrics(SM_CYSCREEN);
+
+		// 座標を左上(0,0)に強制する
+		x = 0;
+		y = 0;
 	}
 
 	//	スタイルの取得
-	const DWORD tWindowStyle = setting.isFullscreen ? WS_POPUP : WS_OVERLAPPEDWINDOW;
 	RECT tRect = {};
 	tRect.left = 0;
 	tRect.top = 0;

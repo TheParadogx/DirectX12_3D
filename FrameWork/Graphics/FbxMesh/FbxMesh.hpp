@@ -105,6 +105,15 @@ namespace Engine::Graphics
 		}
 
 		/// <summary>
+		/// Animation‚ÌÄ¶ŠÔ‚Ìæ“¾
+		/// </summary>
+		/// <returns></returns>
+		float GetAnimationTime() const
+		{
+			return mFrame;
+		}
+
+		/// <summary>
 		/// •âŠÔ‚É‚©‚¯‚éŠÔ‚Ìİ’è
 		/// </summary>
 		/// <param name="BlendTime"></param>

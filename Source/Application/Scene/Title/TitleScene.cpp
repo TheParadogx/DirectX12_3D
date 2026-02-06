@@ -7,6 +7,7 @@
 
 #include"Application/Scene/InGame/InGameScene.hpp"
 #include"Factory/CreateTitle.hpp"
+#include"Application/Scene/StageSelect/StageSelectScene.hpp"
 
 /// <summary>
 ///	‰Šú‰»
@@ -15,7 +16,7 @@
 bool Engine::Scene::Title::Initialize()
 {
     //  ”wŒi
-    CreateTitleObject::TitleBG();
+    CreateTitleObject::CreateBG();
 
     return true;
 }
@@ -28,7 +29,7 @@ void Engine::Scene::Title::PostUpdate(double FixedDeltaTime)
 {
     if (GET_INPUT_MANAGER->IsActionPressed("Select"))
     {
-        Engine::System::SceneManager::GetInstance()->ChangeScene<InGame>();
+        Engine::System::SceneManager::GetInstance()->ChangeSceneFade<StageSelect>();
     }
 }
 

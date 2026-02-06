@@ -48,9 +48,9 @@ void Engine::System::CameraControlSystem::PostUpdate(entt::registry& Reg, double
 			Math::Vector3 relativePos;
 			float cosPitch = cosf(ctrl.Pitch);
 
-			relativePos.x = ctrl.Distance * cosPitch * sinf(ctrl.Yaw);
+			relativePos.x = -ctrl.Distance * cosPitch * sinf(ctrl.Yaw);
 			relativePos.y = -ctrl.Distance * sinf(ctrl.Pitch);
-			relativePos.z = ctrl.Distance * cosPitch * cosf(ctrl.Yaw);
+			relativePos.z = -ctrl.Distance * cosPitch * cosf(ctrl.Yaw);
 
 			//	カメラの最終的な座標
 			Math::Vector3 cameraPos = LookAtPos + relativePos;

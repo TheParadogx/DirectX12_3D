@@ -68,3 +68,21 @@ const Color Engine::Graphics::Color::Gray()
 	return gray;
 }
 
+const Color Engine::Graphics::Color::CoralRed()
+{
+	static const Color CoralRed = { 0.95, 0.42, 0.45, 1.0f };
+	return CoralRed;
+}
+
+const Color Engine::Graphics::Color::Apricot()
+{
+	static const Color Apricot = { 1.00, 0.8, 0.5, 1.0f };
+	return Apricot;
+}
+
+const Color Engine::Graphics::Color::Lime()
+{
+	static const Color Lime = { 0.45, 0.7, 0.10, 1.0f };
+	return Lime;
+}
+

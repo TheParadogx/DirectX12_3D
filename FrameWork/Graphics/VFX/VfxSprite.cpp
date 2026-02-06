@@ -16,10 +16,10 @@ namespace Engine::Graphics {
 		, mPosition(0,10,0)
 		, mRotation(Math::Quaternion::Identity)
 		, mScale(1,1,1)
-		, mSize(5,5)
+		, mSize(1,1)
 		, mPivot(0,0)
 		, mColor(Color::White())
-		, mIsBillBoard(false)
+		, mIsBillBoard(true)
 		, mTimer(0)
 	{
 	}
@@ -32,6 +32,11 @@ namespace Engine::Graphics {
 	{
 		if (texture == nullptr) return false;
 		mTexture = texture;
+
+		float w = static_cast<float>(texture->GetWidth());
+		float h = static_cast<float>(texture->GetHeight());
+		mSize.x = w / h; // 横幅を比率にする (例: 256x64なら 4.0)
+		mSize.y = 1.0f;  // 高さを基準 1.0 にする
 
 		bool ret = false;
 
@@ -61,22 +66,18 @@ namespace Engine::Graphics {
 	/// <returns></returns>
 	bool VfxMesh::CreateMesh()
 	{
-		// mSizeとmPivotに基づいた動的な頂点計算
-		float left = -mSize.x * (0.5f + mPivot.x);
-		float right = mSize.x * (0.5f - mPivot.x);
-		float bottom = -mSize.y * (0.5f + mPivot.y);
-		float top = mSize.y * (0.5f - mPivot.y);
+		float left = -0.5f - mPivot.x;
+		float right = 0.5f - mPivot.x;
+		float bottom = -0.5f - mPivot.y;
+		float top = 0.5f - mPivot.y;
 
 		Vertex vertices[] = {
-			// 1つ目の三角形
-			{ Math::Vector3(left,  bottom, 0.0f), Math::Vector2(0.0f, 1.0f) }, // 左下
-			{ Math::Vector3(left,  top,    0.0f), Math::Vector2(0.0f, 0.0f) }, // 左上
-			{ Math::Vector3(right, bottom, 0.0f), Math::Vector2(1.0f, 1.0f) }, // 右下
-
-			// 2つ目の三角形
-			{ Math::Vector3(right, bottom, 0.0f), Math::Vector2(1.0f, 1.0f) }, // 右下
-			{ Math::Vector3(left,  top,    0.0f), Math::Vector2(0.0f, 0.0f) }, // 左上
-			{ Math::Vector3(right, top,    0.0f), Math::Vector2(1.0f, 0.0f) }, // 右上
+			{ Math::Vector3(left,  bottom, 0.0f), Math::Vector2(0.0f, 1.0f) },
+			{ Math::Vector3(left,  top,    0.0f), Math::Vector2(0.0f, 0.0f) },
+			{ Math::Vector3(right, bottom, 0.0f), Math::Vector2(1.0f, 1.0f) },
+			{ Math::Vector3(right, bottom, 0.0f), Math::Vector2(1.0f, 1.0f) },
+			{ Math::Vector3(left,  top,    0.0f), Math::Vector2(0.0f, 0.0f) },
+			{ Math::Vector3(right, top,    0.0f), Math::Vector2(1.0f, 0.0f) },
 		};
 
 		// --- DX12 リソース作成 ---
@@ -116,12 +117,11 @@ namespace Engine::Graphics {
 		//	時間の経過などをさせてもいい
 		mTimer += DeltaTime;
 
-		if (mIsBillBoard) {
-			if (System::Camera::Main == nullptr) return;
+		if (mIsBillBoard && System::Camera::Main != nullptr) {
 
 			// 自分からカメラへの方向ベクトルを作成
 			Math::Vector3 cameraPos = System::Camera::Main->GetPosition();
-			Math::Vector3 toCamera = cameraPos - mPosition;
+			Math::Vector3 toCamera = mPosition - cameraPos;
 
 			// その方向を向くクォータニオンを作成
 			mRotation = Math::Quaternion::LookRotation(toCamera,Math::Vector3::Up);
@@ -165,7 +165,9 @@ namespace Engine::Graphics {
 		//	描画
 		renderer->DrawVfx(mVBView, 6);
 
+#if _DEBUG
 		DebugRender::DrawDebugQuad(mWorldMatrix, mSize.x, mSize.y, Color::Green());
+#endif // _DEBUG
 	}
 
 
