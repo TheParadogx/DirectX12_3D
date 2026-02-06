@@ -230,8 +230,9 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	//	体力バー
 	auto& hpBar = registry.emplace<System::HpRenderComponent>
 		(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0), Graphics::Color::CoralRed());
-	hpBar.SetPosition({ 622,126});
+	hpBar.SetPosition({ 622,126 });
 	hpBar.SetSize({ 629,12 });
+	hpBar.isColorOverridden = true;
 
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();
@@ -309,9 +310,10 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 
 	//	体力バー
 	auto& hpBar = registry.emplace<System::HpRenderComponent>
-		(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0),Graphics::Color::CoralRed());
+		(enemy, baseRes, barRes, Math::Vector2(0.0, 0.0), Graphics::Color::CoralRed());
 	hpBar.SetPosition({ 622,126 });
 	hpBar.SetSize({ 629,12 });
+	hpBar.isColorOverridden = true;
 
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();
@@ -411,6 +413,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	param.AttackComboMax = 4;
 	param.IdleTime = 0.7f;
 	param.Rank = EnemyRank::Boss;
+	param.CanCancelEvade = true;
 
 
 	//	武器
@@ -606,20 +609,25 @@ entt::entity Engine::System::ObjectsFactory::CreateSkill1()
 
 	//	スキル
 	auto& skill = registry.emplace<SkillComponent>(entity);
-	int Count = 0;
-	int CountMax = 10;
-	while (Count < CountMax)
-	{
-		Count++;
-		auto path = "Assets/Effect/Sylph/" + std::to_string(Count) + ".efk";
-		auto res = Graphics::EffectManager::GetInstance()->GetEffect(path);
-		skill.Effects.push_back(res);
-	}
+
+	//	エフェクトの読み込み
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/1.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/2.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/3.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/4.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/6.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/7.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/8.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/9.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/10.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Tornade.efk"));
+
 
 	auto& trans = registry.emplace<Transform3D>(entity);
 
 	auto& damage = registry.emplace<AttackPowerComponent>(entity);
 	damage.DamageValue = 250.0f;
+	damage.HitEffectAsset.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Skill1Hit.efk"));
 
 	registry.emplace<PlayerWeaponTag>(entity);
 

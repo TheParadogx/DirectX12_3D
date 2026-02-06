@@ -44,29 +44,32 @@ void Engine::System::SceneManager::PostUpdate(double  FixedDeltaTime)
 		mScene->PostUpdate(FixedDeltaTime);
 	}
 
-	auto view = mRegistry.view<FadeComponent, SpriteComponent>();
-	view.each([&](auto eitity,FadeComponent& fade, SpriteComponent& sprite)
+	if (!mRegistry.valid(mFadeEntity))
+	{
+		return;
+	}
+
+	FadeComponent& fade = mRegistry.get<FadeComponent>(mFadeEntity);
+	SpriteComponent& sprite = mRegistry.get<SpriteComponent>(mFadeEntity);
+	//	時間を進めてアルファを計算するLerp
+	fade.CurrentTime += (float)FixedDeltaTime;
+
+	// 0.0 ～ 1.0 にクランプ
+	float t = std::clamp(fade.CurrentTime / fade.TotalTime, 0.0f, 1.0f);
+
+	// std::lerp(開始値, 終了値, 進行度)
+	float alpha = std::lerp(fade.StartAlpha, fade.TargetAlpha, t);
+
+	sprite.Sprite.SetColor({ 0.0f, 0.0f, 0.0f, alpha });
+
+	if (fade.State == eFadeState::FadeIn)
+	{
+		if (t >= 1.0f)
 		{
-			//	時間を進めてアルファを計算するLerp
-			fade.CurrentTime += (float)FixedDeltaTime;
-
-			// 0.0 ～ 1.0 にクランプ
-			float t = std::clamp(fade.CurrentTime / fade.TotalTime, 0.0f, 1.0f);
-
-			// std::lerp(開始値, 終了値, 進行度)
-			float alpha = std::lerp(fade.StartAlpha, fade.TargetAlpha, t);
-
-			sprite.Sprite.SetColor({ 0.0f, 0.0f, 0.0f, alpha });
-
-			if (fade.State == eFadeState::FadeIn)
-			{
-				if (t >= 1.0f)
-				{
-					mRegistry.destroy(eitity);
-				}
-			}
-
-		});
+			mRegistry.destroy(mFadeEntity);
+			mFadeEntity = entt::null;
+		}
+	}
 }
 
 /// <summary>
@@ -115,8 +118,7 @@ void Engine::System::SceneManager::PostPresentUpdate()
 	auto view = mRegistry.view<FadeComponent>();
 	if (view.empty() == false)
 	{
-		auto entity = view.front();
-		auto& fade = mRegistry.get<FadeComponent>(entity);
+		auto& fade = mRegistry.get<FadeComponent>(mFadeEntity);
 
 		//	フェードアウトでなおかつ
 		if (fade.State == eFadeState::FadeOut)
@@ -163,6 +165,7 @@ void Engine::System::SceneManager::PostPresentUpdate()
 			mScene.reset();
 		}
 
+
 		mScene = std::move(mNextScene);
 		mNextScene = nullptr;
 
@@ -178,13 +181,15 @@ void Engine::System::SceneManager::PostPresentUpdate()
 /// </summary>
 void Engine::System::SceneManager::CreateFadeEntity()
 {
-	auto entity = mRegistry.create();
+	if (mFadeEntity != entt::null) return;
+
+	mFadeEntity = mRegistry.create();
 	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Fade/Fade.png");
-	auto& sprite = mRegistry.emplace<SpriteComponent>(entity,res);
+	auto& sprite = mRegistry.emplace<SpriteComponent>(mFadeEntity,res);
 	auto window = Window::GetInstance();
 	sprite.Sprite.SetSize({ (float)window->GetWidth(), (float)window->GetHeight() });
 	sprite.Sprite.SetColor({ 0,0,0,0 });
-	auto& fade = mRegistry.emplace<FadeComponent>(entity);
+	auto& fade = mRegistry.emplace<FadeComponent>(mFadeEntity);
 }
 
 /// <summary>

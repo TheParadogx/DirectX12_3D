@@ -37,7 +37,7 @@ void Engine::System::GlowSystem::Update(entt::registry& Reg, float DeltaTime)
 				//	‰Î‰Ô‚ª‚ ‚Á‚½‚ç
 				if (SparkTag* spark = Reg.try_get<SparkTag>(entity))
 				{
-					if (Math::Random::Range(0.0f, 1.0f) < spark->Chance)
+					if (Random::Range(0.0f, 1.0f) < spark->Chance)
 					{
 						float current = sprite.Sprite.GetIntensity();
 						sprite.Sprite.SetIntensity(current * spark->BoostMultiplier);

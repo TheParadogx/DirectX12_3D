@@ -10,6 +10,8 @@ namespace Engine::System
 	struct EnemyParameters
 	{
 		float MoveSpeed = 10.0f;	//	‘–‚é‘¬“x
+		float EvadeSpeed = 20.0f;	//	‰ñ”ğ‚Ì‘¬“x
+		float EvadeMaxSpeed = 50.0f;	//	‰ñ”ğ‚Ì‘¬“x
 		float AttackRange = 10.0f;	//	UŒ‚‚É“ü‚é‹——£
 		float IdleTime = 1.0f;	//	UŒ‚Œã‚Ìd’¼ŠÔ
 

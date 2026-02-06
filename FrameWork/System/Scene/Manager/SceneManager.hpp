@@ -143,6 +143,11 @@ namespace Engine::System
 		/// フェード用のレジストリ
 		/// </summary>
 		entt::registry mRegistry;
+
+		/// <summary>
+		/// フェード用のインスタンス
+		/// </summary>
+		entt::entity mFadeEntity = entt::null;
 	};
 }
 
