@@ -27,7 +27,7 @@ namespace Engine::System
 		/// Ÿ‚Ìó‘Ô‚ğŒˆ’è‚·‚éƒƒ\ƒbƒh
 		/// </summary>
 		/// <returns></returns>
-		eEnemyState DetermineNextRequest(EnemyAIComponent& AI, EnemyParameters& Param,FbxComponent& Fbx,float Distance);
+		eEnemyState DetermineNextRequest(entt::registry& Reg,EnemyAIComponent& AI, EnemyParameters& Param,FbxComponent& Fbx,float Distance);
 
 	private:
 

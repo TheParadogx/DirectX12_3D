@@ -26,7 +26,7 @@ namespace Engine::System
 	/// </summary>
 	struct ActiveSkillTag {
 		float ElapsedTime = 0.0f; // 発動してから何秒経ったか
-		float Duration = 5.0f;    // 何秒間アクティブでいるか
+		float Duration = 2.0f;    // 何秒間アクティブでいるか
 	};
 
 	/// <summary>
