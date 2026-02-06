@@ -57,7 +57,6 @@ Engine::System::eEnemyState Engine::System::EnemyAISystem::DetermineNextRequest(
 			AI.PrevPlayerState = pState.State;
 		});
 
-
 	//	赤のキャンセル回避
 	if (Param.CanCancelEvade == true)
 	{
@@ -164,6 +163,21 @@ void Engine::System::EnemyAISystem::UpdateIdle(EnemyAIComponent& AI, EnemyParame
 	AI.StateTimer += DeltaTime;
 }
 
+void Engine::System::EnemyAISystem::UpdateDodge(EnemyAIComponent& AI, EnemyParameters& Param, Transform3D& Transform, Rigidbody3D& Rigidbody, const Math::Vector3& ToPlayer, float Distance)
+{
+	//	近すぎたら何もしない
+	if (Distance <= 0.001) return;
+
+	Math::Vector3 dir = -ToPlayer;
+	dir.y = 0;
+
+	dir.Normalize();
+
+	//	移動速度
+	Rigidbody.Velocity = dir * Param.EvadeSpeed;
+	Param.EvadeSpeed *= 0.99;
+}
+
 /// <summary>
 ///	状態の変更
 /// </summary>
@@ -216,6 +230,8 @@ void Engine::System::EnemyAISystem::ExitState(entt::registry& Reg,EnemyAICompone
 		break;
 
 	case Engine::System::eEnemyState::Evade:
+		fbx.AnimationScale = 1.0f;
+		Param.EvadeSpeed = Param.EvadeMaxSpeed;
 		break;
 
 	case Engine::System::eEnemyState::CancelEvade:
@@ -263,6 +279,12 @@ void Engine::System::EnemyAISystem::InitState(entt::registry& Reg,EnemyAICompone
 		break;
 
 	case Engine::System::eEnemyState::Evade:
+		fbx.CurrAnimation = "Dodge";
+		fbx.AnimationScale = 5.0f;
+		fbx.IsLoop = false;
+		Param.EvadeSpeed = Param.EvadeMaxSpeed;
+		break;
+
 		break;
 
 	case Engine::System::eEnemyState::CancelEvade:
@@ -300,6 +322,11 @@ void Engine::System::EnemyAISystem::PreUpdate(entt::registry& Reg, double DeltaT
 				break;
 
 			case Engine::System::eEnemyState::Evade:
+				if (fbx.Mesh->GetAnimationFinish())
+				{
+					AI.IsActionFinished = true;
+				}
+
 				break;
 
 			case Engine::System::eEnemyState::CancelEvade:
@@ -325,7 +352,20 @@ void Engine::System::EnemyAISystem::MainUpdate(entt::registry& Reg, double Delta
 			float distanceSQ = Dir.SqrLength();
 
 			//	状態の遷移
-			auto nextState = DetermineNextRequest(Reg,AI, Param, fbx,distanceSQ);
+			Engine::System::eEnemyState nextState = AI.CurrState;
+			// 回避中かつアクションがまだ終わっていないなら、状態判定をスキップする
+			bool isEvading = (AI.CurrState == eEnemyState::Evade || AI.CurrState == eEnemyState::CancelEvade);
+			if (isEvading && AI.IsActionFinished == false)
+			{
+				// 状態を維持
+				nextState = AI.CurrState;
+			}
+			else
+			{
+				// それ以外（待機中や追跡中、または回避が終わった瞬間）なら次の状態を仰ぐ
+				nextState = DetermineNextRequest(Reg, AI, Param, fbx, distanceSQ);
+			}
+
 
 			//	状態の切り替え
 			if (AI.CurrState != nextState || AI.IsActionFinished == true)
@@ -350,8 +390,8 @@ void Engine::System::EnemyAISystem::MainUpdate(entt::registry& Reg, double Delta
 				}
 				break;
 			case Engine::System::eEnemyState::Evade:
-				break;
 			case Engine::System::eEnemyState::CancelEvade:
+				UpdateDodge(AI, Param, trans, rigid, Dir, distanceSQ);
 				break;
 			default:
 				break;
