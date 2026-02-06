@@ -5,6 +5,9 @@
 
 namespace Engine::System
 {
+	/// <summary>
+	/// エフェクトの再生インスタンスを管理するコンポーネント
+	/// </summary>
 	struct EffectComponent
 	{
 		//	親からの相対
@@ -20,5 +23,9 @@ namespace Engine::System
 
 		//	ループするかどうか
 		bool IsLoop = false;
+
+		//	表示するかどうか
+		bool IsShow = true;
+		bool LoastIsShow = false;
 	};
 }

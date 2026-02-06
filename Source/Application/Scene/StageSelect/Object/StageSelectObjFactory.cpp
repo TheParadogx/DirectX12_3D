@@ -16,6 +16,7 @@
 
 #include"System/Conponent/Effect/EffectComponent.hpp"
 #include"Graphics/Effect/Manager/EffectManager.hpp"
+#include"System/Conponent/Effect/Factory/EffectFactory.hpp"
 
 #include"System/CSV/CSVManager.hpp"
 #include"Application/Data/SaveData.hpp"
@@ -288,9 +289,26 @@ void Engine::System::StageSelectObjFactory::TestEffect()
 	transform.Rotation = Math::Quaternion::AngleAxis(-3.14159265f / 2, Math::Vector3::Up);
 
 	//	ƒŠƒ\[ƒX
-	auto res = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/AttackHit.efk");
-	auto& effect = registry.emplace<EffectComponent>(entity);
-	effect.Asset = res;
-	effect.IsLoop = true;
-	effect.Effect.Play(effect.Asset, transform.Position);
+	//auto res = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/AttackHit.efk");
+	//auto& effect = registry.emplace<EffectComponent>(entity);
+	//effect.Asset = res;
+	//effect.IsLoop = true;
+	//effect.Effect.Play(effect.Asset, transform.Position);
+
+	std::vector<Effekseer::EffectRef> Res;
+	int Count = 0;
+	int CountMax = 10;
+	while (Count < CountMax)
+	{
+		Count++;
+		auto path = "Assets/Effect/Sylph/" + std::to_string(Count) + ".efk";
+		auto res = Graphics::EffectManager::GetInstance()->GetEffect(path);
+		Res.push_back(res);
+	}
+	float scale = 5.0f;
+
+	for (auto& r : Res)
+	{
+		EffectFactory::CreateAtLocation(r,{0,1,0},{ scale ,scale ,scale },false);
+	}
 }

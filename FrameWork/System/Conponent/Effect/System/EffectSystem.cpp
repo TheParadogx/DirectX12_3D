@@ -13,6 +13,13 @@ namespace Engine::System
 		auto view = Reg.view<EffectComponent>();
 		view.each([&](auto entity, EffectComponent& effect) 
 			{
+				if (effect.IsShow != effect.LoastIsShow)
+				{
+					effect.Effect.SetVisible(effect.IsShow);
+					effect.LoastIsShow = effect.IsShow;
+				}
+				if (!effect.IsShow) return;
+
 				//	自動削除判定
 				if (effect.Effect.IsPlaying() == false)
 				{
@@ -46,18 +53,18 @@ namespace Engine::System
 
 				if (targetTrans)
 				{
-					// ^位置の同期^
+					// 位置の同期
 					// 親がいる場合はOffsetを加算（親の回転を考慮しない簡易版）
 					Math::Vector3 finalPos = targetTrans->Position + effect.Offset;
 					effect.Effect.SetLocation(finalPos);
 
-					// ^回転の同期^
+					// 回転の同期
 					// Effekseer::SetRotation はオイラー角 (ラジアン) を期待する
 					// Quaternion から Euler への変換 (エンジンの仕様に合わせてください)
 					Math::Vector3 euler = targetTrans->Rotation.ToEuler(); // 仮のメソッド名
 					effect.Effect.SetRotation(euler);
 
-					// ^スケールの同期^
+					// スケールの同期
 					effect.Effect.SetScale(targetTrans->Scale);
 				}
 
