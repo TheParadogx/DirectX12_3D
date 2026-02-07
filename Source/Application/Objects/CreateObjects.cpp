@@ -68,6 +68,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	auto collider = col.GetPtr<AABBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	col.BoneName = "Head";
 	registry.emplace<ColliderComponent>(player, std::move(col));
 
 	//	移動量（物理）
@@ -112,6 +113,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	//	スキル保持
 	auto& skillHolder = registry.emplace<SkillSlotComponent>(player);
 	skillHolder.SkillSlots[0] = CreateSkill1();
+	skillHolder.SkillSlots[1] = CreateSkill2();
 
 	return player;
 }
@@ -238,6 +240,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	auto collider = col.GetPtr<AABBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	col.BoneName = "Head";
 	registry.emplace<ColliderComponent>(enemy, std::move(col));
 
 	//　状態管理
@@ -319,6 +322,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	auto collider = col.GetPtr<AABBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	col.BoneName = "Head";
 	registry.emplace<ColliderComponent>(enemy, std::move(col));
 
 	//　状態管理
@@ -400,7 +404,8 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
-	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };	
+	col.BoneName = "Head";
 	registry.emplace<ColliderComponent>(enemy, std::move(col));
 
 	//　状態管理
@@ -532,7 +537,6 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 	//	当たり判定
 	//	いったん正常に動作するかどうか
 
-
 	//	アタッチ
 	auto& socket = registry.emplace<SocketComponent>(sword);
 	socket.Parent = Parent;
@@ -601,6 +605,40 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 /// </summary>
 /// <returns></returns>
 entt::entity Engine::System::ObjectsFactory::CreateSkill1()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	auto entity = manager->CreateEntity();
+
+	//	スキル
+	auto& skill = registry.emplace<SkillComponent>(entity);
+
+	//	エフェクトの読み込み
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/1.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/2.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/3.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/4.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/6.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/7.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/8.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/9.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/10.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Tornade.efk"));
+
+
+	auto& trans = registry.emplace<Transform3D>(entity);
+
+	auto& damage = registry.emplace<AttackPowerComponent>(entity);
+	damage.DamageValue = 250.0f;
+	damage.HitEffectAsset.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Skill1Hit.efk"));
+
+	registry.emplace<PlayerWeaponTag>(entity);
+
+	return entity;
+}
+
+entt::entity Engine::System::ObjectsFactory::CreateSkill2()
 {
 	auto manager = EntityManager::GetInstance();
 	auto& registry = EntityManager::GetInstance()->GetRegistry();

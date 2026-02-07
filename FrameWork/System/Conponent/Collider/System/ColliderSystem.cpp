@@ -7,6 +7,7 @@
 #include"System/Conponent/Collider/ColliderComponent.hpp"
 #include"System/Conponent/Rigidbody/RigidbodyComponent.hpp"
 #include"System/Collider/CollisionEvents/CollisionEvent.hpp"
+#include"System/Conponent/Fbx/FbxMeshConponent.hpp"
 
 /// <summary>
 /// 衝突コンポーネントのアタッチ
@@ -38,6 +39,61 @@ void Engine::System::ColliderSystem::Initialize()
 /// 中心座標の更新
 /// </summary>
 /// <param name="Registry"></param>
+
+#if true
+void Engine::System::ColliderSystem::Update(entt::registry& Registry)
+{
+	// FbxComponent も含めて View を作成
+	auto view = Registry.view<Transform3D, ColliderComponent>();
+
+	view.each([&](entt::entity entity, Transform3D& trans, ColliderComponent& col)
+		{
+			if (!col.IsCollisiton) return;
+
+			Math::Vector3 finalPos = trans.Position;
+
+			// --- ボーン追従ロジック ---
+			bool boneFound = false;
+			FbxComponent* fbx = Registry.try_get<FbxComponent>(entity);
+			if (fbx != nullptr)
+			{
+				// ボーン名が指定されており、かつモデルにそのボーンが存在するか確認
+				if (!col.BoneName.empty())
+				{
+					boneFound = true;
+				}
+			}
+
+
+
+
+			// 各コライダー型への適用
+			if (auto* pAABB = col.GetPtr<AABBCollider>())
+			{
+				//	そのまま代入
+				if (boneFound == true)
+				{
+					finalPos = fbx->Mesh->GetBoneWorldPosition(col.BoneName);
+					finalPos.y = trans.Position.y;
+				}
+
+				pAABB->SetCenter(finalPos + col.Offset);
+
+			}
+			else if (auto* pOBB = col.GetPtr<OBBCollider>())
+			{
+				//	こっちでは回転などの計算をする
+				Math::Matrix rotMat = trans.Rotation.ToMatrix();
+				Math::Vector3 rotatedOffset = Math::Vector3::TransformNormal(col.Offset, rotMat);
+				finalPos = trans.Position + rotatedOffset;
+
+				pOBB->SetCenter(finalPos);
+				pOBB->SetRotation(trans.Rotation);
+			}
+		});
+}
+
+#else
 void Engine::System::ColliderSystem::Update(entt::registry& Registry)
 {
 	auto view = Registry.view<Transform3D, ColliderComponent>();
@@ -69,6 +125,7 @@ void Engine::System::ColliderSystem::Update(entt::registry& Registry)
 			}
 		});
 }
+#endif // true
 
 /// <summary>
 /// 当たり判定

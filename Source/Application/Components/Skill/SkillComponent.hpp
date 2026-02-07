@@ -35,6 +35,6 @@ namespace Engine::System
 	struct SkillSlotComponent
 	{
 		//	•Û‚µ‚Ä‚¢‚éƒXƒLƒ‹
-		std::array<entt::entity, 1> SkillSlots = { entt::null };
+		std::array<entt::entity, 2> SkillSlots = { entt::null };
 	};
 }

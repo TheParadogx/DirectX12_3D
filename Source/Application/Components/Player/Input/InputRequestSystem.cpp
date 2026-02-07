@@ -47,12 +47,22 @@ void Engine::System::InputRequestSystem::PreUpdate(entt::registry& Reg, double D
 			//	スキル
 			if (Input::InputManager::GetInstance()->IsActionPressed("Skill1"))
 			{
-				req.Flags |= eActionInputFlags::SkillRequested;
+				req.Flags |= eActionInputFlags::Skill1Requested;
 			}
 			else
 			{
-				req.Flags &= ~eActionInputFlags::SkillRequested;
+				req.Flags &= ~eActionInputFlags::Skill1Requested;
 			}
+			//	スキル
+			if (Input::InputManager::GetInstance()->IsActionPressed("Skill2"))
+			{
+				req.Flags |= eActionInputFlags::Skill2Requested;
+			}
+			else
+			{
+				req.Flags &= ~eActionInputFlags::Skill2Requested;
+			}
+
 
 
 			//	ジャンプ

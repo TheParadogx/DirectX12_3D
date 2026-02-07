@@ -13,7 +13,8 @@ namespace Engine::System
 		RunRequested = 1 << 0,		//	走り
 		DodgeRequested = 1 << 1,	//	ダッシュ
 		AttackRequested = 1 << 2,	//	攻撃
-		SkillRequested = 1 << 3,	//	スキル
+		Skill1Requested = 1 << 3,	//	スキル
+		Skill2Requested = 1 << 4,	//	スキル
 	};
 	DEFINE_ENUM_BITWISE_OPERATORS(eActionInputFlags);
 

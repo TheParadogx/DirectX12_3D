@@ -262,7 +262,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 			}
 
 			//	スキル（今は１つだけ）
-			bool skillRequested = HasFlag(req.Flags, eActionInputFlags::SkillRequested);
+			bool skillRequested = HasFlag(req.Flags, eActionInputFlags::Skill1Requested);
 			if (skillRequested == true && state.State != ePlayerState::Skill)
 			{
 				//	プレイヤーが持っているスキルのエンティティの取得
@@ -314,6 +314,57 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 
 			}
 
+			bool skill2Requested = HasFlag(req.Flags, eActionInputFlags::Skill2Requested);
+			if (skill2Requested == true && state.State != ePlayerState::Skill)
+			{
+				//	プレイヤーが持っているスキルのエンティティの取得
+				SkillSlotComponent* slots = Reg.try_get<SkillSlotComponent>(entity);
+				if (slots != nullptr)
+				{
+					//	今はスキル番号１を指定します
+					entt::entity skillEntity = slots->SkillSlots[1];
+					if (Reg.valid(skillEntity) && Reg.all_of<SkillComponent>(skillEntity))
+					{
+						SkillComponent& skill = Reg.get<SkillComponent>(skillEntity);
+						Transform3D& skillTrans = Reg.get<Transform3D>(skillEntity);
+						//	クールダウンチェック
+						if (skill.CooldownTimer <= 0.0f)
+						{
+							//	アニメーションあるなら変更する
+
+							//	アクティブのアタッチ
+							Reg.emplace_or_replace<ActiveSkillTag>(skillEntity);
+
+							//	当たり判定とヒット履歴のアタッチ
+							Reg.emplace_or_replace<HitHistoryComponent>(skillEntity);
+							//	ここで当たり判定をアタッチする。
+							auto col = ColliderComponent::Create<OBBCollider>();
+							auto collider = col.GetPtr<OBBCollider>();
+							collider->SetVolume({ 20.0f,0.4f,20.0f });
+							Reg.emplace_or_replace<ColliderComponent>(skillEntity, std::move(col));
+							skillTrans.Position = trans.Position;
+
+							float scale = 10.0f;
+							//	エフェクト生成
+							for (auto& asset : skill.Effects)
+							{
+								auto EffEnt = EffectFactory::CreateAtLocation(asset, skillTrans.Position, { scale,scale,scale }, false);
+							}
+							//	クールタイムを設定
+							skill.CooldownTimer = skill.MaxCooldown;
+
+						}
+
+					}
+					else
+					{
+						//	何もセットされてないときときとかの処理があるなら入れてもいい
+					}
+
+				}
+				return;
+
+			}
 
 
 			// 攻撃ボタンが押されている
@@ -351,7 +402,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 					ChangeState(Reg, state, ePlayerState::Attack);
 					state.Attack.AttackCount = 0;
 					fbx.IsLoop = false;
-					fbx.AnimationScale = 2.5f;
+					fbx.AnimationScale = 2.2f;
 				}
 
 				//	武器に必要なものをアタッチ
@@ -359,7 +410,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				//	ここで当たり判定をアタッチする。
 				auto col = ColliderComponent::Create<OBBCollider>();
 				auto collider = col.GetPtr<OBBCollider>();
-				collider->SetVolume({ 1.0f,4.0f,1.0f });
+				collider->SetVolume({ 2.0f,5.0f,2.0f });
 				col.Offset = { 0.0f, -4.0f, 0.0f };
 				Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
 

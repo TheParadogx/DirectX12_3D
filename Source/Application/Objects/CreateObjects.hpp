@@ -10,6 +10,7 @@ namespace Engine::System
 		static entt::entity CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName);
 
 		static entt::entity CreateSkill1();
+		static entt::entity CreateSkill2();
 	public:
 		static entt::entity CreatePlayer();
 		static void CreateEnemy();
