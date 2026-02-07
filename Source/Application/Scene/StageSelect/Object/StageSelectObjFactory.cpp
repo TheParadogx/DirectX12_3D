@@ -296,19 +296,30 @@ void Engine::System::StageSelectObjFactory::TestEffect()
 	//effect.Effect.Play(effect.Asset, transform.Position);
 
 	std::vector<Effekseer::EffectRef> Res;
-	int Count = 0;
-	int CountMax = 10;
-	while (Count < CountMax)
-	{
-		Count++;
-		auto path = "Assets/Effect/Sylph/" + std::to_string(Count) + ".efk";
-		auto res = Graphics::EffectManager::GetInstance()->GetEffect(path);
-		Res.push_back(res);
-	}
-	float scale = 5.0f;
+	//int Count = 0;
+	//int CountMax = 10;
+	//while (Count < CountMax)
+	//{
+	//	Count++;
+	//	auto path = "Assets/Effect/Sylph/" + std::to_string(Count) + ".efk";
+	//	auto res = Graphics::EffectManager::GetInstance()->GetEffect(path);
+	//	Res.push_back(res);
+	//}
+
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/PhantasmMeteor.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire3.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire7.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Flame.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/LightningStrike.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Light4.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Light3.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Blow2.efk"));
+	//Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Herald.efk"));
+
+	float scale = 3.0f;
 
 	for (auto& r : Res)
 	{
-		EffectFactory::CreateAtLocation(r,{0,1,0},{ scale ,scale ,scale },false);
+		EffectFactory::CreateAtLocation(r,{0,1,0},{ scale ,scale ,scale },true);
 	}
 }

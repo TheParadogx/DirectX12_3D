@@ -19,11 +19,12 @@ bool Engine::Input::InputManager::Initialize()
 	AddAction("Sprint", { eKeyCode::LShift,ePadButton::A });
 	AddAction("Select", { eKeyCode::Space,ePadButton::A,eMouseButton::Left });
 	AddAction("Cancel", { eKeyCode::Escape,ePadButton::B });
-	AddAction("Attack", { eKeyCode::Count,ePadButton::B,eMouseButton::Left });
-	AddAction("Interact", { eKeyCode::F,ePadButton::A});
+	AddAction("Attack", { eKeyCode::Count,ePadButton::R2,eMouseButton::Left });
+	AddAction("Interact", { eKeyCode::F,ePadButton::X});
 	AddAction("Right", { eKeyCode::D,ePadButton::DPadRight });
 	AddAction("Left", { eKeyCode::A,ePadButton::DPadLeft });
 	AddAction("Skill1", { eKeyCode::Q,ePadButton::L1 });
+	AddAction("Skill2", { eKeyCode::E,ePadButton::R1 });
 	return true;
 }
 

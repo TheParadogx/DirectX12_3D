@@ -546,7 +546,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 	auto windEffect2 = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sword6.efk");
 
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
-	damage.DamageValue = 250.0f;
+	damage.DamageValue = 1;
 	damage.HitEffectAsset.push_back(effectRes);
 	damage.HitEffectAsset.push_back(windEffect);
 	damage.HitEffectAsset.push_back(windEffect2);
@@ -588,7 +588,7 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 	socket.PivotOffset = { 0,1.98,0.0 };
 
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
-	damage.DamageValue = 250.0f;
+	damage.DamageValue = 1;
 
 	registry.emplace<EnemyWeaponTag>(sword);
 	
