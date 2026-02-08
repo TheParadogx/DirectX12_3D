@@ -83,6 +83,7 @@ namespace Engine::System
 
 		// ’è”
 		static const Time Zero;
+		static inline double Scale = 1.0;
 	private:
 		std::chrono::microseconds mMicroseconds = {};
 

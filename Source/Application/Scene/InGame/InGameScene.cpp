@@ -8,6 +8,7 @@
 #include"System/Camera/Camera.hpp"
 #include"System/Conponent/Collider/System/ColliderSystem.hpp"
 
+
 #include"Application/Components/CameraWork/System/CameraControlSystem.hpp"
 #include"Application/Components/Socket/SocketComponentSystem.hpp"
 #include"Application/Components/HpRender/HpRenderSystem.hpp"
@@ -134,14 +135,6 @@ namespace Engine::Scene
 		return true;
 	}
 
-	/// <summary>
-	/// âÊñ ÇÃêÿÇËë÷Ç¶îªíË
-	/// </summary>
-	/// <param name="FixedDeltaTime"></param>
-	void InGame::PostUpdate(double FixedDeltaTime)
-	{
-
-	}
 
 	/// <summary>
 	/// ï`âÊ

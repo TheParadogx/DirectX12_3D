@@ -7,8 +7,16 @@
 #include"System/Conponent/Collider/System/ColliderSystem.hpp"
 #include "System/Entity/System/Manager/SystemManager.hpp"
 #include"System/Entity/Manager/EntityManager.hpp"
+#include"System/Input/Manager/InputManager.hpp"
+#include"System/Scene/Manager/SceneManager.hpp"
+#include"System/Window/Window.hpp"
+
+#include"System/Conponent/Sprite/SpriteComponent.hpp"
+#include"System/Conponent/Transform/TransformConponent.hpp"
+
 //	Resrouce
 #include"Graphics/SkyBox/Resource/SkyBoxResourceManager.hpp"
+#include"Graphics/Texture/Manager/TextureManager.hpp"
 
 //	User
 #include"Application/Components/Tag/TagComponent.hpp"
@@ -26,6 +34,47 @@
 #include"Application/Components/Skill/System/SkillSystem.hpp"
 
 #include"Audio/Manager/AudioManager.hpp"
+
+#include"Application/Scene/Title/TitleScene.hpp"
+#include"System/Time/Time.hpp"
+
+void Engine::Scene::StageSelect::OpenConfirmWindow()
+{
+	System::Time::Scale = 0.0f;
+	mState = eState::Confirming;
+	using namespace System;
+	auto manager = EntityManager::GetInstance();
+	auto& registry = manager->GetRegistry();
+
+	mConfirmWindowEntity = manager->CreateEntity();
+	auto window = Window::GetInstance();
+
+	//	座標
+	auto& trans = registry.emplace<Transform2D>(mConfirmWindowEntity);
+	trans.Position = { window->GetWidth() / 2.0f ,(float)window->GetHeight() / 2 };
+	float scale = 0.5f;
+	trans.Scale = { scale,scale };
+
+	//	sprite
+	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/StageSelect/Texture/OpitionMenu.png");
+	auto& sprite = registry.emplace<SpriteComponent>(mConfirmWindowEntity, res);
+	sprite.Sprite.SetColor({ 1,1,1,1 });
+	sprite.Sprite.SetPivot({ 0.4,0.5 });
+	sprite.Sprite.SetPosition(trans.Position);
+	sprite.Sprite.SetScale(trans.Scale);
+}
+
+void Engine::Scene::StageSelect::CloseConfirmWindow()
+{
+	System::Time::Scale = 1.0f;
+	mState = eState::Normal;
+	using namespace System;
+	auto manager = EntityManager::GetInstance();
+	auto& registry = manager->GetRegistry();
+	registry.destroy(mConfirmWindowEntity);
+	mConfirmWindowEntity = entt::null;
+
+}
 
 bool Engine::Scene::StageSelect::Initialize()
 {
@@ -65,6 +114,45 @@ bool Engine::Scene::StageSelect::Initialize()
 	return true;
 }
 
+void Engine::Scene::StageSelect::Update(double DeltaTime)
+{
+	auto input = Input::InputManager::GetInstance();
+
+	//	optionで状態判定
+	if (input->IsActionPressed("Option"))
+	{
+		if (mState == eState::Normal)
+		{
+			//	ウィンドウを出す
+			OpenConfirmWindow();
+		}
+		else
+		{
+			//	ウィンドウを閉じる
+			CloseConfirmWindow();
+		}
+	}
+
+	//	状態遷移判定
+	if (mState == eState::Confirming)
+	{
+		if (input->IsActionPressed("Select"))
+		{
+			System::Time::Scale = 1.0f;
+			//	状態遷移を呼ぶ
+			System::SceneManager::GetInstance()->ChangeSceneFade<Scene::Title>();
+			//	SE
+			Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Select.aud", false, 1.0f);
+		}
+		else if (input->IsActionPressed("Cancel"))
+		{
+			CloseConfirmWindow();
+		}
+		return;
+	}
+
+}
+
 /// <summary>
 /// 描画
 /// </summary>
@@ -75,5 +163,6 @@ void Engine::Scene::StageSelect::Render()
 
 void Engine::Scene::StageSelect::Release()
 {
+	System::Time::Scale = 1.0f;
 	System::EntityManager::GetInstance()->ClearLocalEntities();
 }
