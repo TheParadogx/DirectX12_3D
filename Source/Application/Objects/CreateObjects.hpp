@@ -2,14 +2,17 @@
 #include<Plugin/entt/entt.hpp>
 #include<string>
 
+#include"Graphics/Color/Color.hpp"
+
 namespace Engine::System
 {
 	class ObjectsFactory
 	{
-		static entt::entity CreatePlayerWeapon(entt::entity Parent,const std::string& BoneName);
-		static entt::entity CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName);
+		static entt::entity CreatePlayerWeapon(entt::entity Parent,const std::string& BoneName,int Damage);
+		static entt::entity CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName,int Damage,const Graphics::Color& Color);
 
 		static entt::entity CreateSkill1();
+		static entt::entity CreateSkill2();
 	public:
 		static entt::entity CreatePlayer();
 		static void CreateEnemy();

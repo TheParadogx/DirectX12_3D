@@ -2,6 +2,7 @@
 #include"System/Scene/IScene.hpp"
 #include"Graphics/SkyBox/SkyBox.hpp"
 #include"Application/Objects/EnemyRank.hpp"
+#include"entt/entt.hpp"
 
 #include<memory>
 
@@ -44,7 +45,6 @@ namespace Engine::Scene
 		/// </summary>
 		std::unique_ptr<Graphics::SkyBox> mSkyBox;
 		System::EnemyRank mSelectEnemy;
-
 	};
 }
 

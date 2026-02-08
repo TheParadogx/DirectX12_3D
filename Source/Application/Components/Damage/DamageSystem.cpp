@@ -12,6 +12,8 @@
 
 #include"System/Conponent/Effect/Factory/EffectFactory.hpp"
 
+#include"Audio/Manager/AudioManager.hpp"
+
 /// <summary>
 /// ƒ_ƒ[ƒWˆ—
 /// </summary>
@@ -60,7 +62,7 @@ void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaT
 									effectAsset,
 									victimTrans->Position + attack.Offset,
 									attack.Scale);
-
+								Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/HitEffect.aud", false, 0.2f);
 							}
 						}
 					}
