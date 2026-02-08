@@ -12,6 +12,8 @@
 #include"Application/Components/Skill/SkillComponent.hpp"
 #include"System/Conponent/Effect/Factory/EffectFactory.hpp"
 
+#include"Audio/Manager/AudioManager.hpp"
+
 /// <summary>
 /// 走り状態に移行できるかどうかの判定
 /// </summary>
@@ -301,6 +303,8 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 							//	クールタイムを設定
 							skill.CooldownTimer = skill.MaxCooldown;
 
+							//	音を流す
+							Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Wind.aud", false, 1.0f);
 						}
 
 					}
@@ -352,7 +356,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 							}
 							//	クールタイムを設定
 							skill.CooldownTimer = skill.MaxCooldown;
-
+							Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Fire.aud", false, 1.0f);
 						}
 
 					}
@@ -415,7 +419,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
 
 				fbx.CurrAnimation = "Attack_" + std::to_string(state.Attack.AttackCount);
-
+				//Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Sword1.aud", false, 0.5f);
 
 				return;
 

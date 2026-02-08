@@ -122,7 +122,7 @@ namespace Engine::Scene
 		registry.emplace<System::InGameTag>(TimerEnt);
 
 		//	スカイボックス		
-		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");
+		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/skybox.dds");
 		mSkyBox = std::make_unique<Graphics::SkyBox>();
 		mSkyBox->Create(SkyBoxResource);
 
