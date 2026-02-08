@@ -430,12 +430,23 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 			ret = (HasFlag(req.Flags,eActionInputFlags::RunRequested) == true) && (this->CheckRunRequest(state) == true);
 			if (ret == true)
 			{
+				static float FootStepTimer = 0.0f;
+				constexpr float FootStepInterval = 0.3f;
+
 				if (state.State != ePlayerState::Run)
 				{
 					state.State = ePlayerState::Run;
 					//	‚±‚±‚ÉØ‚è‘Ö‚¦Žž‚É1‰ñ‚¾‚¯’Ê‚µ‚½‚¢ˆ—‚È‚Ç‚ð“ü‚ê‚Ä‚à‚¢‚¢
 					fbx.CurrAnimation = "Jog";
 				}
+
+				FootStepTimer += DeltaTime;
+				if (FootStepTimer >= FootStepInterval)
+				{
+					FootStepTimer = 0.0f;
+					Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Foot.aud", false, 0.1f);
+				}
+
 				//	ˆÚ“®—Ê‚Ì‘ã“ü
 				move.InputDir = req.InputVec;
 

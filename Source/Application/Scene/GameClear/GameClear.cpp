@@ -15,6 +15,8 @@
 #include"Application/Data/ClearRankData.hpp"
 #include"System/Conponent/Sprite/Glow/GlowComponents.hpp"
 
+#include"Audio/Manager/AudioManager.hpp"
+
 namespace Engine::Scene
 {
 
@@ -101,6 +103,7 @@ namespace Engine::Scene
 		//	‰æ–Ê‘JˆÚ
 		if (GET_INPUT_MANAGER->IsActionPressed("Select"))
 		{
+			Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Select.aud", false, 1.0f);
 			Engine::System::SceneManager::GetInstance()->ChangeSceneFade<Title>();
 		}
 	}

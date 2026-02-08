@@ -35,6 +35,8 @@
 #include"System/Conponent/Timer/TimerComponent.hpp"
 #include"System/Conponent/Timer/System/TimerComponentSystem.hpp"
 
+#include"Audio/Manager/AudioManager.hpp"
+
 namespace Engine::Scene
 {
 	InGame::InGame(System::EnemyRank Rank)
@@ -125,6 +127,9 @@ namespace Engine::Scene
 		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/skybox.dds");
 		mSkyBox = std::make_unique<Graphics::SkyBox>();
 		mSkyBox->Create(SkyBoxResource);
+
+		Audio::AudioManager::GetInstance()->PlaySE("Assets/InGame/BGM.aud", true, 0.2f, false);
+
 
 		return true;
 	}
