@@ -419,7 +419,7 @@ void Engine::System::PlayerStateSystem::MainUpdate(entt::registry& Reg, double D
 				Reg.emplace_or_replace<ColliderComponent>(state.Weapon, std::move(col));
 
 				fbx.CurrAnimation = "Attack_" + std::to_string(state.Attack.AttackCount);
-				//Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Sword1.aud", false, 0.5f);
+				Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Sword1.aud", false, 0.1f);
 
 				return;
 

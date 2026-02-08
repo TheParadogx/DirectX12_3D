@@ -91,6 +91,7 @@ namespace Engine::Scene
 		RankFac::CreateRank(mClearTime);
 		GameClearFactory::CreateBG();
 
+		Audio::AudioManager::GetInstance()->PlaySE("Assets/GameClear/Sound/BGM.aud", true, 0.2f, false);
 
 		return true;
 	}
