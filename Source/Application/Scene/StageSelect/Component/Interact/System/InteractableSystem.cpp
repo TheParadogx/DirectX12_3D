@@ -13,6 +13,8 @@
 
 #include "System/Conponent/Vfx/VfxMeshComponent.hpp"
 
+#include"Audio/Manager/AudioManager.hpp"
+
 /// <summary>
 /// ‘JˆÚ”»’è
 /// </summary>
@@ -48,6 +50,7 @@ void Engine::System::InteractableSystem::MainUpdate(entt::registry& Reg, double 
 				bool IsInput = Input::InputManager::GetInstance()->IsActionPressed("Interact");
 				if (IsInput == true && interract.Talkable == true)
 				{
+					Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Select.aud", false, 1.0f);
 					System::SceneManager::GetInstance()->ChangeSceneFade<Scene::InGame>(interract.Rank);
 				}
 

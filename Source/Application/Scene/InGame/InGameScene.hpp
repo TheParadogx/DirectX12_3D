@@ -2,6 +2,7 @@
 #include"System/Scene/IScene.hpp"
 #include"Graphics/SkyBox/SkyBox.hpp"
 #include"Application/Objects/EnemyRank.hpp"
+#include"entt/entt.hpp"
 
 #include<memory>
 
@@ -19,12 +20,6 @@ namespace Engine::Scene
 		bool Initialize()override;
 
 		/// <summary>
-		/// 画面の切り替え判定
-		/// </summary>
-		/// <param name="FixedDeltaTime"></param>
-		void PostUpdate(double FixedDeltaTime)override;
-
-		/// <summary>
 		/// 描画
 		/// </summary>
 		void Render()override;
@@ -39,12 +34,13 @@ namespace Engine::Scene
 			return "InGame";
 		}
 	private:
+
+
 		/// <summary>
 		/// スカイボックス
 		/// </summary>
 		std::unique_ptr<Graphics::SkyBox> mSkyBox;
 		System::EnemyRank mSelectEnemy;
-
 	};
 }
 

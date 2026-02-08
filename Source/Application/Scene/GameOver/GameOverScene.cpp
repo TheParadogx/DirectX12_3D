@@ -9,6 +9,8 @@
 
 #include"System/Conponent/Sprite/Scale/ScaleComponent.hpp"
 
+#include"Audio/Manager/AudioManager.hpp"
+
 namespace Engine::Scene
 {
 	/// <summary>
@@ -38,6 +40,8 @@ namespace Engine::Scene
 		TitlePulse.Duration = 6.0f;
 		TitlePulse.Range = 0.1f;
 
+		Audio::AudioManager::GetInstance()->PlaySE("Assets/GameOver/Sound/BGM.aud", true, 0.2f, false);
+
 		return true;
 	}
 
@@ -54,14 +58,12 @@ namespace Engine::Scene
 		{
 			if (mSelectMode == SelectMode::Title) {
 				mSelectMode = SelectMode::Retry;
-				//	SE‚ð–Â‚ç‚·
 			}
 		}
 		if (GET_INPUT_MANAGER->IsActionPressed("Left"))
 		{
 			if (mSelectMode == SelectMode::Retry) {
 				mSelectMode = SelectMode::Title;
-				//	SE‚ð–Â‚ç‚·
 			}
 		}
 
@@ -92,9 +94,12 @@ namespace Engine::Scene
 			case Engine::Scene::GameOver::SelectMode::None:
 				break;
 			case Engine::Scene::GameOver::SelectMode::Title:
+				Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Select.aud", false, 1.0f);
+
 				Engine::System::SceneManager::GetInstance()->ChangeSceneFade<Title>();
 				break;
 			case Engine::Scene::GameOver::SelectMode::Retry:
+				Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Select.aud", false, 1.0f);
 				Engine::System::SceneManager::GetInstance()->ChangeSceneFade<InGame>(mEnemyRank);
 				break;
 			default:

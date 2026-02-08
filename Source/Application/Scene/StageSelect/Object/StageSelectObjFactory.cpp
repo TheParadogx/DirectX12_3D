@@ -113,7 +113,7 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Basic()
 	interact.Talkable = true;
 
 	//	˜b‚µ‚©‚¯‚é—p‚Ì‰æ‘œ
-	std::string FilePath = "Assets/StageSelect/Texture/Blue_Challenge.png";
+	std::string FilePath = "Assets/StageSelect/Texture/Blue_C.png";
 
 	auto vfxRes = Graphics::TextureManager::GetInstance()->Load(FilePath);
 	auto& vfx = registry.emplace<VfxMeshComponent>(enemy, vfxRes);
@@ -182,11 +182,11 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Advanced()
 	std::string FilePath;
 	if (interact.Talkable == true)
 	{
-		FilePath = "Assets/StageSelect/Texture/Yellow_Challenge.png";
+		FilePath = "Assets/StageSelect/Texture/Yellow_C.png";
 	}
 	else
 	{
-		FilePath = "Assets/StageSelect/Texture/Yellow_Require.png";
+		FilePath = "Assets/StageSelect/Texture/Yellow_R.png";
 	}
 
 	auto vfxRes = Graphics::TextureManager::GetInstance()->Load(FilePath);
@@ -256,11 +256,11 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 	std::string FilePath;
 	if (interact.Talkable == true)
 	{
-		FilePath = "Assets/StageSelect/Texture/Red_Challenge.png";
+		FilePath = "Assets/StageSelect/Texture/Red_C.png";
 	}
 	else
 	{
-		FilePath = "Assets/StageSelect/Texture/Red_Require.png";
+		FilePath = "Assets/StageSelect/Texture/Red_R.png";
 	}
 
 
@@ -296,19 +296,29 @@ void Engine::System::StageSelectObjFactory::TestEffect()
 	//effect.Effect.Play(effect.Asset, transform.Position);
 
 	std::vector<Effekseer::EffectRef> Res;
-	int Count = 0;
-	int CountMax = 10;
-	while (Count < CountMax)
-	{
-		Count++;
-		auto path = "Assets/Effect/Sylph/" + std::to_string(Count) + ".efk";
-		auto res = Graphics::EffectManager::GetInstance()->GetEffect(path);
-		Res.push_back(res);
-	}
-	float scale = 5.0f;
+	//int Count = 0;
+	//int CountMax = 10;
+	//while (Count < CountMax)
+	//{
+	//	Count++;
+	//	auto path = "Assets/Effect/Sylph/" + std::to_string(Count) + ".efk";
+	//	auto res = Graphics::EffectManager::GetInstance()->GetEffect(path);
+	//	Res.push_back(res);
+	//}
+
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire3.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire7.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Flame.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/LightningStrike.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Light4.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Light3.efk"));
+	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Blow2.efk"));
+	//Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Herald.efk"));
+
+	float scale = 3.0f;
 
 	for (auto& r : Res)
 	{
-		EffectFactory::CreateAtLocation(r,{0,1,0},{ scale ,scale ,scale },false);
+		EffectFactory::CreateAtLocation(r,{0,1,0},{ scale ,scale ,scale },true);
 	}
 }

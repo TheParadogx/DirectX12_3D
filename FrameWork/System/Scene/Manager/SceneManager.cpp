@@ -8,6 +8,7 @@
 #include"System/Conponent/Sprite/SpriteComponent.hpp"
 #include"System/Fade/FadeComponent.hpp"
 #include"Graphics/Texture/Manager/TextureManager.hpp"
+#include"Audio/Manager/AudioManager.hpp"
 
 /// <summary>
 ///	‰Šú‰»
@@ -129,7 +130,7 @@ void Engine::System::SceneManager::PostPresentUpdate()
 
 			Graphics::DirectX::GetInstance()->WaitForGPU();
 			SystemManager::GetInstance()->AllClearSystem();
-
+			Audio::AudioManager::GetInstance()->AllClearSound();
 
 			//	I‚í‚Á‚Ä‚¢‚½‚çØ‚è‘Ö‚¦‚é
 			if (mScene != nullptr)
@@ -156,6 +157,7 @@ void Engine::System::SceneManager::PostPresentUpdate()
 	{
 		Graphics::DirectX::GetInstance()->WaitForGPU();
 		SystemManager::GetInstance()->AllClearSystem();
+		Audio::AudioManager::GetInstance()->AllClearSound();
 
 
 		//	I‚í‚Á‚Ä‚¢‚½‚çØ‚è‘Ö‚¦‚é

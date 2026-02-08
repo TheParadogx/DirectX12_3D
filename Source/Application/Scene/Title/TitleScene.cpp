@@ -8,6 +8,7 @@
 #include"Application/Scene/InGame/InGameScene.hpp"
 #include"Factory/CreateTitle.hpp"
 #include"Application/Scene/StageSelect/StageSelectScene.hpp"
+#include"Audio/Manager/AudioManager.hpp"
 
 /// <summary>
 ///	‰Šú‰»
@@ -17,6 +18,8 @@ bool Engine::Scene::Title::Initialize()
 {
     //  ”wŒi
     CreateTitleObject::CreateBG();
+
+    Audio::AudioManager::GetInstance()->PlaySE("Assets/Title/Sound/BGM.aud",true,1.0f,false);
 
     return true;
 }
@@ -29,6 +32,7 @@ void Engine::Scene::Title::PostUpdate(double FixedDeltaTime)
 {
     if (GET_INPUT_MANAGER->IsActionPressed("Select"))
     {
+        Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/Select.aud", false, 1.0f);
         Engine::System::SceneManager::GetInstance()->ChangeSceneFade<StageSelect>();
     }
 }

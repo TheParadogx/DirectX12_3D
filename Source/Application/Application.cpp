@@ -28,6 +28,7 @@
 
 #include"System/CSV/CSVManager.hpp"
 #include"Application/Data/SaveData.hpp"
+#include"Application/Data/ClearRankData.hpp"
 
 void Engine::App::Application::CreateStartScene()
 {
@@ -55,6 +56,11 @@ void Engine::App::Application::CreateStartScene()
 bool Engine::App::Application::DataLoad()
 {
     bool ret = System::CSV::Get<System::SaveData>().Load("Assets/Data/SaveData.csv");
+    if (ret == false)
+    {
+        return false;
+    }
+    ret = System::CSV::Get<System::ClearRankData>().Load("Assets/Data/ClearRankData.csv");
     if (ret == false)
     {
         return false;
@@ -162,6 +168,10 @@ void Engine::App::Application::Tick()
         {
             seconds = 0.1;
         }
+
+        //  時間のスケール
+        seconds *= System::Time::Scale;
+
 
         //  事前更新
         this->PreUpdate(seconds);

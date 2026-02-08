@@ -8,6 +8,7 @@
 #include"System/Camera/Camera.hpp"
 #include"System/Conponent/Collider/System/ColliderSystem.hpp"
 
+
 #include"Application/Components/CameraWork/System/CameraControlSystem.hpp"
 #include"Application/Components/Socket/SocketComponentSystem.hpp"
 #include"Application/Components/HpRender/HpRenderSystem.hpp"
@@ -31,6 +32,11 @@
 #include"Graphics/Texture/Manager/TextureManager.hpp"
 
 #include"Application/Macro/ProjMacros.hpp"
+
+#include"System/Conponent/Timer/TimerComponent.hpp"
+#include"System/Conponent/Timer/System/TimerComponentSystem.hpp"
+
+#include"Audio/Manager/AudioManager.hpp"
 
 namespace Engine::Scene
 {
@@ -113,21 +119,22 @@ namespace Engine::Scene
 		System::ObjectsFactory::CreateField();
 		System::ObjectsFactory::CreatePlayer();
 
-		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");
+		//	タイマー
+		auto TimerEnt = System::TimerComponentSystem::CreateTimerObject();
+		auto& registry = System::EntityManager::GetInstance()->GetRegistry();
+		registry.emplace<System::InGameTag>(TimerEnt);
+
+		//	スカイボックス		
+		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/skybox.dds");
 		mSkyBox = std::make_unique<Graphics::SkyBox>();
 		mSkyBox->Create(SkyBoxResource);
+
+		Audio::AudioManager::GetInstance()->PlaySE("Assets/InGame/BGM.aud", true, 0.2f, false);
+
 
 		return true;
 	}
 
-	/// <summary>
-	/// 画面の切り替え判定
-	/// </summary>
-	/// <param name="FixedDeltaTime"></param>
-	void InGame::PostUpdate(double FixedDeltaTime)
-	{
-
-	}
 
 	/// <summary>
 	/// 描画

@@ -4,6 +4,13 @@
 
 namespace Engine::System 
 {
+
+	// タイムを分解する構造体（使い勝手がいいように）
+	struct TimeDisplay {
+		int Minutes;
+		int Seconds;
+	};
+
 	class Time
 	{
 	public:
@@ -42,6 +49,18 @@ namespace Engine::System
 			return mMicroseconds;
 		}
 
+		/// <summary>
+		/// 時間を分と秒に変換する。
+		/// </summary>
+		/// <param name="totalSeconds"></param>
+		/// <returns></returns>
+		static TimeDisplay GetTimeDisplay(float totalSeconds) {
+			int total = static_cast<int>(totalSeconds);
+			int m = total / 60;
+			int s = total % 60;
+			return { m, s };
+		}
+
 
 		// 比較
 		constexpr bool operator==(const Time& Other) const = default;
@@ -64,6 +83,7 @@ namespace Engine::System
 
 		// 定数
 		static const Time Zero;
+		static inline double Scale = 1.0;
 	private:
 		std::chrono::microseconds mMicroseconds = {};
 

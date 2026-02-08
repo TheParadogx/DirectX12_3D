@@ -16,7 +16,7 @@ namespace Engine::Audio
 	{
 		GENERATE_SINGLETON_BODY(AudioManager);
 
-	public:
+	public: 
 		/// <summary>
 		/// 初期化
 		/// </summary>
@@ -30,10 +30,15 @@ namespace Engine::Audio
 		/// <param name="FilePath">ファイル名</param>
 		/// <param name="Loop">true:ループ再生</param>
 		/// <param name="Volume">音量:0.0f - 1.0f</param>
-		void PlaySE(const std::string& FilePath, bool Loop = false, float Volume = 1.0f);
+		void PlaySE(const std::string& FilePath, bool Loop = false, float Volume = 1.0f,bool IsGlobal = true);
 
 
 		void MixSounds(int16_t* Output, size_t FramesRequested, uint16_t Channels);
+
+		/// <summary>
+		/// 全てのサウンドを止める
+		/// </summary>
+		void AllClearSound();
 
 		/// <summary>
 		/// miniaudioで呼び出されるコールバック
@@ -57,3 +62,4 @@ namespace Engine::Audio
 		std::recursive_mutex  mMtx;
 	};
 }
+
