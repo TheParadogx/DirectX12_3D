@@ -8,6 +8,7 @@
 #include"System/Camera/Camera.hpp"
 #include"System/Conponent/Collider/System/ColliderSystem.hpp"
 
+
 #include"Application/Components/CameraWork/System/CameraControlSystem.hpp"
 #include"Application/Components/Socket/SocketComponentSystem.hpp"
 #include"Application/Components/HpRender/HpRenderSystem.hpp"
@@ -34,6 +35,8 @@
 
 #include"System/Conponent/Timer/TimerComponent.hpp"
 #include"System/Conponent/Timer/System/TimerComponentSystem.hpp"
+
+#include"Audio/Manager/AudioManager.hpp"
 
 namespace Engine::Scene
 {
@@ -126,17 +129,12 @@ namespace Engine::Scene
 		mSkyBox = std::make_unique<Graphics::SkyBox>();
 		mSkyBox->Create(SkyBoxResource);
 
+		Audio::AudioManager::GetInstance()->PlaySE("Assets/InGame/BGM.aud", true, 0.2f, false);
+
+
 		return true;
 	}
 
-	/// <summary>
-	/// âÊñ ÇÃêÿÇËë÷Ç¶îªíË
-	/// </summary>
-	/// <param name="FixedDeltaTime"></param>
-	void InGame::PostUpdate(double FixedDeltaTime)
-	{
-
-	}
 
 	/// <summary>
 	/// ï`âÊ

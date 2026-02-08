@@ -14,6 +14,7 @@
 
 #include"Audio/Manager/AudioManager.hpp"
 
+
 /// <summary>
 /// ダメージ処理
 /// </summary>
@@ -49,6 +50,7 @@ void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaT
 				if (auto* status = Reg.try_get<StatusComponet>(victim))
 				{
 					status->ApplyDamage(attack.DamageValue);
+					Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/HitEffect.aud", false, 0.2f);
 
 					// 攻撃側がエフェクトアセットを持っていれば生成
 					if (attack.HitEffectAsset.empty() == false)
@@ -62,7 +64,6 @@ void Engine::System::DamageSystem::PostUpdate(entt::registry& Reg, double DeltaT
 									effectAsset,
 									victimTrans->Position + attack.Offset,
 									attack.Scale);
-								Audio::AudioManager::GetInstance()->PlaySE("Assets/Sound/HitEffect.aud", false, 0.2f);
 							}
 						}
 					}

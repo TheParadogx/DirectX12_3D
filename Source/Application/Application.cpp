@@ -169,6 +169,10 @@ void Engine::App::Application::Tick()
             seconds = 0.1;
         }
 
+        //  時間のスケール
+        seconds *= System::Time::Scale;
+
+
         //  事前更新
         this->PreUpdate(seconds);
         this->ImGuiUpdate();

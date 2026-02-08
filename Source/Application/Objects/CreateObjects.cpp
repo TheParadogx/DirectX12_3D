@@ -586,8 +586,15 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 	socket.OffsetRot = { -0.7,-0.685,0.192,0.007 };
 	socket.PivotOffset = { 0,1.98,0.0 };
 
+
+	auto effectRes = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/HitEffect.efk");
+
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
 	damage.DamageValue = Damage;
+	damage.HitEffectAsset.push_back(effectRes);
+	damage.Offset = { 0,5,0 };
+	constexpr float EffScale = 3.0f;
+	damage.Scale = { EffScale,EffScale,EffScale };
 
 	registry.emplace<EnemyWeaponTag>(sword);
 	

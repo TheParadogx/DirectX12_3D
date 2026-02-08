@@ -25,6 +25,9 @@ bool Engine::Input::InputManager::Initialize()
 	AddAction("Left", { eKeyCode::A,ePadButton::DPadLeft });
 	AddAction("Skill1", { eKeyCode::Q,ePadButton::L1 });
 	AddAction("Skill2", { eKeyCode::E,ePadButton::R1 });
+
+	AddAction("Option", { eKeyCode::Escape,ePadButton::Menu });
+
 	return true;
 }
 
