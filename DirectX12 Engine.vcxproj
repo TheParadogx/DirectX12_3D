@@ -173,6 +173,7 @@
     <ClInclude Include="FrameWork\System\Conponent\Timer\TimerComponent.hpp" />
     <ClInclude Include="Source\Application\Components\Skill\System\SkillSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Skill\SkillComponent.hpp" />
+    <ClInclude Include="Source\Application\Data\ClearRankData.hpp" />
     <ClInclude Include="Source\Application\Data\SaveData.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\Component\UISelectionDecorator.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.hpp" />

@@ -253,7 +253,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	param.Rank = EnemyRank::Basic;
 
 	//	•Ší
-	auto sword = CreateEnemyWeapon(enemy, "RightHand", 10, Graphics::Color::Cyan());
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", 100, Graphics::Color::Cyan());
 	param.Weapon = sword;
 
 

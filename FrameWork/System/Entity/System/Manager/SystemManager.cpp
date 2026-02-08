@@ -10,6 +10,7 @@
 #include"System/Conponent/Sprite/Glow/System/GlowSystem.hpp"
 #include"System/Conponent/Sprite/Scale/System/ScaleSystem.hpp"
 #include"System/Conponent/Effect/System/EffectSystem.hpp"
+#include"System/Conponent/Timer/System/TimerComponentSystem.hpp"
 
 namespace Engine::System
 {
@@ -20,6 +21,8 @@ namespace Engine::System
 	/// <param name="DeltaTime">デルタタイム</param>
 	void SystemManager::PreUpdate(entt::registry& Reg, double DeltaTime)
 	{
+		System::TimerComponentSystem::PreUpdate(Reg, DeltaTime);
+
 		//	ユーザー定義
 		for (const auto& System : mSystems)
 		{

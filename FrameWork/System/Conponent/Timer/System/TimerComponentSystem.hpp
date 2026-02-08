@@ -11,6 +11,12 @@ namespace Engine::System
 		/// </summary>
 		/// <param name="DeltaTime"></param>
 		static void PreUpdate(entt::registry& Reg,double DeltaTime);
+
+		/// <summary>
+		/// タイマーとなるエンティティの作成
+		/// </summary>
+		/// <returns></returns>
+		static entt::entity CreateTimerObject();
 	};
 }
 

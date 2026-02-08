@@ -6,6 +6,9 @@
 #include"System/Conponent/Sprite/SpriteComponent.hpp"
 #include"System/Window/Window.hpp"
 
+#include"System/Conponent/Sprite/Glow/GlowComponents.hpp"
+
+
 void Engine::Scene::GameClearFactory::CreateBG()
 {
 	using namespace System;
@@ -20,11 +23,24 @@ void Engine::Scene::GameClearFactory::CreateBG()
 	trans.Scale = { 1.0f,1.0f };
 
 	//	sprite
-	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/GameClear/Texture/GameClearBG.png");
+	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/GameClear/Texture/BG.png");
 	auto& sprite = registry.emplace<SpriteComponent>(entity, res);
-	float color = 5.0f;
+	float color = 1.0f;
 	sprite.Sprite.SetColor({ color,color,color,1 });
 	auto window = Window::GetInstance();
 	sprite.Sprite.SetSize({ (float)window->GetWidth(),(float)window->GetHeight() });
+
+	auto& glow = registry.emplace<GlowComponent>(entity);
+	glow.BaseIntensity = 1.0f;
+
+	auto& liner = registry.emplace<LinearShiftTag>(entity);
+	liner.StartIntensity = 5.0f;
+	liner.EndIntensity = 1.0f;
+	liner.Duration = 5.0f;
+	liner.AutoDestroy = true;
+
+	auto& pulse = registry.emplace<PulseTag>(entity);
+	pulse.Duration = 7.0f;
+	pulse.Range = 1.5f;
 
 }

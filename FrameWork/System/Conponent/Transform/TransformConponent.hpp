@@ -11,9 +11,9 @@ namespace Engine::System
 	/// </summary>
 	struct Transform2D
 	{
-		Math::Vector2 Position;
-		Math::Vector2 Scale;
-		float Rotation;
+		Math::Vector2 Position = Math::Vector2::Zero;
+		Math::Vector2 Scale = Math::Vector2(1,1);
+		float Rotation = 0.0f;
 	};
 
 	/// <summary>

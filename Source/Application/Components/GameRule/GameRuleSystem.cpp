@@ -11,6 +11,8 @@
 #include"Application/Data/SaveData.hpp"
 
 #include"Application/Components/Enemy/Parameter/EnemyParametersComponent.hpp"
+#include"System/Conponent/Timer/TimerComponent.hpp"
+#include"Application/Components/Tag/TagComponent.hpp"
 
 /// <summary>
 /// Gameの終了条件を見る
@@ -74,7 +76,17 @@ void Engine::System::GameRuleSystem::PostUpdate(entt::registry& Reg, double Delt
 
 		if (gameClear == true)
 		{
-			SceneManager::GetInstance()->ChangeSceneFade<Scene::GameClear>();
+			//	タイマーの取得
+			auto TimerView = Reg.view<TimerComponent, InGameTag>();
+			auto TimerEntity = TimerView.front();
+			double Time = 0;
+			if (TimerEntity != entt::null)
+			{
+				auto& T = TimerView.get<TimerComponent>(TimerEntity);
+				Time = T.Timer;
+			}
+
+			SceneManager::GetInstance()->ChangeSceneFade<Scene::GameClear>(Time);
 		}
 		else
 		{

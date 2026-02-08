@@ -2,6 +2,8 @@
 #include "TimerComponentSystem.hpp"
 #include"../TimerComponent.hpp"
 
+#include"System/Entity/Manager/EntityManager.hpp"
+
 namespace Engine::System
 {
 	/// <summary>
@@ -15,5 +17,18 @@ namespace Engine::System
 			{
 				timer.Timer += DeltaTime;
 			});
+	}
+
+	/// <summary>
+	/// タイマーとなるエンティティの作成
+	/// </summary>
+	/// <returns></returns>
+	entt::entity TimerComponentSystem::CreateTimerObject()
+	{
+		entt::registry& Reg = EntityManager::GetInstance()->GetRegistry();
+		entt::entity entity = Reg.create();
+
+		Reg.emplace<TimerComponent>(entity);
+		return entity;
 	}
 }
