@@ -104,7 +104,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	move.MoveSpeed = 20.0f;
 
 	//	武器
-	auto sword = CreatePlayerWeapon(player,"RightHand",100);
+	auto sword = CreatePlayerWeapon(player,"RightHand",500);
 	state.Weapon = sword;
 
 	//	タグ
@@ -175,7 +175,7 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	auto& state = registry.emplace<EnemyStateComponent>(enemy);
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", 10, Graphics::Color::White());
 	state.Weapon = sword;
 
 	//	タグ
@@ -253,7 +253,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	param.Rank = EnemyRank::Basic;
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", 10, Graphics::Color::Cyan());
 	param.Weapon = sword;
 
 
@@ -335,7 +335,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	param.Rank = EnemyRank::Advanced;
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", 10, Graphics::Color::Yellow());
 	param.Weapon = sword;
 
 
@@ -422,7 +422,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	auto sword = CreateEnemyWeapon(enemy, "RightHand",10,Graphics::Color::Red());
 	param.Weapon = sword;
 
 
@@ -557,7 +557,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 	return sword;
 }
 
-entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName)
+entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName, int Damage, const Graphics::Color& Color)
 {
 	auto manager = EntityManager::GetInstance();
 	auto& registry = EntityManager::GetInstance()->GetRegistry();
@@ -576,7 +576,7 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(sword, res, false);
 	fbx.CurrAnimation = "";
-	fbx.Mesh->SetColor(Graphics::Color::Red());
+	fbx.Mesh->SetColor(Color);
 
 	//	アタッチ
 	auto& socket = registry.emplace<SocketComponent>(sword);
@@ -587,7 +587,7 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 	socket.PivotOffset = { 0,1.98,0.0 };
 
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
-	damage.DamageValue = 1;
+	damage.DamageValue = Damage;
 
 	registry.emplace<EnemyWeaponTag>(sword);
 	

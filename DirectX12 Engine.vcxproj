@@ -170,6 +170,7 @@
     <ClInclude Include="FrameWork\System\Conponent\Sprite\Scale\ScaleComponent.hpp" />
     <ClInclude Include="FrameWork\System\Conponent\Sprite\Scale\System\ScaleSystem.hpp" />
     <ClInclude Include="FrameWork\System\CSV\CSVManager.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Timer\TimerComponent.hpp" />
     <ClInclude Include="Source\Application\Components\Skill\System\SkillSystem.hpp" />
     <ClInclude Include="Source\Application\Components\Skill\SkillComponent.hpp" />
     <ClInclude Include="Source\Application\Data\SaveData.hpp" />
@@ -327,6 +328,7 @@
     <ClInclude Include="FrameWork\System\Conponent\Vfx\System\VfxRenderSystem.hpp" />
     <ClInclude Include="Source\Application\Scene\StageSelect\StageSelectScene.hpp" />
     <ClInclude Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.hpp" />
+    <ClInclude Include="FrameWork\System\Conponent\Timer\System\TimerComponentSystem.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="FrameWork\System\Conponent\Effect\Factory\EffectFactory.cpp" />
@@ -511,6 +513,7 @@
     <ClCompile Include="FrameWork\System\Conponent\Vfx\System\VfxRenderSystem.cpp" />
     <ClCompile Include="Source\Application\Scene\StageSelect\StageSelectScene.cpp" />
     <ClCompile Include="Source\Application\Scene\StageSelect\Object\StageSelectObjFactory.cpp" />
+    <ClCompile Include="FrameWork\System\Conponent\Timer\System\TimerComponentSystem.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Shader\VfxShader.hlsli">

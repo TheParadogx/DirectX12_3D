@@ -62,7 +62,7 @@ void Engine::Scene::CreateTitleObject::CreateGuide()
 	float scale = 0.6f;
 	trans.Scale = { scale,scale };
 
-	////	sprite
+	//	sprite
 	auto res = Graphics::TextureManager::GetInstance()->Load("Assets/Title/Texture/Guide.png");
 	auto& sprite = registry.emplace<SpriteComponent>(entity, res);
 	sprite.Sprite.SetColor({ 1,1,1,1 });

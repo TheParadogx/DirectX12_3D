@@ -6,6 +6,11 @@ namespace Engine::Scene
 	class GameClear : public System::IScene
 	{
 	public:
+		GameClear(double ClearTime = 0)
+			:mClearTime(ClearTime)
+		{
+
+		}
 
 		/// <summary>
 		/// ‰Šú‰»
@@ -28,7 +33,7 @@ namespace Engine::Scene
 			return "GameClear";
 		}
 	private:
-
+		double mClearTime = 0;
 	};
 }
 
