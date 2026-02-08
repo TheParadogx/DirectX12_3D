@@ -7,6 +7,7 @@
 #include<memory>
 #include<map>
 #include<functional>
+#include<string>
 
 namespace Engine::System
 {
@@ -64,6 +65,9 @@ namespace Engine::System
 
 		//	足元からどれくらいずらすか
 		Math::Vector3 Offset = { 0.0f, 0.0f, 0.0f };
+
+		//	ボーン名（空なら追従なし）
+		std::string BoneName = "";
 
 		//	型情報
 		std::type_index Type;

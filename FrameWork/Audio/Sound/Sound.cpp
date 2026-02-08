@@ -54,6 +54,8 @@ void Engine::Audio::Sound::ApplyAndMix(int16_t* Output, size_t FramesRequested, 
 		return;
 	}
 
+	if (Resource->Channels <= 0) return;
+
 	//　リソースの全フレーム数と現在の位置から残りフレーム数を計算
 	size_t framesAvailable = Resource->PcmData.size() / Resource->Channels - CurrentFrame;
 

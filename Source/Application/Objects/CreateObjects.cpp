@@ -68,6 +68,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	auto collider = col.GetPtr<AABBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	col.BoneName = "Head";
 	registry.emplace<ColliderComponent>(player, std::move(col));
 
 	//	移動量（物理）
@@ -103,7 +104,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	move.MoveSpeed = 20.0f;
 
 	//	武器
-	auto sword = CreatePlayerWeapon(player,"RightHand");
+	auto sword = CreatePlayerWeapon(player,"RightHand",500);
 	state.Weapon = sword;
 
 	//	タグ
@@ -112,6 +113,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	//	スキル保持
 	auto& skillHolder = registry.emplace<SkillSlotComponent>(player);
 	skillHolder.SkillSlots[0] = CreateSkill1();
+	skillHolder.SkillSlots[1] = CreateSkill2();
 
 	return player;
 }
@@ -173,7 +175,7 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	auto& state = registry.emplace<EnemyStateComponent>(enemy);
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", 10, Graphics::Color::White());
 	state.Weapon = sword;
 
 	//	タグ
@@ -238,6 +240,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	auto collider = col.GetPtr<AABBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	col.BoneName = "Head";
 	registry.emplace<ColliderComponent>(enemy, std::move(col));
 
 	//　状態管理
@@ -250,7 +253,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	param.Rank = EnemyRank::Basic;
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", 100, Graphics::Color::Cyan());
 	param.Weapon = sword;
 
 
@@ -319,6 +322,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	auto collider = col.GetPtr<AABBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
 	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	col.BoneName = "Head";
 	registry.emplace<ColliderComponent>(enemy, std::move(col));
 
 	//　状態管理
@@ -331,7 +335,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	param.Rank = EnemyRank::Advanced;
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", 10, Graphics::Color::Yellow());
 	param.Weapon = sword;
 
 
@@ -400,7 +404,8 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	auto col = ColliderComponent::Create<AABBCollider>();
 	auto collider = col.GetPtr<AABBCollider>();
 	collider->SetVolume({ 2.0f,8.0f,2.0f });
-	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };
+	col.Offset = { 0.0f, collider->GetVolume().y * 0.5f, 0.0f };	
+	col.BoneName = "Head";
 	registry.emplace<ColliderComponent>(enemy, std::move(col));
 
 	//　状態管理
@@ -417,7 +422,7 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand");
+	auto sword = CreateEnemyWeapon(enemy, "RightHand",10,Graphics::Color::Red());
 	param.Weapon = sword;
 
 
@@ -506,7 +511,7 @@ void Engine::System::ObjectsFactory::CreateTest()
 
 }
 
-entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Parent, const std::string& BoneName)
+entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Parent, const std::string& BoneName, int Damage)
 {
 	auto manager = EntityManager::GetInstance();
 	auto& registry = EntityManager::GetInstance()->GetRegistry();
@@ -521,17 +526,11 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 
 	//	fbxのリソース
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/Sword.fbx.bin");
-	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/MM_Sword.fbx.bin");
 
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(sword, res, false);
 	fbx.CurrAnimation = "";
-	//fbx.Mesh->SetColor(Graphics::Color::Green);
-
-	//	当たり判定
-	//	いったん正常に動作するかどうか
-
 
 	//	アタッチ
 	auto& socket = registry.emplace<SocketComponent>(sword);
@@ -546,7 +545,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 	auto windEffect2 = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sword6.efk");
 
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
-	damage.DamageValue = 250.0f;
+	damage.DamageValue = Damage;
 	damage.HitEffectAsset.push_back(effectRes);
 	damage.HitEffectAsset.push_back(windEffect);
 	damage.HitEffectAsset.push_back(windEffect2);
@@ -558,7 +557,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 	return sword;
 }
 
-entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName)
+entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Parent, const std::string& BoneName, int Damage, const Graphics::Color& Color)
 {
 	auto manager = EntityManager::GetInstance();
 	auto& registry = EntityManager::GetInstance()->GetRegistry();
@@ -577,7 +576,7 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(sword, res, false);
 	fbx.CurrAnimation = "";
-	fbx.Mesh->SetColor(Graphics::Color::Red());
+	fbx.Mesh->SetColor(Color);
 
 	//	アタッチ
 	auto& socket = registry.emplace<SocketComponent>(sword);
@@ -587,8 +586,15 @@ entt::entity Engine::System::ObjectsFactory::CreateEnemyWeapon(entt::entity Pare
 	socket.OffsetRot = { -0.7,-0.685,0.192,0.007 };
 	socket.PivotOffset = { 0,1.98,0.0 };
 
+
+	auto effectRes = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/HitEffect.efk");
+
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
-	damage.DamageValue = 250.0f;
+	damage.DamageValue = Damage;
+	damage.HitEffectAsset.push_back(effectRes);
+	damage.Offset = { 0,5,0 };
+	constexpr float EffScale = 3.0f;
+	damage.Scale = { EffScale,EffScale,EffScale };
 
 	registry.emplace<EnemyWeaponTag>(sword);
 	
@@ -622,6 +628,35 @@ entt::entity Engine::System::ObjectsFactory::CreateSkill1()
 	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sylph/10.efk"));
 	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Tornade.efk"));
 
+
+	auto& trans = registry.emplace<Transform3D>(entity);
+
+	auto& damage = registry.emplace<AttackPowerComponent>(entity);
+	damage.DamageValue = 250.0f;
+	damage.HitEffectAsset.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Skill1Hit.efk"));
+
+	registry.emplace<PlayerWeaponTag>(entity);
+
+	return entity;
+}
+
+entt::entity Engine::System::ObjectsFactory::CreateSkill2()
+{
+	auto manager = EntityManager::GetInstance();
+	auto& registry = EntityManager::GetInstance()->GetRegistry();
+
+	auto entity = manager->CreateEntity();
+
+	//	スキル
+	auto& skill = registry.emplace<SkillComponent>(entity);
+	skill.MaxCooldown = 4.0f;
+
+	//	エフェクトの読み込み
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire3.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire7.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Flame.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Light4.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Light3.efk"));
 
 	auto& trans = registry.emplace<Transform3D>(entity);
 
