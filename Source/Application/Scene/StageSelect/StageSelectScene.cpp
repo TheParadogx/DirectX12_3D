@@ -25,6 +25,7 @@
 #include"Application/Scene/StageSelect/Component/Interact/System/InteractableSystem.hpp"
 #include"Application/Components/Skill/System/SkillSystem.hpp"
 
+#include"Audio/Manager/AudioManager.hpp"
 
 bool Engine::Scene::StageSelect::Initialize()
 {
@@ -48,14 +49,17 @@ bool Engine::Scene::StageSelect::Initialize()
 	System::StageSelectObjFactory::CreateEnemy_Basic();
 	System::StageSelectObjFactory::CreateEnemy_Advanced();
 	System::StageSelectObjFactory::CreateEnemy_Boss();
-#ifndef _DENUG
+#ifdef _DEBUG
 	//System::StageSelectObjFactory::TestEffect();
 #endif // _DENUG
 
 	//	‹ó
-	auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");
+	auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/skybox.dds");
 	mSkyBox = std::make_unique<Graphics::SkyBox>();
 	mSkyBox->Create(SkyBoxResource);
+
+	//	ƒ^ƒCƒgƒ‹‚Ì‰¹
+	Audio::AudioManager::GetInstance()->PlaySE("Assets/StageSelect/Sound/BGM.aud", true, 0.05f,false);
 
 
 	return true;

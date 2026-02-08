@@ -32,6 +32,9 @@
 
 #include"Application/Macro/ProjMacros.hpp"
 
+#include"System/Conponent/Timer/TimerComponent.hpp"
+#include"System/Conponent/Timer/System/TimerComponentSystem.hpp"
+
 namespace Engine::Scene
 {
 	InGame::InGame(System::EnemyRank Rank)
@@ -113,7 +116,13 @@ namespace Engine::Scene
 		System::ObjectsFactory::CreateField();
 		System::ObjectsFactory::CreatePlayer();
 
-		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/cubemap.dds");
+		//	タイマー
+		auto TimerEnt = System::TimerComponentSystem::CreateTimerObject();
+		auto& registry = System::EntityManager::GetInstance()->GetRegistry();
+		registry.emplace<System::InGameTag>(TimerEnt);
+
+		//	スカイボックス		
+		auto SkyBoxResource = Graphics::SkyBoxResourceManager::GetInstance()->Load("Assets/SkyBox/skybox.dds");
 		mSkyBox = std::make_unique<Graphics::SkyBox>();
 		mSkyBox->Create(SkyBoxResource);
 

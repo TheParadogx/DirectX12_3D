@@ -64,6 +64,8 @@ namespace Engine::Audio
 		/// </summary>
 		bool Playing = false;
 
+		bool IsGlobal = true;
+
 	};
 
 }

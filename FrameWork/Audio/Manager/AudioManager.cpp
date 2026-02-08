@@ -28,7 +28,7 @@ bool Engine::Audio::AudioManager::Initialize(AudioResourceManager* AudioResManag
 /// <param name="FilePath">ファイル名</param>
 /// <param name="Loop">true:ループ再生</param>
 /// <param name="Volume">音量:0.0f - 1.0f</param>
-void Engine::Audio::AudioManager::PlaySE(const std::string& FilePath, bool Loop, float Volume)
+void Engine::Audio::AudioManager::PlaySE(const std::string& FilePath, bool Loop, float Volume, bool IsGlobal)
 {
 	auto resource = mResources->GetResource(FilePath);
 	if (IsNullptr(resource))
@@ -39,6 +39,7 @@ void Engine::Audio::AudioManager::PlaySE(const std::string& FilePath, bool Loop,
 	Sound sound(resource);
 	sound.Loop = Loop;
 	sound.Volume = Volume;
+	sound.IsGlobal = IsGlobal;
 	sound.Play();
 	std::lock_guard<std::recursive_mutex> lock(mMtx);
 	mSounds.push_back(std::move(sound));
@@ -59,6 +60,19 @@ void Engine::Audio::AudioManager::MixSounds(int16_t* Output, size_t FramesReques
 		it->ApplyAndMix(Output, FramesRequested, Channels);
 		++it;
 	}
+}
+
+/// <summary>
+/// 全てのサウンドを止める
+/// </summary>
+void Engine::Audio::AudioManager::AllClearSound()
+{
+	std::lock_guard<std::recursive_mutex> lock(mMtx);
+
+	// IsPersistent が false（永続的ではない）ものを削除する
+	std::erase_if(mSounds, [](const Sound& sound) {
+		return !sound.IsGlobal;
+		});
 }
 
 /// <summary>
