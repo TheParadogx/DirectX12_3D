@@ -113,7 +113,7 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Basic()
 	interact.Talkable = true;
 
 	//	˜b‚µ‚©‚¯‚é—p‚Ì‰æ‘œ
-	std::string FilePath = "Assets/StageSelect/Texture/Blue_Challenge.png";
+	std::string FilePath = "Assets/StageSelect/Texture/Blue_C.png";
 
 	auto vfxRes = Graphics::TextureManager::GetInstance()->Load(FilePath);
 	auto& vfx = registry.emplace<VfxMeshComponent>(enemy, vfxRes);
@@ -182,11 +182,11 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Advanced()
 	std::string FilePath;
 	if (interact.Talkable == true)
 	{
-		FilePath = "Assets/StageSelect/Texture/Yellow_Challenge.png";
+		FilePath = "Assets/StageSelect/Texture/Yellow_C.png";
 	}
 	else
 	{
-		FilePath = "Assets/StageSelect/Texture/Yellow_Require.png";
+		FilePath = "Assets/StageSelect/Texture/Yellow_R.png";
 	}
 
 	auto vfxRes = Graphics::TextureManager::GetInstance()->Load(FilePath);
@@ -256,11 +256,11 @@ void Engine::System::StageSelectObjFactory::CreateEnemy_Boss()
 	std::string FilePath;
 	if (interact.Talkable == true)
 	{
-		FilePath = "Assets/StageSelect/Texture/Red_Challenge.png";
+		FilePath = "Assets/StageSelect/Texture/Red_C.png";
 	}
 	else
 	{
-		FilePath = "Assets/StageSelect/Texture/Red_Require.png";
+		FilePath = "Assets/StageSelect/Texture/Red_R.png";
 	}
 
 
@@ -306,7 +306,6 @@ void Engine::System::StageSelectObjFactory::TestEffect()
 	//	Res.push_back(res);
 	//}
 
-	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/PhantasmMeteor.efk"));
 	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire3.efk"));
 	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire7.efk"));
 	Res.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Flame.efk"));

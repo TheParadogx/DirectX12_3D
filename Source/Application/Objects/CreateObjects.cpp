@@ -104,7 +104,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	move.MoveSpeed = 20.0f;
 
 	//	武器
-	auto sword = CreatePlayerWeapon(player,"RightHand");
+	auto sword = CreatePlayerWeapon(player,"RightHand",100);
 	state.Weapon = sword;
 
 	//	タグ
@@ -511,7 +511,7 @@ void Engine::System::ObjectsFactory::CreateTest()
 
 }
 
-entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Parent, const std::string& BoneName)
+entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Parent, const std::string& BoneName, int Damage)
 {
 	auto manager = EntityManager::GetInstance();
 	auto& registry = EntityManager::GetInstance()->GetRegistry();
@@ -526,16 +526,11 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 
 	//	fbxのリソース
 	auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/Sword.fbx.bin");
-	//auto res = Graphics::FbxResourceManager::GetInstance()->Load("Assets/Sword/MM_Sword.fbx.bin");
 
 
 	//	fbxのモデル
 	auto& fbx = registry.emplace<FbxComponent>(sword, res, false);
 	fbx.CurrAnimation = "";
-	//fbx.Mesh->SetColor(Graphics::Color::Green);
-
-	//	当たり判定
-	//	いったん正常に動作するかどうか
 
 	//	アタッチ
 	auto& socket = registry.emplace<SocketComponent>(sword);
@@ -550,7 +545,7 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 	auto windEffect2 = Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Sword6.efk");
 
 	auto& damage = registry.emplace<AttackPowerComponent>(sword);
-	damage.DamageValue = 1;
+	damage.DamageValue = Damage;
 	damage.HitEffectAsset.push_back(effectRes);
 	damage.HitEffectAsset.push_back(windEffect);
 	damage.HitEffectAsset.push_back(windEffect2);
@@ -647,11 +642,14 @@ entt::entity Engine::System::ObjectsFactory::CreateSkill2()
 
 	//	スキル
 	auto& skill = registry.emplace<SkillComponent>(entity);
+	skill.MaxCooldown = 4.0f;
 
 	//	エフェクトの読み込み
 	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire3.efk"));
 	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Fire7.efk"));
 	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Flame.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Light4.efk"));
+	skill.Effects.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Light3.efk"));
 
 	auto& trans = registry.emplace<Transform3D>(entity);
 

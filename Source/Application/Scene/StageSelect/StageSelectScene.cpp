@@ -49,7 +49,7 @@ bool Engine::Scene::StageSelect::Initialize()
 	System::StageSelectObjFactory::CreateEnemy_Advanced();
 	System::StageSelectObjFactory::CreateEnemy_Boss();
 #ifdef _DEBUG
-	System::StageSelectObjFactory::TestEffect();
+	//System::StageSelectObjFactory::TestEffect();
 #endif // _DENUG
 
 	//	‹ó
