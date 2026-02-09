@@ -33,6 +33,13 @@
 #include"Application/Data/PlayerData.hpp"
 #include"Application/Data/SkillData.hpp"
 
+#ifdef _DEBUG
+#define ESC_BREAK	//	コメントにしたらESCで終了しなくなります。展示会なので落とせないように
+#else
+#define ESC_BREAK	//	コメントにしたらESCで終了しなくなります。展示会なので落とせないように
+#endif // _DEBUG
+
+
 void Engine::App::Application::CreateStartScene()
 {
 
@@ -105,10 +112,12 @@ void Engine::App::Application::Run()
         mEngine->EndFrame();
         mScene->PostPresentUpdate();
 
+#ifdef ESC_BREAK
         if (Input::InputManager::GetInstance()->GetKeyboard()->IsHeld(Input::eKeyCode::Escape))
         {
             break;
         }
+#endif // ESC_BREAK
     }
 }
 

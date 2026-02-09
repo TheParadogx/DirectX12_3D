@@ -155,9 +155,11 @@ void Engine::Core::Engine::OnDestory()
 /// </summary>
 void Engine::Core::Engine::NewFrame()
 {
+#ifdef _DEBUG
 	//	“ü—Í
 	//	ImGui
 	mImgui->NewFrame();
+#endif // _DEBUG
 }
 
 /// <summary>
@@ -176,7 +178,9 @@ void Engine::Core::Engine::BegineRendering()
 /// </summary>
 void Engine::Core::Engine::EndFrame()
 {
+#ifdef _DEBUG
 	mImgui->EndFrame(mDirectX, mGDHManager);
+#endif // _DEBUG
 
 	mDirectX->Flip();
 }

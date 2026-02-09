@@ -206,6 +206,10 @@ std::vector<Engine::Input::ePadIndex> Engine::Input::PadManager::GetAvailableInd
 /// </summary>
 void Engine::Input::PadManager::ImGuiUpdate()
 {
+
+#ifdef _DEBUG
+
+
 	ImGui::Begin("Gamepad Monitor");
 	ImGui::Text("Connected Pads: %zu", mGamepads.size());
 	ImGui::Separator();
@@ -222,5 +226,6 @@ void Engine::Input::PadManager::ImGuiUpdate()
 
 
 	ImGui::End();
+#endif // _DEBUG
 
 }

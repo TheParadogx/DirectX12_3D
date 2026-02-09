@@ -38,6 +38,8 @@
 #include"Application/Scene/Title/TitleScene.hpp"
 #include"System/Time/Time.hpp"
 
+
+
 void Engine::Scene::StageSelect::OpenConfirmWindow()
 {
 	System::Time::Scale = 0.0f;

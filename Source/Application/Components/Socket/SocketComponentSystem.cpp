@@ -96,6 +96,8 @@ void Engine::System::SocketComponentSystem::PostUpdate(entt::registry& Reg, doub
 /// <param name="Reg"></param>
 void Engine::System::SocketComponentSystem::OnGui(entt::registry& Reg)
 {
+#ifdef _DEBUG
+
 
     // 調整用のウィンドウを作成
     if (ImGui::Begin("Socket Offset Tuner"))
@@ -135,6 +137,7 @@ void Engine::System::SocketComponentSystem::OnGui(entt::registry& Reg)
             });
     }
     ImGui::End();
+#endif // _DEBUG
 
 
 }
