@@ -108,7 +108,7 @@ bool Engine::Scene::StageSelect::Initialize()
 	mSkyBox->Create(SkyBoxResource);
 
 	//	ƒ^ƒCƒgƒ‹‚Ì‰¹
-	Audio::AudioManager::GetInstance()->PlaySE("Assets/StageSelect/Sound/BGM.aud", true, 0.05f,false);
+	Audio::AudioManager::GetInstance()->PlaySE("Assets/StageSelect/Sound/BGM.aud", true, 0.15f,false);
 
 
 	return true;

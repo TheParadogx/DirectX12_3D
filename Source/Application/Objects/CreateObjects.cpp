@@ -35,6 +35,8 @@
 
 #include"System/CSV/CSVManager.hpp"
 #include"Application/Data/EnemyData.hpp"
+#include"Application/Data/PlayerData.hpp"
+#include"Application/Data/SkillData.hpp"
 
 entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 {
@@ -45,6 +47,9 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 
 	//	オブジェクト
 	auto player = manager->CreateEntity();
+
+	auto data = System::CSV::Get<PlayerData>().Find(1);
+
 
 	//	座標
 	auto& transform = registry.emplace<Transform3D>(player);
@@ -85,8 +90,8 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(player);
-	status.MaxHp.Base = 1000;
-	status.Hp = 1000;
+	status.MaxHp.Base = data ->MaxHP;
+	status.Hp = data->MaxHP;
 
 	auto baseRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/BarBase.png");
 	auto barRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/Bar.png");
@@ -101,13 +106,17 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	registry.emplace<System::InputRequestComponent>(player);
 	//	状態
 	auto& state = registry.emplace<System::PlayerStateComponent>(player);
-
+	state.Dodge.DodgeCountMax = data->DodgeMax;
+	state.Dodge.CoolDowmMax = data->DodgeCT;
+	state.Dodge.MoveSpeed = data->DodgeSpeed;
 	//	移動
 	auto& move = registry.emplace<System::MoveComponent>(player);
-	move.MoveSpeed = 20.0f;
+	move.MoveSpeed = data->MoveSpeed;
+	move.TurnSpeed = data->TurnSpeed;
+
 
 	//	武器
-	auto sword = CreatePlayerWeapon(player,"RightHand",500);
+	auto sword = CreatePlayerWeapon(player,"RightHand", data->Attack);
 	state.Weapon = sword;
 
 	//	タグ
@@ -201,8 +210,6 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	//	データ取得
 	auto data = System::CSV::Get<EnemyData>().Find(1);
 
-
-
 	//	座標
 	auto& transform = registry.emplace<Transform3D>(enemy);
 	transform.Position = { 20.0f,0.0f,20.0f };
@@ -259,17 +266,17 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
 	param.Rank = EnemyRank::Basic;
-	//param.MoveSpeed = data->MoveSpeed;
-	//param.EvadeSpeed = param.EvadeMaxSpeed = data->EvadeSpeed;
-	//param.AttackRange = data->AttackRange;
-	//param.IdleTime = data->IdleTime;
-	//param.IdleEvadeProbability = data->IdleEvadeProbability;
-	//param.CancelEvadeProbability = data->CancelEvadeProbability;
-	//param.AttackComboMax = data->AttackComboMax;
-	//param.CanCancelEvade = (bool)data->CanCancelEvade;
+	param.MoveSpeed = data->MoveSpeed;
+	param.EvadeSpeed = param.EvadeMaxSpeed = data->EvadeSpeed;
+	param.AttackRange = data->AttackRange;
+	param.IdleTime = data->IdleTime;
+	param.IdleEvadeProbability = data->IdleEvadeProbability;
+	param.CancelEvadeProbability = data->CancelEvadeProbability;
+	param.AttackComboMax = data->AttackComboMax;
+	param.CanCancelEvade = (bool)data->CanCancelEvade;
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand", 100, Graphics::Color::Cyan());
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", data->Attack, Graphics::Color::Cyan());
 	param.Weapon = sword;
 
 
@@ -292,6 +299,8 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	const float Scale = 0.05f;
 
 	auto enemy = manager->CreateEntity();
+
+	auto data = System::CSV::Get<EnemyData>().Find(2);
 
 	//	座標
 	auto& transform = registry.emplace<Transform3D>(enemy);
@@ -320,8 +329,8 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);
-	status.MaxHp.Base = 1000;
-	status.Hp = 1000;
+	status.MaxHp.Base = data->MaxHP;
+	status.Hp = data->MaxHP;
 
 	//	画像
 	auto baseRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/BarBase.png");
@@ -349,9 +358,18 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
 	param.Rank = EnemyRank::Advanced;
+	param.MoveSpeed = data->MoveSpeed;
+	param.EvadeSpeed = param.EvadeMaxSpeed = data->EvadeSpeed;
+	param.AttackRange = data->AttackRange;
+	param.IdleTime = data->IdleTime;
+	param.IdleEvadeProbability = data->IdleEvadeProbability;
+	param.CancelEvadeProbability = data->CancelEvadeProbability;
+	param.AttackComboMax = data->AttackComboMax;
+	param.CanCancelEvade = (bool)data->CanCancelEvade;
+
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand", 10, Graphics::Color::Yellow());
+	auto sword = CreateEnemyWeapon(enemy, "RightHand", data->Attack, Graphics::Color::Yellow());
 	param.Weapon = sword;
 
 
@@ -375,6 +393,8 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	const float Scale = 0.05f;
 
 	auto enemy = manager->CreateEntity();
+	auto data = System::CSV::Get<EnemyData>().Find(3);
+
 
 	//	座標
 	auto& transform = registry.emplace<Transform3D>(enemy);
@@ -403,8 +423,8 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);
-	status.MaxHp.Base = 1000;
-	status.Hp = 1000;
+	status.MaxHp.Base = data->MaxHP;
+	status.Hp = data->MaxHP;
 
 	//	画像
 	auto baseRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/BarBase.png");
@@ -431,14 +451,19 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	auto& ai = registry.emplace<EnemyAIComponent>(enemy);
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
-	param.AttackComboMax = 4;
-	param.IdleTime = 0.7f;
 	param.Rank = EnemyRank::Boss;
-	param.CanCancelEvade = true;
+	param.MoveSpeed = data->MoveSpeed;
+	param.EvadeSpeed = param.EvadeMaxSpeed = data->EvadeSpeed;
+	param.AttackRange = data->AttackRange;
+	param.IdleTime = data->IdleTime;
+	param.IdleEvadeProbability = data->IdleEvadeProbability;
+	param.CancelEvadeProbability = data->CancelEvadeProbability;
+	param.AttackComboMax = data->AttackComboMax;
+	param.CanCancelEvade = (bool)data->CanCancelEvade;
 
 
 	//	武器
-	auto sword = CreateEnemyWeapon(enemy, "RightHand",10,Graphics::Color::Red());
+	auto sword = CreateEnemyWeapon(enemy, "RightHand",data->Attack,Graphics::Color::Red());
 	param.Weapon = sword;
 
 
@@ -628,6 +653,8 @@ entt::entity Engine::System::ObjectsFactory::CreateSkill1()
 	auto& registry = EntityManager::GetInstance()->GetRegistry();
 
 	auto entity = manager->CreateEntity();
+	auto data = System::CSV::Get<SkillData>().Find(1);
+
 
 	//	スキル
 	auto& skill = registry.emplace<SkillComponent>(entity);
@@ -648,7 +675,7 @@ entt::entity Engine::System::ObjectsFactory::CreateSkill1()
 	auto& trans = registry.emplace<Transform3D>(entity);
 
 	auto& damage = registry.emplace<AttackPowerComponent>(entity);
-	damage.DamageValue = 250.0f;
+	damage.DamageValue = data->Attack;
 	damage.HitEffectAsset.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Skill1Hit.efk"));
 
 	registry.emplace<PlayerWeaponTag>(entity);
@@ -662,6 +689,7 @@ entt::entity Engine::System::ObjectsFactory::CreateSkill2()
 	auto& registry = EntityManager::GetInstance()->GetRegistry();
 
 	auto entity = manager->CreateEntity();
+	auto data = System::CSV::Get<SkillData>().Find(2);
 
 	//	スキル
 	auto& skill = registry.emplace<SkillComponent>(entity);
@@ -677,7 +705,7 @@ entt::entity Engine::System::ObjectsFactory::CreateSkill2()
 	auto& trans = registry.emplace<Transform3D>(entity);
 
 	auto& damage = registry.emplace<AttackPowerComponent>(entity);
-	damage.DamageValue = 250.0f;
+	damage.DamageValue = data->Attack;
 	damage.HitEffectAsset.push_back(Graphics::EffectManager::GetInstance()->GetEffect("Assets/Effect/Skill1Hit.efk"));
 
 	registry.emplace<PlayerWeaponTag>(entity);

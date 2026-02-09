@@ -30,6 +30,8 @@
 #include"Application/Data/SaveData.hpp"
 #include"Application/Data/ClearRankData.hpp"
 #include"Application/Data/EnemyData.hpp"
+#include"Application/Data/PlayerData.hpp"
+#include"Application/Data/SkillData.hpp"
 
 void Engine::App::Application::CreateStartScene()
 {
@@ -71,6 +73,17 @@ bool Engine::App::Application::DataLoad()
     {
         return false;
     }
+    ret = System::CSV::Get<System::PlayerData>().Load("Assets/Data/PlayerData.csv");
+    if (ret == false)
+    {
+        return false;
+    }
+    ret = System::CSV::Get<System::SkillData>().Load("Assets/Data/SkillData.csv");
+    if (ret == false)
+    {
+        return false;
+    }
+
 
     return true;
 }

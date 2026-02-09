@@ -175,7 +175,9 @@
     <ClInclude Include="Source\Application\Components\Skill\SkillComponent.hpp" />
     <ClInclude Include="Source\Application\Data\ClearRankData.hpp" />
     <ClInclude Include="Source\Application\Data\EnemyData.hpp" />
+    <ClInclude Include="Source\Application\Data\PlayerData.hpp" />
     <ClInclude Include="Source\Application\Data\SaveData.hpp" />
+    <ClInclude Include="Source\Application\Data\SkillData.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\Component\UISelectionDecorator.hpp" />
     <ClInclude Include="Source\Application\Scene\GameOver\Factory\CreateGameOver.hpp" />
     <ClInclude Include="FrameWork\System\Fade\FadeComponent.hpp" />
