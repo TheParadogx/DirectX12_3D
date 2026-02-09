@@ -17,6 +17,7 @@ namespace Engine::System
         if constexpr (std::is_same_v<T, int>) val = std::stoi(s);
         else if constexpr (std::is_same_v<T, double>) val = std::stod(s);
         else if constexpr (std::is_same_v<T, std::string>) val = s;
+        else if constexpr (std::is_same_v<T, float>)  val = std::stof(s);
     }
 
     /* s‚ğ•ª‰ğ */

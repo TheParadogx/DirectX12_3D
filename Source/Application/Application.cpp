@@ -29,6 +29,7 @@
 #include"System/CSV/CSVManager.hpp"
 #include"Application/Data/SaveData.hpp"
 #include"Application/Data/ClearRankData.hpp"
+#include"Application/Data/EnemyData.hpp"
 
 void Engine::App::Application::CreateStartScene()
 {
@@ -65,6 +66,12 @@ bool Engine::App::Application::DataLoad()
     {
         return false;
     }
+    ret = System::CSV::Get<System::EnemyData>().Load("Assets/Data/EnemyData.csv");
+    if (ret == false)
+    {
+        return false;
+    }
+
     return true;
 }
 

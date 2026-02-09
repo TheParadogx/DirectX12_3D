@@ -33,6 +33,9 @@
 #include"Application/Components/Skill/SkillComponent.hpp"
 
 
+#include"System/CSV/CSVManager.hpp"
+#include"Application/Data/EnemyData.hpp"
+
 entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 {
 	auto manager = EntityManager::GetInstance();
@@ -195,6 +198,11 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 
 	auto enemy = manager->CreateEntity();
 
+	//	データ取得
+	auto data = System::CSV::Get<EnemyData>().Find(1);
+
+
+
 	//	座標
 	auto& transform = registry.emplace<Transform3D>(enemy);
 	transform.Position = { 20.0f,0.0f,20.0f };
@@ -222,8 +230,8 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 
 	//	ステータス
 	auto& status = registry.emplace<System::StatusComponet>(enemy);
-	status.MaxHp.Base = 1000;
-	status.Hp = 1000;
+	status.MaxHp.Base = data->MaxHP;
+	status.Hp = data->MaxHP;
 
 	//	画像
 	auto baseRes = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/HPBar/BarBase.png");
@@ -251,6 +259,14 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	//	パラメーター
 	auto& param = registry.emplace<EnemyParameters>(enemy);
 	param.Rank = EnemyRank::Basic;
+	//param.MoveSpeed = data->MoveSpeed;
+	//param.EvadeSpeed = param.EvadeMaxSpeed = data->EvadeSpeed;
+	//param.AttackRange = data->AttackRange;
+	//param.IdleTime = data->IdleTime;
+	//param.IdleEvadeProbability = data->IdleEvadeProbability;
+	//param.CancelEvadeProbability = data->CancelEvadeProbability;
+	//param.AttackComboMax = data->AttackComboMax;
+	//param.CanCancelEvade = (bool)data->CanCancelEvade;
 
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand", 100, Graphics::Color::Cyan());
