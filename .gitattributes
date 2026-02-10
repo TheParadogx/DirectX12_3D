@@ -1,0 +1,12 @@
+# デフォルトで改行コードを自動判定
+* text=auto
+
+# C++関連をCRLFに固定（GitHubのZIP用）
+*.cpp text eol=crlf
+*.h   text eol=crlf
+*.hpp text eol=crlf
+
+# その他のテキストファイルもCRLFに
+*.hlsl text eol=crlf
+*.txt  text eol=crlf
+*.editorconfig text eol=crlf

@@ -1,21 +1,9 @@
 root = true
 
-# All files
 [*]
 indent_style = space
+end_of_line = crlf
+charset = utf-8-bom
 
-# Xml files
 [*.xml]
 indent_size = 2
-
-# デフォルトで改行コードを自動判定
-* text=auto
-
-# C++のソースコードとヘッダを明示的にCRLFに固定
-*.cpp text eol=crlf
-*.h   text eol=crlf
-*.hpp text eol=crlf
-
-# ついでにシェーダーや設定ファイルも固定するなら
-*.hlsl text eol=crlf
-*.txt  text eol=crlf
