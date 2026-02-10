@@ -13,7 +13,7 @@ SamplerState Sampler : register(s0);
 float4 main(VStoPS input) : SV_Target0
 {
     // UVのx座標が ratio を超えていたら描画をスキップ
-    // これにより画像が「削れる」表現になる
+    //  画像をこれで削れるように
     if (input.UV.x > g_ratio)
     {
         discard;
