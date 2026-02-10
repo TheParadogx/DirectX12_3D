@@ -16,6 +16,7 @@
 #include"Application/Components/HpRender/HpRenderComponent.hpp"
 #include"Application/Components/Status/StatusComponent.hpp"
 #include"Application/Components/Damage/AttackPowerComponent.hpp"
+#include"System/Conponent/Vfx/VfxMeshComponent.hpp"
 
 #include"Application/Components/Player/PlayerState/PlayerStateComponent.hpp"
 #include"Application/Components/Player/Input/InputRequestComponent.hpp"
@@ -127,6 +128,15 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayer()
 	skillHolder.SkillSlots[0] = CreateSkill1();
 	skillHolder.SkillSlots[1] = CreateSkill2();
 
+	auto shadow = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/FootShadow/FootShadow.png");
+	auto& vfx = registry.emplace<System::VfxMeshComponent>(player, shadow);
+	vfx.Offset = { 0,0.01,0};
+	vfx.Mesh->SetIsBillboard(false);
+	float vfxScale = 4.0f;
+	vfx.Mesh->SetScale({ vfxScale ,vfxScale ,vfxScale });
+	vfx.Mesh->SetColor({ 0,0,0,0.5 });
+	vfx.Mesh->SetRotationToGround();
+
 	return player;
 }
 
@@ -189,6 +199,16 @@ void Engine::System::ObjectsFactory::CreateEnemy()
 	//	武器
 	auto sword = CreateEnemyWeapon(enemy, "RightHand", 10, Graphics::Color::White());
 	state.Weapon = sword;
+
+	auto shadow = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/FootShadow/FootShadow.png");
+	auto& vfx = registry.emplace<System::VfxMeshComponent>(enemy, shadow);
+	vfx.Offset = { 0,0.01,0 };
+	vfx.Mesh->SetIsBillboard(false);
+	float vfxScale = 4.0f;
+	vfx.Mesh->SetScale({ vfxScale ,vfxScale ,vfxScale });
+	vfx.Mesh->SetColor({ 0,0,0,0.5 });
+	vfx.Mesh->SetRotationToGround();
+
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
@@ -279,7 +299,14 @@ void Engine::System::ObjectsFactory::CreateEnemy_Basic()
 	auto sword = CreateEnemyWeapon(enemy, "RightHand", data->Attack, Graphics::Color::Cyan());
 	param.Weapon = sword;
 
-
+	auto shadow = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/FootShadow/FootShadow.png");
+	auto& vfx = registry.emplace<System::VfxMeshComponent>(enemy, shadow);
+	vfx.Offset = { 0,0.01,0 };
+	vfx.Mesh->SetIsBillboard(false);
+	float vfxScale = 4.0f;
+	vfx.Mesh->SetScale({ vfxScale ,vfxScale ,vfxScale });
+	vfx.Mesh->SetColor({ 0,0,0,0.5 });
+	vfx.Mesh->SetRotationToGround();
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
@@ -372,7 +399,14 @@ void Engine::System::ObjectsFactory::CreateEnemy_Advanced()
 	auto sword = CreateEnemyWeapon(enemy, "RightHand", data->Attack, Graphics::Color::Yellow());
 	param.Weapon = sword;
 
-
+	auto shadow = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/FootShadow/FootShadow.png");
+	auto& vfx = registry.emplace<System::VfxMeshComponent>(enemy, shadow);
+	vfx.Offset = { 0,0.01,0 };
+	vfx.Mesh->SetIsBillboard(false);
+	float vfxScale = 4.0f;
+	vfx.Mesh->SetScale({ vfxScale ,vfxScale ,vfxScale });
+	vfx.Mesh->SetColor({ 0,0,0,0.5 });
+	vfx.Mesh->SetRotationToGround();
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
@@ -466,7 +500,14 @@ void Engine::System::ObjectsFactory::CreateEnemy_Boss()
 	auto sword = CreateEnemyWeapon(enemy, "RightHand",data->Attack,Graphics::Color::Red());
 	param.Weapon = sword;
 
-
+	auto shadow = Graphics::TextureManager::GetInstance()->Load("Assets/Texture/FootShadow/FootShadow.png");
+	auto& vfx = registry.emplace<System::VfxMeshComponent>(enemy, shadow);
+	vfx.Offset = { 0,0.01,0 };
+	vfx.Mesh->SetIsBillboard(false);
+	float vfxScale = 4.0f;
+	vfx.Mesh->SetScale({ vfxScale ,vfxScale ,vfxScale });
+	vfx.Mesh->SetColor({ 0,0,0,0.5 });
+	vfx.Mesh->SetRotationToGround();
 
 	//	タグ
 	registry.emplace<EnemyTag>(enemy);
@@ -592,6 +633,9 @@ entt::entity Engine::System::ObjectsFactory::CreatePlayerWeapon(entt::entity Par
 	damage.HitEffectAsset.push_back(windEffect2);
 	damage.Offset = { 0,5,0 };
 	damage.Scale = { 2,2,2 };
+
+	//	足元の影用のVfxのアタッチ
+
 
 	registry.emplace<PlayerWeaponTag>(sword);
 

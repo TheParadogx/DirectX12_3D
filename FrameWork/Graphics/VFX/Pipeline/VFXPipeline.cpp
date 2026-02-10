@@ -216,10 +216,9 @@ namespace Engine::Graphics
         rtDesc.BlendEnable = TRUE; // エフェクトなのでTRUE
         rtDesc.LogicOpEnable = FALSE;
 
-        rtDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;  // 自分の色にアルファを掛ける
-        rtDesc.DestBlend = D3D12_BLEND_ONE;        // 背景の色はそのまま100%使う（めっちゃブレンド）
-        //rtDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA; //  普通のまま使いたいとき
-        rtDesc.BlendOp = D3D12_BLEND_OP_ADD;
+        rtDesc.SrcBlend = D3D12_BLEND_SRC_ALPHA;           // 自分の色にアルファを掛ける
+        rtDesc.DestBlend = D3D12_BLEND_INV_SRC_ALPHA;      // 背景に1-アルファを掛ける
+        rtDesc.BlendOp = D3D12_BLEND_OP_ADD;               // 両方を足す
 
         rtDesc.SrcBlendAlpha = D3D12_BLEND_ONE;
         rtDesc.DestBlendAlpha = D3D12_BLEND_ZERO;

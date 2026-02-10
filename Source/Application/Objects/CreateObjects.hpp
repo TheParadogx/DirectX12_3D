@@ -6,6 +6,7 @@
 
 namespace Engine::System
 {
+
 	class ObjectsFactory
 	{
 		static entt::entity CreatePlayerWeapon(entt::entity Parent,const std::string& BoneName,int Damage);
@@ -13,9 +14,10 @@ namespace Engine::System
 
 		static entt::entity CreateSkill1();
 		static entt::entity CreateSkill2();
+
 	public:
 		static entt::entity CreatePlayer();
-		static void CreateEnemy();
+		static void CreateEnemy();	//	テスト用
 		static void CreateEnemy_Basic();     // 青（最初）
 		static void CreateEnemy_Advanced();  // 黄（中盤）
 		static void CreateEnemy_Boss();      // 赤（最強）
