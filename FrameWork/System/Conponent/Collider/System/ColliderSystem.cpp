@@ -275,6 +275,10 @@ void Engine::System::ColliderSystem::Debug(entt::registry& Registry)
 /// </summary>
 void Engine::System::ColliderSystem::OnGui(entt::registry& Registry)
 {
+
+
+#ifdef _DEBUG
+
 	auto view = Registry.view<ColliderComponent>();
 
 	// ImGui ‚Ì’†‚ÅˆêˆÓ‚ÌID‚ğˆÛ‚·‚é‚½‚ß‚ÌƒJƒEƒ“ƒ^
@@ -312,5 +316,7 @@ void Engine::System::ColliderSystem::OnGui(entt::registry& Registry)
 
 			ImGui::PopID();
 			ImGui::Separator(); // ‹«ŠEü
+
 		});
+#endif // _DEBUG
 }

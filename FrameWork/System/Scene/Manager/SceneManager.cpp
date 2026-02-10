@@ -78,10 +78,12 @@ void Engine::System::SceneManager::PostUpdate(double  FixedDeltaTime)
 /// </summary>
 void Engine::System::SceneManager::ImGuiUpdate()
 {
+#ifdef _DEBUG
 	if (mScene != nullptr)
 	{
 		mScene->ImGuiUpdate();
 	}
+#endif // _DEBUG
 }
 
 /// <summary>

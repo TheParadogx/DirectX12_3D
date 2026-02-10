@@ -14,6 +14,10 @@
 /// </summary>
 void Engine::Debug::AppDebugUI::SceneDebug()
 {
+
+#ifdef _DEBUG
+
+
 	System::SceneManager* scene = System::SceneManager::GetInstance();
 	if (scene == nullptr) return;
 
@@ -64,6 +68,7 @@ void Engine::Debug::AppDebugUI::SceneDebug()
 	}
 
 	ImGui::End();
+#endif // _DEBUG
 }
 
 /// <summary>

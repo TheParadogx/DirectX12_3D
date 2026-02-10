@@ -92,6 +92,10 @@ void Engine::System::HpRenderSystem::UpdateColor(HpRenderComponent& Component, f
 
 void Engine::System::HpRenderSystem::OnGui(entt::registry& Reg)
 {
+
+#ifdef _DEBUG
+
+
 	if (ImGui::Begin("Entitys"))
 	{
 
@@ -126,4 +130,5 @@ void Engine::System::HpRenderSystem::OnGui(entt::registry& Reg)
 	}
 
 	ImGui::End();
+#endif // _DEBUG
 }
