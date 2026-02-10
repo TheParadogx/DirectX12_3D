@@ -16,6 +16,13 @@ namespace Engine::Graphics
 		/// <param name="Segments">頂点数</param>
 		static void DrawDebugCircle(const Math::Vector3& Center, float Radius, const Graphics::Color& Color,const int Segments = 32);
 
+		/// <summary>
+		/// デバック用の四角形描画
+		/// </summary>
+		/// <param name="World"></param>
+		/// <param name="Width"></param>
+		/// <param name="Height"></param>
+		/// <param name="Color"></param>
 		static void DrawDebugQuad(const Math::Matrix& World, float Width, float Height, const Graphics::Color& Color);
 	};
 }

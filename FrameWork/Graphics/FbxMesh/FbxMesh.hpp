@@ -52,6 +52,7 @@ namespace Engine::Graphics
 		/// </summary>
 		void Render();
 		
+		//	アクセサ
 		const Math::Vector3& GetPosition()const;
 		void SetPosition(const Math::Vector3& position);
 

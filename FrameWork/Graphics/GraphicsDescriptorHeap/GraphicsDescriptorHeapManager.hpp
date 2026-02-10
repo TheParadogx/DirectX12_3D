@@ -58,15 +58,30 @@ namespace Engine::Graphics
 		ID3D12DescriptorHeap* GetGraphicsHeap();
 
 	private:
+		/// <summary>
+		/// CpuとGpu情報のセット
+		/// </summary>
 		struct HandleInfo
 		{
 			D3D12_CPU_DESCRIPTOR_HANDLE Cpu;
 			D3D12_GPU_DESCRIPTOR_HANDLE Gpu;
 		};
 
+		/// <summary>
+		/// グラフィックス用途のディスクリプタヒープを参照する
+		/// </summary>
 		mw::DescriptorHeapPtr mGraphicsHeap;
+		/// <summary>
+		/// 各ディスクリプタの状態の記録
+		/// </summary>
 		std::array<HandleInfo, MAX_DESCRIPTOR> mInfo;
+		/// <summary>
+		/// 各領域の使用状況
+		/// </summary>
 		std::array<bool, MAX_DESCRIPTOR> mInUse;
+		/// <summary>
+		/// 検索操作で使用されるオフセットを保持
+		/// </summary>
 		int mSearchOffset;
 
 	};

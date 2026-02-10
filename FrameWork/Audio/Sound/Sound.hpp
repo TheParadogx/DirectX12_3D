@@ -64,6 +64,9 @@ namespace Engine::Audio
 		/// </summary>
 		bool Playing = false;
 
+		/// <summary>
+		/// true:画面切り替え時にリセットされず再生終了などで削除
+		/// </summary>
 		bool IsGlobal = true;
 
 	};

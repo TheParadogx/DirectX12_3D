@@ -3,7 +3,9 @@
 #include<wrl/client.h>
 #include<dxgi1_6.h>
 
-//	Microsoft::WRLÇ»ÇÃÇ≈mw
+/*
+* ñΩñºí∑Ç¢Ç©ÇÁÇ±ÇÍíZÇ≠ÇµÇ‹Ç∑ÅB
+*/
 namespace mw
 {
 	template<typename T>

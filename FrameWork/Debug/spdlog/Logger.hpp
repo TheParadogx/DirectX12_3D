@@ -38,18 +38,27 @@ namespace Engine::Debug
 		/// </summary>
 		static void Release();
 
+		/// <summary>
+		/// 通常のログ
+		/// </summary>
 		template<typename... Args>
 		static void Info(spdlog::format_string_t<Args...> fmt, Args&&... args)
 		{
 			sLogger->info(fmt, std::forward<Args>(args)...);
 		}
 
+		/// <summary>
+		/// エラーではないけど注意用ログ
+		/// </summary>
 		template<typename... Args>
 		static void Warn(spdlog::format_string_t<Args...> fmt, Args&&... args)
 		{
 			sLogger->warn(fmt, std::forward<Args>(args)...);
 		}
 
+		/// <summary>
+		/// デバックビルドのみのログ
+		/// </summary>
 		template<typename... Args>
 		static void Debug(spdlog::format_string_t<Args...> fmt, Args&&... args)
 		{
@@ -58,7 +67,9 @@ namespace Engine::Debug
 #endif
 		}
 
-
+		/// <summary>
+		/// エラーだけど復旧可能な状態
+		/// </summary>
 		template<typename... Args>
 		static void Error(
 			const spdlog::source_loc& loc,
@@ -68,7 +79,9 @@ namespace Engine::Debug
 			sLogger->log(loc, spdlog::level::err, fmt, std::forward<Args>(args)...);
 		}
 
-
+		/// <summary>
+		/// 復旧不可能な状態で止めるしかない時
+		/// </summary>
 		template<typename... Args>
 		static void Critical(
 			const spdlog::source_loc& loc,
@@ -80,6 +93,9 @@ namespace Engine::Debug
 		}
 
 	private:
+		/// <summary>
+		/// spdlogの出力用オブジェクト
+		/// </summary>
 		static std::shared_ptr<spdlog::logger> sLogger;
 		static FILE* sConOutFP;
 		static FILE* sConInFP;
@@ -87,6 +103,9 @@ namespace Engine::Debug
 }
 
 
+/*
+* 使いやすくする用のマクロ
+*/
 #define LOG_INFO(...)     Engine::Debug::Logger::Info(__VA_ARGS__)
 #define LOG_WARN(...)     Engine::Debug::Logger::Warn(__VA_ARGS__)
 #define LOG_DEBUG(...)    Engine::Debug::Logger::Debug(__VA_ARGS__)

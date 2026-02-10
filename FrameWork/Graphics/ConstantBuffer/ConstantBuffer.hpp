@@ -46,9 +46,17 @@ namespace Engine::Graphics
 		/// </summary>
 		mw::ResourcePtr mBufferResource;
 
+		/// <summary>
+		/// リソースのディスクリプタ情報格納
+		/// </summary>
 		std::unique_ptr<GraphicsDescriptorHeap> mHeap;
-
+		/// <summary>
+		/// 送りたいバッファのサイズ
+		/// </summary>
 		UINT64 mBufferSize;
+		/// <summary>
+		/// GPUの規則に合わせてアライメントされたサイズ
+		/// </summary>
 		UINT64 mAlignedBufferSize;
 	};
 

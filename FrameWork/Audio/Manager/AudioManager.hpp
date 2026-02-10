@@ -32,7 +32,12 @@ namespace Engine::Audio
 		/// <param name="Volume">音量:0.0f - 1.0f</param>
 		void PlaySE(const std::string& FilePath, bool Loop = false, float Volume = 1.0f,bool IsGlobal = true);
 
-
+		/// <summary>
+		/// 再生中の音全体からスピーカに出力する最終的な音の作成
+		/// </summary>
+		/// <param name="Output"></param>
+		/// <param name="FramesRequested"></param>
+		/// <param name="Channels"></param>
 		void MixSounds(int16_t* Output, size_t FramesRequested, uint16_t Channels);
 
 		/// <summary>
